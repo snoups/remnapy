@@ -58,17 +58,20 @@ class TelegramCallbackResponseDto(AuthTokenResponseData):
 # OAuth2 Authorization models
 class OAuth2AuthorizeRequestDto(BaseModel):
     """Request to initiate OAuth2 authorization"""
+
     provider: OAuth2Provider
 
 
 class OAuth2AuthorizeResponseDto(BaseModel):
     """Response with OAuth2 authorization URL"""
+
     authorization_url: Optional[str] = Field(alias="authorizationUrl")
 
 
 # OAuth2 Callback models
 class OAuth2CallbackRequestDto(BaseModel):
     """Request for OAuth2 callback"""
+
     provider: OAuth2Provider
     code: str
     state: str
@@ -76,25 +79,30 @@ class OAuth2CallbackRequestDto(BaseModel):
 
 class OAuth2CallbackResponseDto(BaseModel):
     """Response with access token from OAuth2 callback"""
+
     access_token: str = Field(alias="accessToken")
 
 
 # Passkey Authentication models
 class GetPasskeyAuthenticationOptionsResponseDto(BaseModel):
     """Response with passkey authentication options"""
+
     # Passkey options are complex WebAuthn objects, using Any for flexibility
     response: Dict[str, Any]
 
 
 class VerifyPasskeyAuthenticationRequestDto(BaseModel):
     """Request to verify passkey authentication"""
+
     # Passkey authentication response is complex WebAuthn object
     response: Dict[str, Any]
 
 
 class VerifyPasskeyAuthenticationResponseDto(BaseModel):
     """Response with access token after successful passkey authentication"""
+
     access_token: str = Field(alias="accessToken")
+
 
 # Legacy alias for backward compatibility
 StatusResponseDto = GetStatusResponseDto

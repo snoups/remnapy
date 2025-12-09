@@ -56,7 +56,10 @@ class ExternalSquadsController(BaseController):
         """Delete external squad"""
         ...
 
-    @post("/external-squads/{uuid}/bulk-actions/add-users", response_class=AddUsersToExternalSquadResponseDto)
+    @post(
+        "/external-squads/{uuid}/bulk-actions/add-users",
+        response_class=AddUsersToExternalSquadResponseDto,
+    )
     async def add_users_to_external_squad(
         self,
         uuid: str,
@@ -64,7 +67,10 @@ class ExternalSquadsController(BaseController):
         """Add all users to external squad"""
         ...
 
-    @delete("/external-squads/{uuid}/bulk-actions/remove-users", response_class=RemoveUsersFromExternalSquadResponseDto)
+    @delete(
+        "/external-squads/{uuid}/bulk-actions/remove-users",
+        response_class=RemoveUsersFromExternalSquadResponseDto,
+    )
     async def remove_users_from_external_squad(
         self,
         uuid: str,

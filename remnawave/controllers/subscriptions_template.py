@@ -2,7 +2,6 @@ from typing import Annotated
 
 from rapid_api_client.annotations import Path, PydanticBody
 
-from remnawave.enums import TemplateType
 from remnawave.models import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,
@@ -21,7 +20,9 @@ class SubscriptionsTemplateController(BaseController):
         """Get all subscription templates (without content)"""
         ...
 
-    @post("/subscription-templates", response_class=CreateSubscriptionTemplateResponseDto)
+    @post(
+        "/subscription-templates", response_class=CreateSubscriptionTemplateResponseDto
+    )
     async def create_template(
         self,
         body: Annotated[CreateSubscriptionTemplateRequestDto, PydanticBody()],
@@ -45,7 +46,10 @@ class SubscriptionsTemplateController(BaseController):
         """Get subscription template by uuid"""
         ...
 
-    @delete("/subscription-templates/{uuid}", response_class=DeleteSubscriptionTemplateResponseDto)
+    @delete(
+        "/subscription-templates/{uuid}",
+        response_class=DeleteSubscriptionTemplateResponseDto,
+    )
     async def delete_template(
         self,
         uuid: Annotated[str, Path(description="Template UUID")],

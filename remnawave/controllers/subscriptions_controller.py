@@ -2,10 +2,14 @@ from typing import Annotated
 
 from rapid_api_client import Path, Query
 
-from remnawave.enums import ClientType
+from remnawave.models import (
+    GetAllSubscriptionsResponseDto,
+    GetSubscriptionByShortUUIDResponseDto,
+    GetSubscriptionByUsernameResponseDto,
+    GetSubscriptionByUUIDResponseDto,
+)
 from remnawave.models.subscription import GetRawSubscriptionByShortUuidResponseDto
 from remnawave.rapid import BaseController, get
-from remnawave.models import GetAllSubscriptionsResponseDto, GetSubscriptionByUsernameResponseDto, GetSubscriptionByShortUUIDResponseDto, GetSubscriptionByUUIDResponseDto
 
 
 class SubscriptionsController(BaseController):
@@ -23,23 +27,31 @@ class SubscriptionsController(BaseController):
         """None"""
         ...
 
-    @get("/subscriptions/by-username/{username}", response_class=GetSubscriptionByUsernameResponseDto)
+    @get(
+        "/subscriptions/by-username/{username}",
+        response_class=GetSubscriptionByUsernameResponseDto,
+    )
     async def get_subscription_by_username(
         self,
         username: Annotated[str, Path(description="Username of the user")],
     ) -> GetSubscriptionByUsernameResponseDto:
         """None"""
         ...
-        
-    @get("/subscriptions/by-short-uuid/{short_uuid}", response_class=GetSubscriptionByShortUUIDResponseDto)
+
+    @get(
+        "/subscriptions/by-short-uuid/{short_uuid}",
+        response_class=GetSubscriptionByShortUUIDResponseDto,
+    )
     async def get_subscription_by_short_uuid(
         self,
         short_uuid: Annotated[str, Path(description="Short UUID of the subscription")],
     ) -> GetSubscriptionByShortUUIDResponseDto:
         """None"""
         ...
-        
-    @get("/subscriptions/by-uuid/{uuid}", response_class=GetSubscriptionByUUIDResponseDto)
+
+    @get(
+        "/subscriptions/by-uuid/{uuid}", response_class=GetSubscriptionByUUIDResponseDto
+    )
     async def get_subscription_by_uuid(
         self,
         uuid: Annotated[str, Path(description="UUID of the user")],
@@ -47,11 +59,16 @@ class SubscriptionsController(BaseController):
         """None"""
         ...
 
-    @get("/subscriptions/by-short-uuid/{short_uuid}/raw", response_class=GetRawSubscriptionByShortUuidResponseDto)
+    @get(
+        "/subscriptions/by-short-uuid/{short_uuid}/raw",
+        response_class=GetRawSubscriptionByShortUuidResponseDto,
+    )
     async def get_raw_subscription(
         self,
         short_uuid: Annotated[str, Path(description="Short UUID of the user")],
-        withDisabledHosts: Annotated[Annotated[bool, Path(description="Include disabled hosts")], bool] = False,
+        withDisabledHosts: Annotated[
+            Annotated[bool, Path(description="Include disabled hosts")], bool
+        ] = False,
     ) -> GetRawSubscriptionByShortUuidResponseDto:
         """None"""
         ...

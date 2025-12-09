@@ -1,7 +1,7 @@
 import base64
 from typing import Literal
 
-from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 
 HAPP_PUBLIC_KEY_V3 = b"""
@@ -39,7 +39,6 @@ oh/uZMozC65SmDw+N5p6Su8CAwEAAQ==
 """
 
 
-
 def create_happ_crypto_link(content: str, method: Literal["v3", "v4"] = "v4") -> str:
     try:
         happ_methods = {
@@ -49,9 +48,15 @@ def create_happ_crypto_link(content: str, method: Literal["v3", "v4"] = "v4") ->
         public_key = serialization.load_pem_public_key(happ_methods[method.lower()])
 
         encrypted = public_key.encrypt(
-            content.encode("utf-8"), padding.PKCS1v15()  # RSA_PKCS1_PADDING
+            content.encode("utf-8"),
+            padding.PKCS1v15(),  # RSA_PKCS1_PADDING
         )
 
-        return "happ://crypt{" + method.lower().replace("v", "") + "/" + base64.b64encode(encrypted).decode()
+        return (
+            "happ://crypt{"
+            + method.lower().replace("v", "")
+            + "/"
+            + base64.b64encode(encrypted).decode()
+        )
     except Exception:
         return ""

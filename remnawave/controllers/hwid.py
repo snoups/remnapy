@@ -1,17 +1,17 @@
 from typing import Annotated
-from uuid import UUID
+
+from rapid_api_client import Path, PydanticBody
 
 from remnawave.models import (
-    CreateUserHwidDeviceResponseDto,
-    DeleteUserHwidDeviceResponseDto,
-    GetUserHwidDevicesResponseDto,
-    GetHwidStatisticsResponseDto,
     CreateHWIDUser,
+    CreateUserHwidDeviceResponseDto,
+    DeleteUserAllHwidDeviceRequestDto,
+    DeleteUserHwidDeviceResponseDto,
+    GetHwidStatisticsResponseDto,
+    GetUserHwidDevicesResponseDto,
     HWIDDeleteRequest,
-    DeleteUserAllHwidDeviceRequestDto
 )
-from rapid_api_client import Path, PydanticBody
-from remnawave.rapid import AttributeBody, BaseController, post, get
+from remnawave.rapid import AttributeBody, BaseController, get, post
 
 
 class HWIDUserController(BaseController):

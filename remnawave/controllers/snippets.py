@@ -11,7 +11,7 @@ from remnawave.models import (
     UpdateSnippetRequestDto,
     UpdateSnippetResponseDto,
 )
-from remnawave.rapid import BaseController, delete, get, post, patch
+from remnawave.rapid import BaseController, delete, get, patch, post
 
 
 class SnippetsController(BaseController):

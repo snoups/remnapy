@@ -1,9 +1,7 @@
-from typing import Annotated, List
-from uuid import UUID
+from typing import Annotated
 
 from rapid_api_client.annotations import PydanticBody
 
-from remnawave.enums import UserStatus
 from remnawave.models import (
     BulkAllExtendExpirationDateRequestDto,
     BulkAllExtendExpirationDateResponseDto,
@@ -34,8 +32,7 @@ class UsersBulkActionsController(BaseController):
         response_class=BulkDeleteUsersByStatusResponseDto,
     )
     async def bulk_delete_users_by_status(
-        self, 
-        body: Annotated[BulkDeleteUsersByStatusRequestDto, PydanticBody()]
+        self, body: Annotated[BulkDeleteUsersByStatusRequestDto, PydanticBody()]
     ) -> BulkDeleteUsersByStatusResponseDto:
         """Bulk Delete Users By Status"""
         ...

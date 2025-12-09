@@ -37,9 +37,7 @@ TServiceEvents = Literal[
     "service.login_attempt_success",
 ]
 
-TErrorsEvents = Literal[
-    "errors.bandwidth_usage_threshold_reached_max_notifications",
-]
+TErrorsEvents = Literal["errors.bandwidth_usage_threshold_reached_max_notifications",]
 
 TCRMEvents = Literal[
     "crm.infra_billing_node_payment_in_7_days",

@@ -2,7 +2,10 @@ from typing import Annotated
 
 from rapid_api_client import Query
 
-from remnawave.models import GetNodesUsageByRangeResponseDto, GetNodesRealtimeUsageResponseDto
+from remnawave.models import (
+    GetNodesRealtimeUsageResponseDto,
+    GetNodesUsageByRangeResponseDto,
+)
 from remnawave.rapid import BaseController, get
 
 
@@ -22,4 +25,3 @@ class BandWidthStatsController(BaseController):
     ) -> GetNodesRealtimeUsageResponseDto:
         """Get Nodes Usage Realtime"""
         ...
-        

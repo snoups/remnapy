@@ -15,10 +15,12 @@ class InboundDto(BaseModel):
     port: Optional[int] = None
     raw_inbound: Optional[Any] = Field(None, alias="rawInbound")
 
+
 class NodesProfileDto(BaseModel):
     uuid: UUID
     name: str
     country_code: str = Field(alias="countryCode")
+
 
 class ConfigProfileDto(BaseModel):
     uuid: UUID

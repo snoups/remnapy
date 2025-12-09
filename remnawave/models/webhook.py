@@ -1,12 +1,24 @@
 from datetime import datetime
-from typing import List, Optional, Literal, Union
+from typing import List, Optional, Union
 from uuid import UUID
+
 from pydantic import BaseModel, Field
 from pydantic.alias_generators import to_camel
+
 from remnawave.enums import (
-    TUsersStatus, TUserEvents, TUserHwidDevicesEvents, TServiceEvents, TNodeEvents, TErrorsEvents, TCRMEvents, TResetPeriods
+    TCRMEvents,
+    TErrorsEvents,
+    TNodeEvents,
+    TResetPeriods,
+    TServiceEvents,
+    TUserEvents,
+    TUserHwidDevicesEvents,
+    TUsersStatus,
 )
+from remnawave.models.users import UserTrafficDto
+
 # ---------------- USER ---------------- #
+
 
 class LastConnectedNodeDto(BaseModel):
     node_name: str
@@ -24,12 +36,11 @@ class InternalSquadDto(BaseModel):
 
 
 class BaseUserDto(BaseModel):
+    id: int
     uuid: UUID
     short_uuid: str
     username: str
     status: TUsersStatus
-    used_traffic_bytes: int
-    lifetime_used_traffic_bytes: int
 
     traffic_limit_bytes: int
     traffic_limit_strategy: TResetPeriods
@@ -39,6 +50,7 @@ class BaseUserDto(BaseModel):
     expire_at: datetime
     sub_revoked_at: Optional[datetime] = None
     last_traffic_reset_at: Optional[datetime] = None
+    last_triggered_threshold: int
 
     trojan_password: str
     vless_uuid: UUID
@@ -51,11 +63,7 @@ class BaseUserDto(BaseModel):
 
     hwid_device_limit: Optional[int] = None
 
-    first_connected_at: Optional[datetime] = None
-    last_triggered_threshold: int
-
-    online_at: Optional[datetime] = None
-    last_connected_node_uuid: Optional[UUID] = None
+    externalSquadUuid: Optional[str]
 
     created_at: datetime
     updated_at: datetime
@@ -64,8 +72,8 @@ class BaseUserDto(BaseModel):
 
 
 class UserDto(BaseUserDto):
+    user_traffic: UserTrafficDto = Field(alias="userTraffic")
     active_internal_squads: List[InternalSquadDto] = Field(default_factory=list)
-    last_connected_node: Optional[LastConnectedNodeDto] = None
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -78,6 +86,7 @@ class UserEventDto(BaseModel):
 
 
 # ---------------- HWID DEVICES ---------------- #
+
 
 class HwidUserDeviceDto(BaseModel):
     hwid: str
@@ -100,9 +109,14 @@ class UserHwidDeviceEventDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
     @classmethod
-    def build(cls, user: UserDto, hwid_device: HwidUserDeviceDto, event: TUserHwidDevicesEvents):
+    def build(
+        cls,
+        user: UserDto,
+        hwid_device: HwidUserDeviceDto,
+        event: TUserHwidDevicesEvents,
+    ):
         return cls(data={"user": user, "hwidUserDevice": hwid_device}, event_name=event)
-    
+
     @property
     def user(self) -> UserDto:
         return self.data["user"]
@@ -111,7 +125,9 @@ class UserHwidDeviceEventDto(BaseModel):
     def hwid_user_device(self) -> HwidUserDeviceDto:
         return self.data["hwidUserDevice"]
 
+
 # ---------------- SERVICE EVENTS ---------------- #
+
 
 class LoginAttemptDto(BaseModel):
     username: str
@@ -119,7 +135,7 @@ class LoginAttemptDto(BaseModel):
     user_agent: str
     description: Optional[str] = None
     password: Optional[str] = None
-    
+
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
@@ -131,6 +147,7 @@ class ServiceEventDto(BaseModel):
 
 
 # ---------------- NODE ENTITIES ---------------- #
+
 
 class ConfigProfileInboundDto(BaseModel):
     uuid: UUID
@@ -195,7 +212,7 @@ class NodeDto(BaseModel):
     xray_uptime: str
 
     users_online: Optional[int] = None
-    
+
     is_traffic_tracking_active: bool
     traffic_reset_day: Optional[int] = None
     traffic_limit_bytes: Optional[int] = None
@@ -228,10 +245,12 @@ class NodeEventDto(BaseModel):
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
+
 # ---------------- ERROR EVENTS ---------------- #
 
 # https://github.com/remnawave/backend/blob/main/src/queue/user-jobs/user-jobs.processor.ts#L224
 # Not implemented yet!
+
 
 class ErrorDto(BaseModel):
     description: str
@@ -247,6 +266,7 @@ class CustomErrorEventDto(BaseModel):
 
 
 # ---------------- CRM EVENTS ---------------- #
+
 
 class BillingNodeDto(BaseModel):
     provider_name: str
@@ -266,6 +286,7 @@ class CrmEventDto(BaseModel):
 
 # ---------------- WEBHOOK PAYLOAD ---------------- #
 
+
 class WebhookPayloadDto(BaseModel):
     event: str
     timestamp: datetime
@@ -276,7 +297,7 @@ class WebhookPayloadDto(BaseModel):
         LoginAttemptDto,
         UserHwidDeviceEventDto,
         BillingNodeDto,
-        dict
+        dict,
     ]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
@@ -302,7 +323,7 @@ class WebhookPayloadDto(BaseModel):
             if event.startswith("service.login_attempt"):
                 login_attempt_data = data_raw.get("loginAttempt", {})
                 data = LoginAttemptDto(**login_attempt_data)
-            else: # service.panel_started - содержит пустой json
+            else:  # service.panel_started - содержит пустой json
                 data = data_raw
         elif event.startswith("errors."):
             data = ErrorDto(**data_raw)

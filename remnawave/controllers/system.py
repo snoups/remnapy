@@ -1,16 +1,18 @@
 from typing import Annotated
+
 from rapid_api_client import PydanticBody
+
 from remnawave.models import (
-    GetBandwidthStatsResponseDto,
-    GetNodesStatisticsResponseDto,
-    GetStatsResponseDto,
-    GetNodesMetricsResponseDto,
-    GetRemnawaveHealthResponseDto,
-    GetX25519KeyPairResponseDto,
-    EncryptHappCryptoLinkRequestDto,
-    EncryptHappCryptoLinkResponseDto,
     DebugSrrMatcherRequestDto,
     DebugSrrMatcherResponseDto,
+    EncryptHappCryptoLinkRequestDto,
+    EncryptHappCryptoLinkResponseDto,
+    GetBandwidthStatsResponseDto,
+    GetNodesMetricsResponseDto,
+    GetNodesStatisticsResponseDto,
+    GetRemnawaveHealthResponseDto,
+    GetStatsResponseDto,
+    GetX25519KeyPairResponseDto,
 )
 from remnawave.rapid import BaseController, get, post
 
@@ -57,7 +59,7 @@ class SystemController(BaseController):
     ) -> GetX25519KeyPairResponseDto:
         """Get X25519 Key Pair"""
         ...
-        
+
     @post("/system/tools/happ/encrypt", response_class=EncryptHappCryptoLinkResponseDto)
     async def encrypt_happ_crypto_link(
         self,

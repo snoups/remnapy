@@ -17,7 +17,7 @@ from rapid_api_client import (
     RapidApi,
 )
 from rapid_api_client.annotations import Header, JsonBody, Path, Query
-from rapid_api_client.client import pydantic_xml, RapidParameter, RapidParameters
+from rapid_api_client.client import RapidParameter, RapidParameters, pydantic_xml
 from rapid_api_client.typing import BM, T
 from rapid_api_client.utils import filter_none_values, find_annotation
 
@@ -27,7 +27,6 @@ from remnawave.utils.serializer import orjson_default
 
 
 class BaseController(RapidApi):
-
     def _build_request(
         self,
         sig: Signature,
@@ -92,7 +91,7 @@ class BaseController(RapidApi):
             return response_class.from_xml(response.content)
         if issubclass(response_class, BaseModel):
             data = response.json()
-            
+
             # Check if this is a RootModel (list response)
             if issubclass(response_class, RootModel):
                 # This is a RootModel - needs the list data, not the wrapper
@@ -104,24 +103,29 @@ class BaseController(RapidApi):
             else:
                 # This is a regular BaseModel
                 # Auto-unwrap single response field for convenience
-                if (isinstance(data, dict) and 
-                    len(data) == 1 and 
-                    "response" in data and
-                    hasattr(response_class, 'model_fields') and 
-                    len(response_class.model_fields) == 1 and
-                    'response' in response_class.model_fields):
+                if (
+                    isinstance(data, dict)
+                    and len(data) == 1
+                    and "response" in data
+                    and hasattr(response_class, "model_fields")
+                    and len(response_class.model_fields) == 1
+                    and "response" in response_class.model_fields
+                ):
                     # This is a wrapper model with single "response" field
                     # Return the inner data directly for convenience
-                    inner_field = response_class.model_fields['response']
+                    inner_field = response_class.model_fields["response"]
                     inner_type = inner_field.annotation
-                    
+
                     # If it's a simple type annotation, use it directly
-                    if hasattr(inner_type, 'model_validate'):
+                    if hasattr(inner_type, "model_validate"):
                         return inner_type.model_validate(data["response"])
                     else:
                         # Fallback to original behavior
                         return response_class.model_validate(data)
-                elif hasattr(response_class, 'model_fields') and 'response' in response_class.model_fields:
+                elif (
+                    hasattr(response_class, "model_fields")
+                    and "response" in response_class.model_fields
+                ):
                     # Model expects full data with response wrapper
                     return response_class.model_validate(data)
                 elif isinstance(data, dict) and "response" in data:
@@ -159,13 +163,16 @@ class CustomRapidParameters(RapidParameters):
                 ), "All body parameters must be of type FormBody"
             elif isinstance(first_body_param.annot, JsonBody):
                 assert len(out.body_parameters) == 1, "Only one JsonBody allowed"
-            elif isinstance(first_body_param.annot, Body) and not isinstance(
-                first_body_param.annot,
-                AttributeBody,  # don't check the AttributeBody because there can be more than one
+            elif (
+                isinstance(first_body_param.annot, Body)
+                and not isinstance(
+                    first_body_param.annot,
+                    AttributeBody,  # don't check the AttributeBody because there can be more than one
+                )
             ):
-                assert (
-                    len(out.body_parameters) == 1
-                ), "Only one Body (JsonBody, FormBody, PydanticBody, FileBody, PydanticXmlBody) allowed"
+                assert len(out.body_parameters) == 1, (
+                    "Only one Body (JsonBody, FormBody, PydanticBody, FileBody, PydanticXmlBody) allowed"
+                )
 
         return out
 
@@ -211,9 +218,9 @@ class CustomRapidParameters(RapidParameters):
                 if len(values) > 0:
                     return "data", values
             elif isinstance(first_body_param.annot, PydanticXmlBody):
-                assert (
-                    pydantic_xml is not None
-                ), "pydantic-xml must be installed to use PydanticXmlBody"
+                assert pydantic_xml is not None, (
+                    "pydantic-xml must be installed to use PydanticXmlBody"
+                )
                 if (value := first_body_param.get_value(ba)) is not None:
                     assert isinstance(value, pydantic_xml.BaseXmlModel)
                     return "content", value.to_xml()

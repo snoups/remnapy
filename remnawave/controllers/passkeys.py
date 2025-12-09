@@ -14,14 +14,20 @@ from remnawave.rapid import BaseController, delete, get, post
 
 
 class PasskeysController(BaseController):
-    @get("/passkeys/registration/options", response_class=GetPasskeyRegistrationOptionsResponseDto)
+    @get(
+        "/passkeys/registration/options",
+        response_class=GetPasskeyRegistrationOptionsResponseDto,
+    )
     async def passkey_registration_options(
         self,
     ) -> GetPasskeyRegistrationOptionsResponseDto:
         """Get registration options for passkey"""
         ...
 
-    @post("/passkeys/registration/verify", response_class=VerifyPasskeyRegistrationResponseDto)
+    @post(
+        "/passkeys/registration/verify",
+        response_class=VerifyPasskeyRegistrationResponseDto,
+    )
     async def passkey_registration_verify(
         self,
         body: Annotated[VerifyPasskeyRegistrationRequestDto, PydanticBody()],

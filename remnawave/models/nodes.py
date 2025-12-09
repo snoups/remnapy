@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Annotated, List, Optional, Union
 from uuid import UUID
 
-from pydantic import BaseModel, Field, StringConstraints, RootModel
+from pydantic import BaseModel, Field, RootModel, StringConstraints
 
 from remnawave.models.internal_squads import InboundsDto
 
@@ -30,6 +30,7 @@ class ReorderNodeItem(BaseModel):
 
 class NodeProviderDto(BaseModel):
     """Node provider information"""
+
     uuid: UUID
     name: str
     favicon_link: Optional[str] = Field(None, alias="faviconLink")
@@ -53,7 +54,7 @@ class CreateNodeRequestDto(BaseModel):
     address: Annotated[str, StringConstraints(min_length=2)]
     port: Optional[int] = Field(None, ge=1, le=65535)
     is_traffic_tracking_active: Optional[bool] = Field(
-        False, 
+        False,
         serialization_alias="isTrafficTrackingActive",
     )
     traffic_limit_bytes: Optional[int] = Field(
@@ -69,8 +70,7 @@ class CreateNodeRequestDto(BaseModel):
         None, serialization_alias="excludedInbounds"
     )
     country_code: Annotated[Optional[str], StringConstraints(max_length=2)] = Field(
-        "XX", 
-        serialization_alias="countryCode"
+        "XX", serialization_alias="countryCode"
     )
     consumption_multiplier: Optional[float] = Field(
         None, serialization_alias="consumptionMultiplier", ge=0.1
@@ -83,7 +83,9 @@ class CreateNodeRequestDto(BaseModel):
 
 class UpdateNodeRequestDto(BaseModel):
     uuid: UUID
-    name: Annotated[Optional[str], StringConstraints(min_length=3, max_length=30)] = None
+    name: Annotated[Optional[str], StringConstraints(min_length=3, max_length=30)] = (
+        None
+    )
     address: Annotated[Optional[str], StringConstraints(min_length=2)] = None
     port: Optional[float] = Field(None, ge=1, le=65535)  # ИСПРАВЛЕН тип на float
     is_traffic_tracking_active: Optional[bool] = Field(
@@ -206,12 +208,15 @@ class DeleteNodeResponseDto(BaseModel):
 
 class RestartAllNodesRequestBodyDto(BaseModel):
     force_restart: bool = Field(default=False, alias="forceRestart")
-    
+
+
 class ResetNodeTrafficRequestDto(BaseModel):
     uuid: Union[str, UUID] = Field(alias="uuid")
 
+
 class ResetNodeTrafficResponseDto(RestartEventResponse):
     pass
+
 
 # Для обратной совместимости
 RestartAllNodesRequestDto = RestartAllNodesRequestBodyDto

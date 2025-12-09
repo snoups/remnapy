@@ -12,10 +12,10 @@ from remnawave.models import (
     DeleteUsersFromInternalSquadRequestDto,
     DeleteUsersFromInternalSquadResponseDto,
     GetAllInternalSquadsResponseDto,
+    GetInternalSquadAccessibleNodesResponseDto,
     GetInternalSquadByUuidResponseDto,
     UpdateInternalSquadRequestDto,
     UpdateInternalSquadResponseDto,
-    GetInternalSquadAccessibleNodesResponseDto,
 )
 from remnawave.rapid import BaseController, delete, get, patch, post
 

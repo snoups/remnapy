@@ -12,7 +12,7 @@ class UserUsageByRange(BaseModel):
     node_name: str = Field(alias="nodeName")
     total: int
     date: datetime.date
-    
+
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 

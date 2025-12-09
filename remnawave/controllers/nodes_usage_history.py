@@ -3,8 +3,8 @@ from typing import Annotated
 from rapid_api_client import Path, Query
 
 from remnawave.models import (
-    GetNodeUserUsageByRangeResponseDto,
     GetNodesUsageByRangeResponseDto,
+    GetNodeUserUsageByRangeResponseDto,
 )
 from remnawave.rapid import BaseController, get
 
@@ -21,7 +21,10 @@ class NodesUsageHistoryController(BaseController):
 
 
 class NodesUserUsageHistoryController(BaseController):
-    @get("/nodes/usage/{uuid}/users/range", response_class=GetNodeUserUsageByRangeResponseDto)
+    @get(
+        "/nodes/usage/{uuid}/users/range",
+        response_class=GetNodeUserUsageByRangeResponseDto,
+    )
     async def get_node_user_usage_by_range(
         self,
         uuid: Annotated[str, Path(description="UUID of the node")],

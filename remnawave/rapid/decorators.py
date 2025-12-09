@@ -27,12 +27,12 @@ def http(
         async def wrapper(
             api: BaseController, *args, **kwargs
         ) -> BM | str | bytes | Response | T:
-            assert isinstance(
-                api, BaseController
-            ), f"{api} should be an instance of BaseController"
-            assert isinstance(
-                api.client, AsyncClient
-            ), f"{api.client} should be an instance of httpx.AsyncClient"
+            assert isinstance(api, BaseController), (
+                f"{api} should be an instance of BaseController"
+            )
+            assert isinstance(api.client, AsyncClient), (
+                f"{api.client} should be an instance of httpx.AsyncClient"
+            )
 
             # noinspection PyProtectedMember
             request = api._build_request(

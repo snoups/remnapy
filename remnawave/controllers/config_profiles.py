@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from rapid_api_client import Path, Query
+from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
 
 from remnawave.models import (
@@ -44,7 +44,10 @@ class ConfigProfilesController(BaseController):
         """Get all inbounds from all config profiles"""
         ...
 
-    @get("/config-profiles/{uuid}/inbounds", response_class=GetInboundsByProfileUuidResponseDto)
+    @get(
+        "/config-profiles/{uuid}/inbounds",
+        response_class=GetInboundsByProfileUuidResponseDto,
+    )
     async def get_inbounds_by_profile_uuid(
         self,
         uuid: Annotated[str, Path(description="UUID of the config profile")],
@@ -69,7 +72,10 @@ class ConfigProfilesController(BaseController):
         ...
 
     # Get computed config profile by uuid​
-    @get("/config-profiles/{uuid}/computed-config", response_class=GetConfigProfileByUuidResponseDto)
+    @get(
+        "/config-profiles/{uuid}/computed-config",
+        response_class=GetConfigProfileByUuidResponseDto,
+    )
     async def get_computed_config_profile_by_uuid(
         self,
         uuid: Annotated[str, Path(description="UUID of the config profile")],

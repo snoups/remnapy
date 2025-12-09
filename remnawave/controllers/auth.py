@@ -3,6 +3,7 @@ from typing import Annotated
 from rapid_api_client.annotations import PydanticBody
 
 from remnawave.models import (
+    GetPasskeyAuthenticationOptionsResponseDto,
     GetStatusResponseDto,
     LoginRequestDto,
     LoginResponseDto,
@@ -10,13 +11,12 @@ from remnawave.models import (
     OAuth2AuthorizeResponseDto,
     OAuth2CallbackRequestDto,
     OAuth2CallbackResponseDto,
-    VerifyPasskeyAuthenticationRequestDto,
-    VerifyPasskeyAuthenticationResponseDto,
-    GetPasskeyAuthenticationOptionsResponseDto,
     RegisterRequestDto,
     RegisterResponseDto,
     TelegramCallbackRequestDto,
     TelegramCallbackResponseDto,
+    VerifyPasskeyAuthenticationRequestDto,
+    VerifyPasskeyAuthenticationResponseDto,
 )
 from remnawave.rapid import BaseController, get, post
 
@@ -69,14 +69,20 @@ class AuthController(BaseController):
         """Callback from OAuth2"""
         ...
 
-    @get("/auth/passkey/authentication/options", response_class=GetPasskeyAuthenticationOptionsResponseDto)
+    @get(
+        "/auth/passkey/authentication/options",
+        response_class=GetPasskeyAuthenticationOptionsResponseDto,
+    )
     async def passkey_authentication_options(
         self,
     ) -> GetPasskeyAuthenticationOptionsResponseDto:
         """Get the authentication options for passkey"""
         ...
 
-    @post("/auth/passkey/authentication/verify", response_class=VerifyPasskeyAuthenticationResponseDto)
+    @post(
+        "/auth/passkey/authentication/verify",
+        response_class=VerifyPasskeyAuthenticationResponseDto,
+    )
     async def passkey_authentication_verify(
         self,
         body: Annotated[VerifyPasskeyAuthenticationRequestDto, PydanticBody()],

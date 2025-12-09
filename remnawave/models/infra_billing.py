@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 class InfraProviderSimpleDto(BaseModel):
     """Упрощенная модель провайдера для billingNodes"""
+
     uuid: UUID
     name: str
     login_url: Optional[str] = Field(alias="loginUrl")
@@ -15,12 +16,14 @@ class InfraProviderSimpleDto(BaseModel):
 
 class InfraBillingHistoryStatsDto(BaseModel):
     """Статистика истории биллинга для провайдера"""
+
     total_amount: float = Field(alias="totalAmount")
     total_bills: float = Field(alias="totalBills")
 
 
 class InfraBillingNodeSimpleDto(BaseModel):
     """Упрощенная модель узла биллинга для провайдера"""
+
     node_uuid: UUID = Field(alias="nodeUuid")
     name: str
     country_code: str = Field(alias="countryCode")
@@ -67,6 +70,7 @@ class InfraBillingNodeDto(BaseModel):
 
 class AvailableBillingNodeDto(BaseModel):
     """Модель для доступных узлов биллинга"""
+
     uuid: UUID
     name: str
     country_code: str = Field(alias="countryCode")
@@ -74,6 +78,7 @@ class AvailableBillingNodeDto(BaseModel):
 
 class BillingStatsDto(BaseModel):
     """Статистика биллинга"""
+
     upcoming_nodes_count: float = Field(alias="upcomingNodesCount")
     current_month_payments: float = Field(alias="currentMonthPayments")
     total_spent: float = Field(alias="totalSpent")
@@ -122,6 +127,7 @@ class DeleteInfraProviderByUuidResponseDto(BaseModel):
 # Billing History models
 class CreateInfraBillingHistoryRecordRequestDto(BaseModel):
     """Модель для создания записи истории биллинга"""
+
     node_uuid: UUID = Field(serialization_alias="nodeUuid")
     provider_uuid: UUID = Field(serialization_alias="providerUuid")
     amount: float
@@ -157,7 +163,9 @@ class CreateInfraBillingNodeRequestDto(BaseModel):
 class CreateInfraBillingNodeResponseDto(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
     billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(alias="availableBillingNodes")
+    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+        alias="availableBillingNodes"
+    )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
     stats: BillingStatsDto
 
@@ -174,7 +182,9 @@ class UpdateInfraBillingNodeResponseDto(InfraBillingNodeDto):
 class InfraBillingNodesData(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
     billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(alias="availableBillingNodes")
+    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+        alias="availableBillingNodes"
+    )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
     stats: BillingStatsDto
 
@@ -185,9 +195,12 @@ class GetInfraBillingNodesResponseDto(InfraBillingNodesData):
 
 class DeleteInfraBillingNodeByUuidResponseDto(BaseModel):
     """API возвращает обновленный список billing nodes после удаления"""
+
     total_billing_nodes: float = Field(alias="totalBillingNodes")
     billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(alias="availableBillingNodes")
+    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+        alias="availableBillingNodes"
+    )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
     stats: BillingStatsDto
 

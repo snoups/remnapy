@@ -37,5 +37,7 @@ class SubscriptionRequestHistoryStatsData(BaseModel):
     hourly_request_stats: List[HourlyRequestStat] = Field(alias="hourlyRequestStats")
 
 
-class GetSubscriptionRequestHistoryStatsResponseDto(SubscriptionRequestHistoryStatsData):
+class GetSubscriptionRequestHistoryStatsResponseDto(
+    SubscriptionRequestHistoryStatsData
+):
     pass

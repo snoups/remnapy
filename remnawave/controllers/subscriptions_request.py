@@ -10,7 +10,10 @@ from remnawave.rapid import BaseController, get
 
 
 class SubscriptionRequestHistoryController(BaseController):
-    @get("/subscription-request-history", response_class=GetAllSubscriptionRequestHistoryResponseDto)
+    @get(
+        "/subscription-request-history",
+        response_class=GetAllSubscriptionRequestHistoryResponseDto,
+    )
     async def get_all_subscription_request_history(
         self,
         size: Annotated[

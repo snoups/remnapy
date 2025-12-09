@@ -7,20 +7,20 @@ from remnawave.models import (
     CreateUserRequestDto,
     CreateUserResponseDto,
     DeleteUserResponseDto,
-    GetAllUsersResponseDto,
+    EmailUserResponseDto,
     GetAllTagsResponseDto,
+    GetAllUsersResponseDto,
+    GetUserAccessibleNodesResponseDto,
     GetUserByIdResponseDto,
     GetUserByShortUuidResponseDto,
     GetUserByUsernameResponseDto,
     GetUserByUuidResponseDto,
-    GetUserAccessibleNodesResponseDto,
     GetUserSubscriptionRequestHistoryResponseDto,
-    TelegramUserResponseDto,
-    EmailUserResponseDto,
+    RevokeUserRequestDto,
     TagUserResponseDto,
+    TelegramUserResponseDto,
     UpdateUserRequestDto,
     UpdateUserResponseDto,
-    RevokeUserRequestDto,
 )
 from remnawave.rapid import BaseController, delete, get, patch, post
 
@@ -46,12 +46,10 @@ class UsersController(BaseController):
     async def get_all_users(
         self,
         start: Annotated[
-            Optional[int], 
-            Query(default=None, description="Offset for pagination")
+            Optional[int], Query(default=None, description="Offset for pagination")
         ] = None,
         size: Annotated[
-            Optional[int], 
-            Query(default=None, description="Page size for pagination")
+            Optional[int], Query(default=None, description="Page size for pagination")
         ] = None,
     ) -> GetAllUsersResponseDto:
         """Get all users"""
@@ -125,8 +123,8 @@ class UsersController(BaseController):
         ...
 
     @get(
-        "/users/{uuid}/subscription-request-history", 
-        response_class=GetUserSubscriptionRequestHistoryResponseDto
+        "/users/{uuid}/subscription-request-history",
+        response_class=GetUserSubscriptionRequestHistoryResponseDto,
     )
     async def get_user_subscription_request_history(
         self,
@@ -136,10 +134,14 @@ class UsersController(BaseController):
         ...
 
     # ИСПРАВЛЕНО: убран alias, используется short_uuid
-    @get("/users/by-short-uuid/{shortUuid}", response_class=GetUserByShortUuidResponseDto)
+    @get(
+        "/users/by-short-uuid/{shortUuid}", response_class=GetUserByShortUuidResponseDto
+    )
     async def get_user_by_short_uuid(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the user", alias="shortUuid")],
+        short_uuid: Annotated[
+            str, Path(description="Short UUID of the user", alias="shortUuid")
+        ],
     ) -> GetUserByShortUuidResponseDto:
         """Get user by Short UUID"""
         ...
@@ -167,7 +169,9 @@ class UsersController(BaseController):
     )
     async def get_users_by_telegram_id(
         self,
-        telegram_id: Annotated[str, Path(description="Telegram ID of the user", alias="telegramId")],
+        telegram_id: Annotated[
+            str, Path(description="Telegram ID of the user", alias="telegramId")
+        ],
     ) -> TelegramUserResponseDto:
         """Get Users By Telegram ID"""
         ...

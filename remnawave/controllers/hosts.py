@@ -8,14 +8,14 @@ from remnawave.models import (
     CreateHostResponseDto,
     DeleteHostResponseDto,
     GetAllHostsResponseDto,
+    GetAllHostTagsResponseDto,
     GetOneHostResponseDto,
     ReorderHostRequestDto,
     ReorderHostResponseDto,
     UpdateHostRequestDto,
     UpdateHostResponseDto,
-    GetAllHostTagsResponseDto,
 )
-from remnawave.rapid import AttributeBody, BaseController, delete, get, post, patch
+from remnawave.rapid import AttributeBody, BaseController, delete, get, patch, post
 
 
 class HostsController(BaseController):

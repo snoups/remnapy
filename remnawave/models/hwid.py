@@ -49,6 +49,7 @@ class GetUserHwidDevicesResponseDto(BaseModel):
     total: int
     devices: List[HwidDeviceDto]
 
+
 class PlatformStatItem(BaseModel):
     platform: str
     count: float
@@ -74,8 +75,10 @@ class HwidStatisticsData(BaseModel):
 class GetHwidStatisticsResponseDto(HwidStatisticsData):
     pass
 
+
 class DeleteUserAllHwidDeviceRequestDto(BaseModel):
     user_uuid: UUID = Field(serialization_alias="userUuid")
+
 
 # Legacy aliases for backward compatibility
 CreateHWIDUser = CreateUserHwidDeviceRequestDto

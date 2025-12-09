@@ -183,14 +183,14 @@ class ErrorCode(StrEnum):
     UPDATE_INFRA_BILLING_ERROR = "A176"
     CALCULATE_BILLING_ERROR = "A177"
     BILLING_PERIOD_ERROR = "A178"
-    
+
     # Добавляем новые коды из failed тестов
     CREATE_SUBSCRIPTION_TEMPLATE_ERROR = "A179"
     SUBSCRIPTION_TEMPLATE_NOT_FOUND = "A180"
     UPDATE_SUBSCRIPTION_TEMPLATE_ERROR = "A181"
     DELETE_SUBSCRIPTION_TEMPLATE_ERROR = "A182"
     GET_SUBSCRIPTION_TEMPLATE_ERROR = "A183"
-    
+
     # Валидационные ошибки
     VALIDATION_ERROR = "V001"
     INVALID_UUID_FORMAT = "V002"
@@ -202,14 +202,14 @@ class ErrorCode(StrEnum):
     INVALID_ENUM_VALUE = "V008"
     INVALID_REGEX_PATTERN = "V009"
     NUMERIC_VALIDATION_ERROR = "V010"
-    
+
     # Сетевые ошибки
     NETWORK_ERROR = "N003"
     TIMEOUT_ERROR = "N004"
     CONNECTION_ERROR = "N005"
     DNS_ERROR = "N006"
     SSL_ERROR = "N007"
-    
+
     # Ошибки аутентификации и авторизации
     INVALID_TOKEN = "AUTH001"
     TOKEN_EXPIRED = "AUTH002"
@@ -217,7 +217,7 @@ class ErrorCode(StrEnum):
     TWO_FACTOR_REQUIRED = "AUTH004"
     ACCOUNT_LOCKED = "AUTH005"
     PASSWORD_COMPLEXITY_ERROR = "AUTH006"
-    
+
     # Ошибки бизнес-логики
     TRAFFIC_LIMIT_EXCEEDED = "BL001"
     USER_LIMIT_EXCEEDED = "BL002"
@@ -225,7 +225,7 @@ class ErrorCode(StrEnum):
     FEATURE_NOT_AVAILABLE = "BL004"
     QUOTA_EXCEEDED = "BL005"
     RESOURCE_LOCKED = "BL006"
-    
+
     # Общие коды
     UNKNOWN = "UNKNOWN"
     NOT_IMPLEMENTED = "NOT_IMPLEMENTED"

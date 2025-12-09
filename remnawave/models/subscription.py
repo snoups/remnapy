@@ -25,11 +25,14 @@ class ActiveInternalSquadDto(BaseModel):
 
 class UserTrafficDto(BaseModel):
     """User traffic information"""
+
     used_traffic_bytes: float = Field(alias="usedTrafficBytes")
     lifetime_used_traffic_bytes: float = Field(alias="lifetimeUsedTrafficBytes")
     online_at: Optional[datetime] = Field(None, alias="onlineAt")
     first_connected_at: Optional[datetime] = Field(None, alias="firstConnectedAt")
-    last_connected_node_uuid: Optional[UUID] = Field(None, alias="lastConnectedNodeUuid")
+    last_connected_node_uuid: Optional[UUID] = Field(
+        None, alias="lastConnectedNodeUuid"
+    )
 
 
 class UserResponseDto(BaseModel):
@@ -54,30 +57,32 @@ class UserResponseDto(BaseModel):
     last_triggered_threshold: int = Field(default=0, alias="lastTriggeredThreshold")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    active_internal_squads: List[ActiveInternalSquadDto] = Field(alias="activeInternalSquads")
+    active_internal_squads: List[ActiveInternalSquadDto] = Field(
+        alias="activeInternalSquads"
+    )
     subscription_url: str = Field(alias="subscriptionUrl")
-    
+
     # Legacy alias for backward compatibility
     @property
     def used_traffic_bytes(self) -> float:
         """Backward compatibility property"""
         return self.user_traffic.used_traffic_bytes
-    
+
     @property
     def lifetime_used_traffic_bytes(self) -> float:
         """Backward compatibility property"""
         return self.user_traffic.lifetime_used_traffic_bytes
-    
+
     @property
     def online_at(self) -> Optional[datetime]:
         """Backward compatibility property"""
         return self.user_traffic.online_at
-    
+
     @property
     def first_connected_at(self) -> Optional[datetime]:
         """Backward compatibility property"""
         return self.user_traffic.first_connected_at
-    
+
     @property
     def last_connected_node_uuid(self) -> Optional[UUID]:
         """Backward compatibility property"""
@@ -106,7 +111,7 @@ class RawHostAdditionalParams(BaseModel):
 class RawHostProtocolOptions(BaseModel):
     class SSOptions(BaseModel):
         method: Optional[str] = None
-    
+
     ss: Optional[SSOptions] = None
 
 
@@ -115,21 +120,26 @@ class RawHostDbData(BaseModel):
     inbound_tag: str = Field(alias="inboundTag")
     uuid: str
     config_profile_uuid: Optional[str] = Field(None, alias="configProfileUuid")
-    config_profile_inbound_uuid: Optional[str] = Field(None, alias="configProfileInboundUuid")
+    config_profile_inbound_uuid: Optional[str] = Field(
+        None, alias="configProfileInboundUuid"
+    )
     is_disabled: bool = Field(alias="isDisabled")
-    view_position: int = Field(alias="viewPosition") 
+    view_position: int = Field(alias="viewPosition")
     remark: str
     is_hidden: bool = Field(alias="isHidden")
     tag: Optional[str] = None
     vless_route_id: Optional[int] = Field(None, alias="vlessRouteId")
 
+
 class RawSettings(BaseModel):
     """Raw settings for network configuration"""
+
     header_type: Optional[str] = Field(None, alias="headerType")
     request: Optional[Dict[str, Any]] = None
 
+
 class RawHost(BaseModel):
-    password: Passwords 
+    password: Passwords
     address: Optional[str] = None
     alpn: Optional[str] = None
     fingerprint: Optional[str] = None
@@ -145,8 +155,12 @@ class RawHost(BaseModel):
     spider_x: Optional[str] = Field(None, alias="spiderX")
     tls: Optional[str] = None
     raw_settings: Optional[RawSettings] = Field(None, alias="rawSettings")
-    additional_params: Optional[RawHostAdditionalParams] = Field(None, alias="additionalParams")
-    x_http_extra_params: Optional[Dict[str, Any]] = Field(None, alias="xHttpExtraParams")
+    additional_params: Optional[RawHostAdditionalParams] = Field(
+        None, alias="additionalParams"
+    )
+    x_http_extra_params: Optional[Dict[str, Any]] = Field(
+        None, alias="xHttpExtraParams"
+    )
     mux_params: Optional[Dict[str, Any]] = Field(None, alias="muxParams")
     sockopt_params: Optional[Dict[str, Any]] = Field(None, alias="sockoptParams")
     server_description: Optional[str] = Field(None, alias="serverDescription")
@@ -156,13 +170,16 @@ class RawHost(BaseModel):
     mihomo_x25519: Optional[bool] = Field(None, alias="mihomoX25519")
     mldsa65_verify: Optional[str] = Field(None, alias="mldsa65Verify")
     encryption: Optional[str] = None
-    protocol_options: Optional[RawHostProtocolOptions] = Field(None, alias="protocolOptions")
+    protocol_options: Optional[RawHostProtocolOptions] = Field(
+        None, alias="protocolOptions"
+    )
     db_data: RawHostDbData = Field(alias="dbData")
     xray_json_template: Optional[Dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
 
 
 class RawSubscriptionResponse(BaseModel):
     """Raw subscription response data"""
+
     user: UserResponseDto
     converted_user_info: ConvertedUserInfo = Field(alias="convertedUserInfo")
     headers: Dict[str, str]
@@ -171,6 +188,7 @@ class RawSubscriptionResponse(BaseModel):
 
 class GetRawSubscriptionByShortUuidResponseDto(RawSubscriptionResponse):
     pass
+
 
 # Legacy alias for backward compatibility
 class UserSubscription(BaseModel):
@@ -204,7 +222,7 @@ class GetSubscriptionInfoResponseDto(BaseModel):
     links: List[str]
     ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
-    
+
     @property
     def happ(self) -> HappCrypto:
         """Generate HAPP link on the fly"""

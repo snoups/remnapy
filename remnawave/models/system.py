@@ -46,12 +46,13 @@ class MemoryStatistic(BaseModel):
 
 class StatusCounts(BaseModel):
     """Dynamic status counts - использует additionalProperties"""
+
     model_config = {"extra": "allow"}
-    
+
     def __getitem__(self, key: str) -> int:
         """Allow dict-like access"""
         return getattr(self, key, 0)
-    
+
     def get(self, key: str, default: int = 0) -> int:
         """Dict-like get method"""
         return getattr(self, key, default)
@@ -76,6 +77,7 @@ class NodesStatistic(BaseModel):
 
 class StatisticResponseDto(BaseModel):
     """System statistics data"""
+
     cpu: CPUStatistic
     memory: MemoryStatistic
     uptime: float
@@ -97,6 +99,7 @@ class RemnawaveHealthData(BaseModel):
 
 class GetStatsResponseDto(StatisticResponseDto):
     """Get system statistics response"""
+
     pass
 
 
@@ -118,6 +121,7 @@ class GetRemnawaveHealthResponseDto(BaseModel):
 
 class NodeMetric(BaseModel):
     """Node metric data"""
+
     uuid: str = Field(alias="nodeUuid")
     name: Optional[str] = None
     address: Optional[str] = None

@@ -9,8 +9,8 @@ from remnawave.models import (
     BulkEnableHostsResponseDto,
     SetInboundToManyHostsRequestDto,
     SetInboundToManyHostsResponseDto,
+    SetPortToManyHostsRequestDto,
     SetPortToManyHostsResponseDto,
-    SetPortToManyHostsRequestDto
 )
 from remnawave.rapid import AttributeBody, BaseController, post
 
