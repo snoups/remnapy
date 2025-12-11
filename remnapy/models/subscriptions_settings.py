@@ -3,6 +3,7 @@ from typing import Annotated, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
+
 from remnapy.enums import (
     ResponseRuleConditionOperator,
     ResponseRuleOperator,
@@ -61,7 +62,7 @@ class ResponseRules(BaseModel):
     rules: List[ResponseRule]
 
 
-class CustomRemarks(BaseModel):
+class CustomRemarksDto(BaseModel):
     """Custom remarks for different user states"""
 
     expired_users: List[str] = Field(alias="expiredUsers", min_length=1)
@@ -71,7 +72,7 @@ class CustomRemarks(BaseModel):
     empty_internal_squads: List[str] = Field(alias="emptyInternalSquads", min_length=1)
 
 
-class HwidSettings(BaseModel):
+class HwidSettingsDto(BaseModel):
     """HWID (Hardware ID) settings"""
 
     enabled: bool
@@ -92,7 +93,7 @@ class SubscriptionSettingsResponseDto(BaseModel):
     serve_json_at_base_subscription: bool = Field(alias="serveJsonAtBaseSubscription")
     show_custom_remarks: bool = Field(alias="isShowCustomRemarks")
 
-    custom_remarks: CustomRemarks = Field(alias="customRemarks")
+    custom_remarks: CustomRemarksDto = Field(alias="customRemarks")
 
     happ_announce: Optional[str] = Field(None, alias="happAnnounce")
     happ_routing: Optional[str] = Field(None, alias="happRouting")
@@ -102,7 +103,7 @@ class SubscriptionSettingsResponseDto(BaseModel):
     randomize_hosts: bool = Field(alias="randomizeHosts")
     response_rules: Optional[ResponseRules] = Field(None, alias="responseRules")
 
-    hwid_settings: Optional[HwidSettings] = Field(None, alias="hwidSettings")
+    hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
 
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
@@ -135,7 +136,7 @@ class UpdateSubscriptionSettingsRequestDto(BaseModel):
         None, serialization_alias="isShowCustomRemarks"
     )
 
-    custom_remarks: Optional[CustomRemarks] = Field(
+    custom_remarks: Optional[CustomRemarksDto] = Field(
         None, serialization_alias="customRemarks"
     )
 
@@ -151,6 +152,11 @@ class UpdateSubscriptionSettingsRequestDto(BaseModel):
         None, serialization_alias="responseRules"
     )
 
-    hwid_settings: Optional[HwidSettings] = Field(
+    hwid_settings: Optional[HwidSettingsDto] = Field(
         None, serialization_alias="hwidSettings"
     )
+
+
+# Backward compatibility aliases
+CustomRemarks = CustomRemarksDto
+HwidSettings = HwidSettingsDto

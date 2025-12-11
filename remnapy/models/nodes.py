@@ -170,6 +170,15 @@ class GetAllNodesResponseDto(RootModel[List[NodeResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
+    
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+    
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
+
 
 
 class EnableNodeResponseDto(NodeResponseDto):
@@ -196,6 +205,14 @@ class ReorderNodeResponseDto(RootModel[List[NodeResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
+    
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+    
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
 
 
 class DeleteNodeResponseDto(BaseModel):

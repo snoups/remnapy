@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 from pydantic.alias_generators import to_camel
+
 from remnapy.enums import (
     TCRMEvents,
     TErrorsEvents,
@@ -14,7 +15,6 @@ from remnapy.enums import (
     TUserHwidDevicesEvents,
     TUsersStatus,
 )
-from remnapy.models.users import UserTrafficDto
 
 # ---------------- USER ---------------- #
 
@@ -30,6 +30,18 @@ class LastConnectedNodeDto(BaseModel):
 class InternalSquadDto(BaseModel):
     uuid: UUID
     name: str
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
+class UserTrafficDto(BaseModel):
+    """User traffic information for webhooks"""
+
+    used_traffic_bytes: int
+    lifetime_used_traffic_bytes: int
+    online_at: Optional[datetime] = None
+    first_connected_at: Optional[datetime] = None
+    last_connected_node_uuid: Optional[UUID] = None
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -68,6 +80,32 @@ class BaseUserDto(BaseModel):
     updated_at: datetime
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+    # Backward compatibility properties
+    @property
+    def used_traffic_bytes(self) -> int:
+        """Backward compatibility property"""
+        return self.user_traffic.used_traffic_bytes
+
+    @property
+    def lifetime_used_traffic_bytes(self) -> int:
+        """Backward compatibility property"""
+        return self.user_traffic.lifetime_used_traffic_bytes
+
+    @property
+    def online_at(self) -> Optional[datetime]:
+        """Backward compatibility property"""
+        return self.user_traffic.online_at
+
+    @property
+    def first_connected_at(self) -> Optional[datetime]:
+        """Backward compatibility property"""
+        return self.user_traffic.first_connected_at
+
+    @property
+    def last_connected_node_uuid(self) -> Optional[UUID]:
+        """Backward compatibility property"""
+        return self.user_traffic.last_connected_node_uuid
 
 
 class UserDto(BaseUserDto):

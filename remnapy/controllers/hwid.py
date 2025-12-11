@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from rapid_api_client import Path, PydanticBody
+
 from remnapy.models import (
     CreateHWIDUser,
     CreateUserHwidDeviceResponseDto,
@@ -60,4 +61,17 @@ class HWIDUserController(BaseController):
         uuid: Annotated[str, Path(description="UUID of the User")],
     ) -> GetUserHwidDevicesResponseDto:
         """Get a user HWID device"""
+        ...
+
+    @get("/hwid/devices/top-users", response_class=GetTopUsersByHwidDevicesResponseDto)
+    async def get_top_users_by_hwid_devices(
+        self,
+        size: Annotated[
+            Optional[int], Query(default=None, description="Page size for pagination")
+        ] = None,
+        start: Annotated[
+            Optional[int], Query(default=None, description="Offset for pagination")
+        ] = None,
+    ) -> GetTopUsersByHwidDevicesResponseDto:
+        """Get top users by HWID devices"""
         ...

@@ -53,7 +53,7 @@ def create_happ_crypto_link(content: str, method: Literal["v3", "v4"] = "v4") ->
         )
 
         return (
-            "happ://crypt{"
+            "happ://crypt"
             + method.lower().replace("v", "")
             + "/"
             + base64.b64encode(encrypted).decode()

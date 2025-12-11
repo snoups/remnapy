@@ -2,6 +2,7 @@ from typing import Annotated, Any, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel, StringConstraints
+
 from remnapy.enums import ALPN, Fingerprint, SecurityLayer
 
 
@@ -54,6 +55,7 @@ class UpdateHostRequestDto(BaseModel):
     override_sni_from_address: Optional[bool] = Field(
         None, serialization_alias="overrideSniFromAddress"
     )
+    keep_blank_sni: Optional[bool] = Field(None, serialization_alias="keepBlankSni")
     vless_route_id: Optional[int] = Field(
         None, serialization_alias="vlessRouteId", ge=0, le=65535
     )
@@ -106,6 +108,7 @@ class HostResponseDto(BaseModel):
     security_layer: SecurityLayer = Field(SecurityLayer.DEFAULT, alias="securityLayer")
     is_hidden: bool = Field(False, alias="isHidden")
     override_sni_from_address: bool = Field(False, alias="overrideSniFromAddress")
+    keep_blank_sni: bool = Field(False, alias="keepBlankSni")
     allow_insecure: bool = Field(False, alias="allowInsecure")
     xray_json_template_uuid: Optional[UUID] = Field(None, alias="xrayJsonTemplateUuid")
     excluded_internal_squads: List[UUID] = Field(
@@ -155,6 +158,7 @@ class CreateHostRequestDto(BaseModel):
     override_sni_from_address: bool = Field(
         False, serialization_alias="overrideSniFromAddress"
     )
+    keep_blank_sni: bool = Field(False, serialization_alias="keepBlankSni")
     xray_json_template_uuid: Optional[UUID] = Field(
         None, serialization_alias="xrayJsonTemplateUuid"
     )
@@ -206,6 +210,14 @@ class GetAllHostsResponseDto(RootModel[List[HostResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
+
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
 
 
 class GetOneHostResponseDto(HostResponseDto):

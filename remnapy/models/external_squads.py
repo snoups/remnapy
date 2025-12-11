@@ -5,6 +5,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
+from remnapy.models import CustomRemarksDto, HwidSettingsDto
+
 
 class TemplateType(StrEnum):
     """Template type enum"""
@@ -44,7 +46,6 @@ class ExternalSquadSubscriptionSettingsDto(BaseModel):
     randomize_hosts: bool = Field(alias="randomizeHosts")
 
 
-# НОВЫЕ МОДЕЛИ
 class ExternalSquadHostOverridesDto(BaseModel):
     """External squad host overrides"""
 
@@ -68,12 +69,14 @@ class ExternalSquadDto(BaseModel):
         None, alias="hostOverrides"
     )
     response_headers: Optional[Dict[str, str]] = Field(None, alias="responseHeaders")
+    hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
+    custom_remarks: Optional[CustomRemarksDto] = Field(None, alias="customRemarks")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
 
 
 # Request/Response models
-class GetExternalSquadsResponseDto(ExternalSquadDto):
+class GetExternalSquadsResponseDto(BaseModel):
     """Response with all external squads"""
 
     total: int = Field(alias="total")
@@ -112,6 +115,8 @@ class UpdateExternalSquadRequestDto(BaseModel):
     host_overrides: Optional[ExternalSquadHostOverridesDto] = Field(
         None, serialization_alias="hostOverrides"
     )
+    hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
+    custom_remarks: Optional[CustomRemarksDto] = Field(None, alias="customRemarks")
     response_headers: Optional[Dict[str, str]] = Field(
         None, serialization_alias="responseHeaders"
     )

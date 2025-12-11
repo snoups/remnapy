@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Optional
+from typing import Annotated, List, Literal, Optional
 from uuid import UUID
 
 from pydantic import (
@@ -9,6 +9,7 @@ from pydantic import (
     RootModel,
     StringConstraints,
 )
+
 from remnapy.enums import TrafficLimitStrategy, UserStatus
 from remnapy.utils.happ_crypt import create_happ_crypto_link
 
@@ -205,6 +206,15 @@ class UserResponseDto(BaseModel):
         crypto_link = create_happ_crypto_link(self.subscription_url)
         return HappCrypto(cryptoLink=crypto_link)
 
+    def happ_with_version(self, version: Literal["v3", "v4"] = "v4") -> HappCrypto:
+        return self._generate_happ(version=version)
+
+    def _generate_happ(self, version):
+        crypto_link = create_happ_crypto_link(
+            content=self.subscription_url, method=version
+        )
+        return HappCrypto(cryptoLink=crypto_link)
+
 
 class RevokeUserRequestDto(BaseModel):
     """Request DTO for revoking user subscription"""
@@ -354,6 +364,14 @@ class EmailUserResponseDto(RootModel[list[UserResponseDto]]):
     def __getitem__(self, item):
         return self.root[item]
 
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
+
 
 class TagUserResponseDto(RootModel[list[UserResponseDto]]):
     """Response for get users by tag"""
@@ -364,6 +382,14 @@ class TagUserResponseDto(RootModel[list[UserResponseDto]]):
     def __getitem__(self, item):
         return self.root[item]
 
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
+
 
 class TelegramUserResponseDto(RootModel[list[UserResponseDto]]):
     """Response for get users by telegram ID"""
@@ -373,3 +399,11 @@ class TelegramUserResponseDto(RootModel[list[UserResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
+
+    def __bool__(self):
+        """Return True if list is not empty"""
+        return bool(self.root)
+
+    def __len__(self):
+        """Return length of list"""
+        return len(self.root)
