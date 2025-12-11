@@ -1,16 +1,18 @@
 import pytest
-
-from remnawave.models import (
+from remnapy.models import (
     CreateSnippetRequestDto,
     DeleteSnippetRequestDto,
     GetSnippetsResponseDto,
     UpdateSnippetRequestDto,
 )
 
+
 def random_string(length=10):
     import random
     import string
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+    return "".join(random.choices(string.ascii_letters + string.digits, k=length))
+
 
 @pytest.mark.asyncio
 async def test_snippets_full_workflow(remnawave):
@@ -25,12 +27,12 @@ async def test_snippets_full_workflow(remnawave):
         name=rand_name,
         snippet=[
             {"type": "vmess", "port": 443},
-            {"type": "vless", "encryption": "none"}
-        ]
+            {"type": "vless", "encryption": "none"},
+        ],
     )
     created = await remnawave.snippets.create_snippet(create_request)
     assert created.total == initial_count + 1
-    
+
     # Verify snippet was created
     snippets_after_create = await remnawave.snippets.get_snippets()
     snippet_names = [s.name for s in snippets_after_create.snippets]
@@ -41,17 +43,17 @@ async def test_snippets_full_workflow(remnawave):
         name=rand_name,
         snippet=[
             {"type": "shadowsocks", "method": "aes-256-gcm"},
-            {"type": "trojan", "password": "test-password"}
-        ]
+            {"type": "trojan", "password": "test-password"},
+        ],
     )
     updated = await remnawave.snippets.update_snippet(update_request)
     assert updated.total == initial_count + 1
-    
+
     # Test deleting the snippet
     delete_request = DeleteSnippetRequestDto(name=rand_name)
     deleted = await remnawave.snippets.delete_snippet_by_name(delete_request)
     assert deleted.total == initial_count
-    
+
     # Verify snippet was deleted
     snippets_after_delete = await remnawave.snippets.get_snippets()
     snippet_names_after = [s.name for s in snippets_after_delete.snippets]
@@ -63,15 +65,15 @@ async def test_snippet_name_validation(remnawave):
     """Test that snippet names are properly validated"""
     # Valid names
     valid_names = ["Test Snippet", "My_Snippet", "Snippet-123", "A B C"]
-    
+
     for name in valid_names:
         request = CreateSnippetRequestDto(name=name, snippet=[{"test": "data"}])
         # Should not raise validation error
         assert request.name == name
-    
+
     # Invalid names would be caught by Pydantic validation
     with pytest.raises(ValueError):
         CreateSnippetRequestDto(name="x", snippet=[])  # Too short
-        
+
     with pytest.raises(ValueError):
         CreateSnippetRequestDto(name="", snippet=[])  # Empty name

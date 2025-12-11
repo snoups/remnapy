@@ -1,19 +1,19 @@
 import random
 
 import pytest
-
-from remnawave.models import (
-    NodeConfigProfileRequestDto,
+from remnapy.models import (
     CreateNodeRequestDto,
     DeleteNodeResponseDto,
     GetAllNodesResponseDto,
+    NodeConfigProfileRequestDto,
     NodeResponseDto,
     NodesResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
     UpdateNodeRequestDto,
 )
-from remnawave.models.nodes import ReorderNodeItem
+from remnapy.models.nodes import ReorderNodeItem
+
 from tests.conftest import REMNAWAVE_CONFIG_PROFILE_UUID, REMNAWAVE_INBOUND_UUID
 from tests.utils import generate_random_string
 
@@ -28,13 +28,15 @@ async def test_nodes(remnawave):
     random_name: str = generate_random_string()
     create_node = await remnawave.nodes.create_node(
         CreateNodeRequestDto(
-            name=random_name, 
-            address=random_ip, 
+            name=random_name,
+            address=random_ip,
             port=random_port,
-            config_profile=NodeConfigProfileRequestDto.model_validate({
-                "activeConfigProfileUuid": str(REMNAWAVE_CONFIG_PROFILE_UUID),
-                "activeInbounds": [str(REMNAWAVE_INBOUND_UUID)]
-            })
+            config_profile=NodeConfigProfileRequestDto.model_validate(
+                {
+                    "activeConfigProfileUuid": str(REMNAWAVE_CONFIG_PROFILE_UUID),
+                    "activeInbounds": [str(REMNAWAVE_INBOUND_UUID)],
+                }
+            ),
         )
     )
     assert isinstance(create_node, NodeResponseDto)
@@ -46,10 +48,11 @@ async def test_nodes(remnawave):
 
     reorder_node = await remnawave.nodes.reorder_nodes(
         ReorderNodeRequestDto(
-            nodes=[ReorderNodeItem(
-                view_position=random.randint(1, 1000),
-                uuid=create_node.uuid
-            )]
+            nodes=[
+                ReorderNodeItem(
+                    view_position=random.randint(1, 1000), uuid=create_node.uuid
+                )
+            ]
         )
     )
     print(reorder_node)

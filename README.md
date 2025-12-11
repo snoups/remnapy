@@ -97,7 +97,7 @@ import os
 import asyncio
 
 from remnawave import RemnawaveSDK  # Updated import for new package
-from remnawave.models import (  # Updated import path
+from remnapy.models import (  # Updated import path
     UsersResponseDto, 
     UserResponseDto,
     GetAllConfigProfilesResponseDto,

@@ -3,8 +3,8 @@ from typing import List
 
 import pytest
 import pytz
+from remnapy.models import BulkResponseDto, BulkUpdateUsersRequestDto, UpdateUserFields
 
-from remnawave.models import BulkResponseDto, UpdateUserFields, BulkUpdateUsersRequestDto
 from tests.conftest import REMNAWAVE_USER_UUID
 
 

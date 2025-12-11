@@ -3,7 +3,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 
-from remnawave import RemnawaveSDK
+from remnapy import RemnawaveSDK
 
 load_dotenv()
 REMNAWAVE_BASE_URL = os.getenv("REMNAWAVE_BASE_URL")
@@ -15,6 +15,7 @@ REMNAWAVE_CONFIG_PROFILE_UUID = os.getenv("REMNAWAVE_CONFIG_PROFILE_UUID")
 REMNAWAVE_USER_UUID = os.getenv("REMNAWAVE_USER_UUID")
 REMNAWAVE_SHORT_UUID = os.getenv("REMNAWAVE_SHORT_UUID")
 REMNAWAVE_USER_USERNAME = os.getenv("REMNAWAVE_USER_USERNAME")
+
 
 @pytest.fixture
 async def remnawave() -> RemnawaveSDK:

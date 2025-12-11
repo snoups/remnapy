@@ -1,7 +1,7 @@
 from uuid import UUID
-import pytest
 
-from remnawave.models import (
+import pytest
+from remnapy.models import (
     AddUsersToInternalSquadRequestDto,
     AddUsersToInternalSquadResponseDto,
     CreateInternalSquadRequestDto,
@@ -14,6 +14,7 @@ from remnawave.models import (
     UpdateInternalSquadRequestDto,
     UpdateInternalSquadResponseDto,
 )
+
 from tests.conftest import REMNAWAVE_INBOUND_UUID
 from tests.utils import generate_random_string
 
@@ -21,14 +22,14 @@ from tests.utils import generate_random_string
 @pytest.mark.asyncio
 async def test_internal_squads(remnawave) -> None:
     squad_name = f"test_squad_{generate_random_string(length=6)}"
-    
+
     # Test create internal squad
     create_squad = await remnawave.internal_squads.create_internal_squad(
-        CreateInternalSquadRequestDto(name=squad_name, inbounds=[
-            REMNAWAVE_INBOUND_UUID
-        ])
+        CreateInternalSquadRequestDto(
+            name=squad_name, inbounds=[REMNAWAVE_INBOUND_UUID]
+        )
     )
-    
+
     assert isinstance(create_squad, CreateInternalSquadResponseDto)
     assert create_squad.name == squad_name
 
@@ -38,9 +39,11 @@ async def test_internal_squads(remnawave) -> None:
     all_squads = await remnawave.internal_squads.get_internal_squads()
     assert isinstance(all_squads, GetAllInternalSquadsResponseDto)
     assert len(all_squads.internal_squads) > 0
-    
+
     # Test get internal squad by uuid
-    squad_by_uuid = await remnawave.internal_squads.get_internal_squad_by_uuid(squad_uuid)
+    squad_by_uuid = await remnawave.internal_squads.get_internal_squad_by_uuid(
+        squad_uuid
+    )
     assert isinstance(squad_by_uuid, GetInternalSquadByUuidResponseDto)
     assert squad_by_uuid.name == squad_name
 
@@ -48,10 +51,10 @@ async def test_internal_squads(remnawave) -> None:
     update_squad = await remnawave.internal_squads.update_internal_squad(
         UpdateInternalSquadRequestDto(
             uuid=create_squad.uuid,
-            inbounds=[REMNAWAVE_INBOUND_UUID], 
+            inbounds=[REMNAWAVE_INBOUND_UUID],
         )
     )
-    
+
     assert isinstance(update_squad, UpdateInternalSquadResponseDto)
     assert update_squad.inbounds[0].uuid == UUID(REMNAWAVE_INBOUND_UUID)
 
@@ -60,16 +63,16 @@ async def test_internal_squads(remnawave) -> None:
     add_users = await remnawave.internal_squads.add_users_to_internal_squad(
         squad_uuid,
     )
-    
+
     assert isinstance(add_users, AddUsersToInternalSquadResponseDto)
-    
+
     # Test remove users from internal squad
     remove_users = await remnawave.internal_squads.remove_users_from_internal_squad(
         squad_uuid,
     )
-    
+
     assert isinstance(remove_users, DeleteUsersFromInternalSquadResponseDto)
-    
+
     # Test delete internal squad
     delete_squad = await remnawave.internal_squads.delete_internal_squad(squad_uuid)
     assert isinstance(delete_squad, DeleteInternalSquadResponseDto)

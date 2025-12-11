@@ -1,9 +1,10 @@
 [project]
-name = "remnawave"
-version = "2.3.0"
-description = "A Python SDK for interacting with the Remnawave API v2.3.0."
+name = "remnapy"
+version = "2.3.1"
+description = "A Python SDK for interacting with the Remnawave API v2.3.2."
 authors = [
-    {name = "Artem",email = "dev@forestsnet.com"}
+    { name = "Artem", email = "dev@forestsnet.com" },
+    { name = "snoups" },
 ]
 license = { text = "MIT" }
 readme = "README.md"
@@ -48,7 +49,7 @@ python-dotenv = "^1.0.1"
 pytz = "^2025.1"
 
 [tool.pytest.ini_options]
-addopts = [ "-n", "logical", "-ra", "--strict-config", "--strict-markers" ]
+addopts = ["-n", "logical", "-ra", "--strict-config", "--strict-markers"]
 testpaths = ["tests"]
 log_cli_level = "INFO"
 xfail_strict = true

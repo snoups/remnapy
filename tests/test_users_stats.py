@@ -1,6 +1,6 @@
 import pytest
+from remnapy.models import GetUserUsageByRangeResponseDto
 
-from remnawave.models import GetUserUsageByRangeResponseDto
 from tests.conftest import REMNAWAVE_USER_UUID
 from tests.utils import generate_isoformat_range
 
