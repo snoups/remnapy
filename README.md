@@ -1,31 +1,24 @@
 # Remnawave Python SDK
 
-> **📢 Repository Migration Notice**
-> 
-> This repository has been moved from [`sm1ky/remnawave-api`](https://github.com/sm1ky/remnawave-api) to [`remnawave/python-sdk`](https://github.com/remnawave/python-sdk).
-> 
-> **PyPI Package Migration:**
-> - **Legacy versions (≤1.x)**: Available at [`remnawave_api`](https://pypi.org/project/remnawave_api/) *(deprecated)*
-> - **New versions (≥2.x)**: Available at [`remnawave`](https://pypi.org/project/remnawave/)
-> 
-> Please update your dependencies to use the new package name for future updates.
+> [!WARNING]
+> This repository is a fork of the official SDK [`remnawave/python-sdk`](https://github.com/remnawave/python-sdk).
 
-[![Stars](https://img.shields.io/github/stars/remnawave/python-sdk.svg?style=social)](https://github.com/remnawave/python-sdk/stargazers)
-[![Forks](https://img.shields.io/github/forks/remnawave/python-sdk.svg?style=social)](https://github.com/remnawave/python-sdk/network/members)
-[![Issues](https://img.shields.io/github/issues/remnawave/python-sdk.svg)](https://github.com/remnawave/python-sdk/issues)
-[![Supported python versions](https://img.shields.io/pypi/pyversions/remnawave.svg)](https://pypi.python.org/pypi/remnawave)
-[![Downloads](https://img.shields.io/pypi/dm/remnawave.svg)](https://pypi.python.org/pypi/remnawave)
-[![PyPi Package Version](https://img.shields.io/pypi/v/remnawave)](https://pypi.python.org/pypi/remnawave)
-[![Publish Python Package](https://github.com/remnawave/python-sdk/actions/workflows/upload.yml/badge.svg?branch=production)](https://github.com/remnawave/python-sdk/actions/workflows/upload.yml)
+[![Stars](https://img.shields.io/github/stars/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/stargazers)
+[![Forks](https://img.shields.io/github/forks/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/network/members)
+[![Issues](https://img.shields.io/github/issues/snoups/remnapy.svg)](https://github.com/snoups/remnapy/issues)
+[![Supported python versions](https://img.shields.io/pypi/pyversions/snoups.svg)](https://pypi.python.org/pypi/remnapy)
+[![Downloads](https://img.shields.io/pypi/dm/snoups.svg)](https://pypi.python.org/pypi/remnapy)
+[![PyPi Package Version](https://img.shields.io/pypi/v/snoups)](https://pypi.python.org/pypi/remnapy)
+[![Publish Python Package](https://github.com/snoups/remnapy/actions/workflows/upload.yml/badge.svg?branch=production)](https://github.com/snoups/remnapy/actions/workflows/upload.yml)
 
-A Python SDK client for interacting with the **[Remnawave API](https://remna.st)**.
+A Python SDK client for interacting with the **[Remnawave API](https://docs.rw/)**.
 This library simplifies working with the API by providing convenient controllers, Pydantic models for requests and responses, and fast serialization with `orjson`. 
 
-**🎉 Version 2.0.0** brings full compatibility with the latest Remnawave backend API, including new endpoints, improved response wrappers, and enhanced type safety.
+**🎉 Version 2.3.0** brings full compatibility with the latest Remnawave backend API, including new endpoints, improved response wrappers, and enhanced type safety.
 
 ## ✨ Key Features
 
-- **Full v2.0.0 API compatibility**: Updated for latest Remnawave backend features
+- **Full v2.3.0 API compatibility**: Updated for latest Remnawave backend features
 - **New controllers**: ConfigProfiles, InternalSquads, InfraBilling, NodesUsageHistory
 - **Enhanced models**: OpenAPI-compliant response wrappers with improved field mappings
 - **Controller-based design**: Split functionality into separate controllers for flexibility. Use only what you need!
@@ -36,25 +29,18 @@ This library simplifies working with the API by providing convenient controllers
 
 ## 📦 Installation
 
-### New Package (Recommended)
+### Production Version
 Install the latest version from the new PyPI package:
 
 ```bash
-pip install remnawave
-```
-
-### Legacy Package (Deprecated)
-If you need older versions (≤1.x), use the legacy package:
-
-```bash
-pip install remnawave_api  # Deprecated - use 'remnawave' instead
+pip install remnapy
 ```
 
 ### Development Version
 If you need the development version:
 
 ```bash
-pip install git+https://github.com/remnawave/python-sdk.git@development
+pip install git+https://github.com/snoups/remnapy.git@development
 ```
 
 ---
@@ -64,25 +50,7 @@ pip install git+https://github.com/remnawave/python-sdk.git@development
 | Contract Version | Remnawave Panel Version |
 | ---------------- | ----------------------- |
 | 2.3.2            | >=2.3.0                 |
-| 2.3.0            | >=2.3.0, <2.3.2         |
-| 2.2.6            | ==2.2.6                 |
-| 2.2.3            | >=2.2.13                |
-| 2.1.19           | >=2.1.19, <2.2.0        |
-| 2.1.18           | >=2.1.18                |
-| 2.1.17           | >=2.1.16, <=2.1.17      |
-| 2.1.16           | >=2.1.16                |
-| 2.1.13           | >=2.1.13, <=2.1.15      |
-| 2.1.9            | >=2.1.9, <=2.1.12       |
-| 2.1.8            | ==2.1.8                 |
-| 2.1.7.post1      | ==2.1.7                 |
-| 2.1.4            | >=2.1.4, <2.1.7         |
-| 2.1.1            | >=2.1.1, <2.1.4         |
-| 2.0.0            | >=2.0.0,<2.1.0          |
-| 1.1.3            | >=1.6.12,<2.0.0         |
-| 1.1.2            | >=1.6.3,<=1.6.11        |
-| 1.1.1            | 1.6.1, 1.6.2            |
-| 1.1.0            | 1.6.0                   |
-| 1.0.8            | 1.5.7                   |
+| 2.3.1            | >=2.3.0, <2.3.2         |
 
 ### Dependencies
 - `orjson` (>=3.10.15, <4.0.0)
@@ -97,7 +65,7 @@ Here’s a quick example to get you started:
 import os
 import asyncio
 
-from remnawave import RemnawaveSDK  # Updated import for new package
+from remnapy import RemnawaveSDK  # Updated import for new package
 from remnapy.models import (  # Updated import path
     UsersResponseDto, 
     UserResponseDto,
@@ -141,4 +109,6 @@ This SDK was originally developed by [@kesevone](https://github.com/kesevone) fo
 
 Previously maintained by [@sm1ky](https://github.com/sm1ky) at [`sm1ky/remnawave-api`](https://github.com/sm1ky/remnawave-api).
 
-Now officially maintained by the Remnawave Community at [`remnawave/python-sdk`](https://github.com/remnawave/python-sdk).
+The official Remnawave repository is located at [`remnawave/python-sdk`](https://github.com/remnawave/python-sdk).
+
+This repository is a fork of the official SDK.
