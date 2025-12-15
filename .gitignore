@@ -174,11 +174,10 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 test.py
-.DS_Store
 docs/
 openapi/
-.DS_Store
 requirements.txt 
 requirements.in
 test_raw.py
 tests/test_one_time.py
+.DS_Store

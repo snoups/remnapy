@@ -49,8 +49,7 @@ pip install git+https://github.com/snoups/remnapy.git@development
 
 | Contract Version | Remnawave Panel Version |
 | ---------------- | ----------------------- |
-| 2.3.2            | >=2.3.0                 |
-| 2.3.1            | >=2.3.0, <2.3.2         |
+| 2.3.0            | >=2.3.0                 |
 
 ### Dependencies
 - `orjson` (>=3.10.15, <4.0.0)

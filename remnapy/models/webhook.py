@@ -109,8 +109,9 @@ class BaseUserDto(BaseModel):
 
 
 class UserDto(BaseUserDto):
-    user_traffic: UserTrafficDto = Field(alias="userTraffic")
+    subscription_url: str = Field(alias="subscriptionUrl")
     active_internal_squads: List[InternalSquadDto] = Field(default_factory=list)
+    user_traffic: UserTrafficDto = Field(alias="userTraffic")
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 

@@ -1,14 +1,16 @@
 [project]
 name = "remnapy"
-version = "2.3.2rc1"
-description = "A Python SDK for interacting with the Remnawave API v2.3.2."
+dynamic = ["version"]
+description = "A Python SDK for interacting with the Remnawave API v2.3.0."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11,<4.0"
+
 authors = [
     { name = "Artem", email = "dev@forestsnet.com" },
     { name = "snoups" },
 ]
-license = { text = "MIT" }
-readme = "README.md"
-requires-python = ">=3.11,<4.0"
+
 dependencies = [
     "rapid-api-client (==0.6.0)",
     "orjson (>=3.10.15,<4.0.0)",
@@ -18,11 +20,12 @@ dependencies = [
     "pydantic>=2.9.2,<3.0.0",
     "cryptography (>=46.0.3,<47.0.0)",
 ]
+
 keywords = ["remnawave", "api", "sdk", "proxy", "httpx", "async", "xray"]
+
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -33,10 +36,12 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/remnawave/python-sdk"
-"Panel Page" = "https://remna.st/"
-"Community Chat" = "https://t.me/+xQs17zMzwCY1NzYy"
-"Update Channel" = "https://t.me/remnawave"
+PanelPage = "https://remna.st/"
+CommunityChat = "https://t.me/+xQs17zMzwCY1NzYy"
+UpdateChannel = "https://t.me/remnawave"
+RemnashopPage = "http://www.github.com/snoups/remnashop"
+RemnashopChat = "https://t.me/remna_shop"
+Homepage = "https://github.com/snoups/remnapy"
 
 [tool.poetry.group.test.dependencies]
 ruff = "^0.4.4"
@@ -56,6 +61,9 @@ xfail_strict = true
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
+[tool.setuptools_scm]
+tag_regex = "^v(?P<version>.+)$"
+
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=68", "setuptools_scm[toml]>=8"]
+build-backend = "setuptools.build_meta"

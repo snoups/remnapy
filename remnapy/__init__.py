@@ -1,7 +1,9 @@
 import logging
+from importlib.metadata import version
 from typing import Optional
 
 import httpx
+
 from remnapy.controllers import (
     APITokensManagementController,
     AuthController,
@@ -35,6 +37,8 @@ from remnapy.controllers import (
     WebhookUtility,
     XrayConfigController,
 )
+
+__version__ = version("remnapy")
 
 
 class RemnawaveSDK:
