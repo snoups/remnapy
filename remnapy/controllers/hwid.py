@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
-from rapid_api_client import Path, PydanticBody
+from rapid_api_client import Path, PydanticBody, Query
 
 from remnapy.models import (
     CreateHWIDUser,
@@ -11,6 +11,7 @@ from remnapy.models import (
     GetUserHwidDevicesResponseDto,
     HWIDDeleteRequest,
 )
+from remnapy.models.hwid import GetTopUsersByHwidDevicesResponseDto
 from remnapy.rapid import AttributeBody, BaseController, get, post
 
 
