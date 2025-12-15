@@ -41,11 +41,11 @@ class GetInboundsResponseDto(RootModel[List[InboundResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -74,11 +74,11 @@ class GetFullInboundsResponseDto(RootModel[List[FullInboundResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)

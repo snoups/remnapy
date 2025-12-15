@@ -1,6 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path, Query
+
 from remnapy.models import (
     GetAllSubscriptionsResponseDto,
     GetSubscriptionByShortUUIDResponseDto,
@@ -43,7 +45,9 @@ class SubscriptionsController(BaseController):
     )
     async def get_subscription_by_short_uuid(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the subscription")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the subscription")
+        ],
     ) -> GetSubscriptionByShortUUIDResponseDto:
         """None"""
         ...
@@ -53,7 +57,7 @@ class SubscriptionsController(BaseController):
     )
     async def get_subscription_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> GetSubscriptionByUUIDResponseDto:
         """None"""
         ...
@@ -64,7 +68,9 @@ class SubscriptionsController(BaseController):
     )
     async def get_raw_subscription(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the user")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the user")
+        ],
         withDisabledHosts: Annotated[
             Annotated[bool, Path(description="Include disabled hosts")], bool
         ] = False,

@@ -2,6 +2,7 @@ import datetime
 from typing import Dict, List, Optional
 
 from pydantic import BaseModel, Field
+
 from remnapy.enums import ResponseType
 from remnapy.models.subscriptions_settings import ResponseRule, ResponseRules
 

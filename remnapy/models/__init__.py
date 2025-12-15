@@ -5,32 +5,32 @@ from .api_tokens_management import (
     FindAllApiTokensResponseDto,
 )
 from .auth import (
+    GetPasskeyAuthenticationOptionsResponseDto,
     GetStatusResponseDto,
     LoginRequestDto,
     LoginResponseDto,
-    RegisterRequestDto,
-    RegisterResponseDto,
-    StatusResponseDto,  # Legacy alias
-    TelegramCallbackRequestDto,
-    TelegramCallbackResponseDto,
     LoginTelegramRequestDto,  # Legacy alias
     OAuth2AuthorizeRequestDto,
     OAuth2AuthorizeResponseDto,
     OAuth2CallbackRequestDto,
     OAuth2CallbackResponseDto,
+    RegisterRequestDto,
+    RegisterResponseDto,
+    StatusResponseDto,  # Legacy alias
+    TelegramCallbackRequestDto,
+    TelegramCallbackResponseDto,
     VerifyPasskeyAuthenticationRequestDto,
     VerifyPasskeyAuthenticationResponseDto,
-    GetPasskeyAuthenticationOptionsResponseDto,
 )
 from .bandwidthstats import (
-    GetNodeUserUsageByRangeResponseDto,
     GetNodesRealtimeUsageResponseDto,
     GetNodesUsageByRangeResponseDto,
+    GetNodeUserUsageByRangeResponseDto,
     GetUserUsageByRangeResponseDto,
     NodeRealtimeUsageResponseDto,
-    NodeUsageResponseDto,
     NodesRealtimeUsageResponseDto,  # Legacy alias
     NodesUsageResponseDto,  # Legacy alias
+    NodeUsageResponseDto,
 )
 from .config_profiles import (
     ConfigProfileDto,
@@ -46,327 +46,6 @@ from .config_profiles import (
     NodesProfileDto,
     UpdateConfigProfileRequestDto,
     UpdateConfigProfileResponseDto,
-)
-from .hosts import (
-    CreateHostInboundData,
-    CreateHostRequestDto,
-    CreateHostResponseDto,
-    DeleteHostResponseDto,
-    GetAllHostsResponseDto,
-    GetOneHostResponseDto,
-    HostInboundData,
-    HostResponseDto,
-    HostsResponseDto,  # Legacy alias
-    ReorderHostItem,
-    ReorderHostRequestDto,
-    ReorderHostResponseDto,
-    UpdateHostRequestDto,
-    UpdateHostResponseDto,
-    GetAllHostTagsResponseDto,
-)
-from .hosts_bulk_actions import (
-    BulkDeleteHostsResponseDto,
-    BulkDisableHostsResponseDto,
-    BulkEnableHostsResponseDto,
-    SetInboundToManyHostsRequestDto,
-    SetInboundToManyHostsResponseDto,
-    SetPortToManyHostsResponseDto,
-    SetPortToManyHostsRequestDto
-)
-from .hwid import (
-    CreateHWIDUser,  # Legacy alias
-    CreateUserHwidDeviceRequestDto,
-    CreateUserHwidDeviceResponseDto,
-    DeleteUserHwidDeviceRequestDto,
-    DeleteUserHwidDeviceResponseDto,
-    GetUserHwidDevicesResponseDto,
-    HWIDDeleteRequest,  # Legacy alias
-    HWIDUserResponseDto,  # Legacy alias
-    HWIDUserResponseDtoList,  # Legacy alias
-    GetHwidStatisticsResponseDto,
-    DeleteUserAllHwidDeviceRequestDto,
-    GetTopUsersByHwidDevicesResponseDto,
-    TopUserByHwidDevicesDto,
-    TopUsersByHwidDevicesData,
-)
-from .inbounds import (
-    AllInboundsData,
-    FullInboundResponseDto,
-    FullInboundStatistic,
-    FullInboundsResponseDto,
-    GetAllInboundsResponseDto,
-    GetFullInboundsResponseDto,
-    GetInboundsByProfileUuidResponseDto,
-    GetInboundsResponseDto,
-    InboundResponseDto,
-    InboundsByProfileData,
-    InboundsResponseDto,  # Legacy alias
-)
-from .inbounds_bulk_actions import (
-    AddInboundToNodesResponseDto,
-    AddInboundToUsersResponseDto,
-    RemoveInboundFromNodesResponseDto,
-    RemoveInboundFromUsersResponseDto,
-)
-from .infra_billing import (
-    CreateInfraBillingHistoryRecordRequestDto,
-    CreateInfraBillingHistoryRecordResponseDto, 
-    CreateInfraBillingNodeRequestDto,
-    CreateInfraBillingNodeResponseDto,
-    CreateInfraProviderRequestDto,
-    CreateInfraProviderResponseDto,
-    DeleteInfraBillingHistoryRecordByUuidResponseDto,  
-    DeleteInfraBillingNodeByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraBillingNodeResponseDto)
-    DeleteInfraProviderByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraProviderResponseDto)
-    GetInfraBillingHistoryRecordsResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
-    GetInfraBillingNodesResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingNodesResponseDto)
-    GetInfraProvidersResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraProvidersResponseDto)
-    GetInfraBillingHistoryByUuidResponseDto,
-    GetInfraBillingNodeByUuidResponseDto,
-    GetInfraProviderByUuidResponseDto,
-    InfraBillingHistoryDto,
-    InfraBillingNodeDto,
-    InfraProviderDto,
-    NodeDto,
-    UpdateInfraBillingNodeRequestDto,
-    UpdateInfraBillingNodeResponseDto,
-    UpdateInfraProviderRequestDto,
-    UpdateInfraProviderResponseDto,
-    DeleteInfraBillingNodeResponseDto,  # LEGACY
-    DeleteInfraProviderResponseDto,  # LEGACY
-    GetAllInfraBillingHistoryResponseDto,  # LEGACY
-    GetAllInfraBillingNodesResponseDto,  # LEGACY
-    GetAllInfraProvidersResponseDto,  # LEGACY
-)
-from .internal_squads import (
-    AddUsersToInternalSquadRequestDto,
-    AddUsersToInternalSquadResponseDto,
-    CreateInternalSquadRequestDto,
-    CreateInternalSquadResponseDto,
-    DeleteInternalSquadResponseDto,
-    DeleteUsersFromInternalSquadRequestDto,
-    DeleteUsersFromInternalSquadResponseDto,
-    GetAllInternalSquadsResponseDto,
-    GetInternalSquadByUuidResponseDto,
-    InternalSquadDto,
-    UpdateInternalSquadRequestDto,
-    UpdateInternalSquadResponseDto,
-    GetInternalSquadAccessibleNodesResponseDto,
-)
-from .keygen import GetPubKeyResponseDto, PubKeyResponseDto  # Legacy alias
-from .nodes import (
-    CreateNodeRequestDto,
-    CreateNodeResponseDto,
-    DeleteNodeResponseDto,
-    DisableNodeResponseDto,
-    EnableNodeResponseDto,
-    ExcludedInbounds,
-    GetAllNodesResponseDto,
-    GetOneNodeResponseDto,
-    NodeConfigProfileDto,
-    NodeConfigProfileRequestDto,
-    NodeResponseDto,
-    NodesResponseDto,  # Legacy alias
-    ReorderNodeRequestDto,
-    ReorderNodeResponseDto,
-    RestartAllNodesResponseDto,
-    RestartNodeResponseDto,
-    UpdateNodeRequestDto,
-    UpdateNodeResponseDto,
-    RestartAllNodesRequestDto, # Legacy alias,
-    RestartAllNodesRequestBodyDto,
-    ResetNodeTrafficRequestDto,
-    ResetNodeTrafficResponseDto
-)
-from .nodes_usage_history import (
-    GetNodeUserUsageByRangeResponseDto,
-    GetNodesUsageByRangeResponseDto,
-    GetUserAccessibleNodesResponseDto,
-    NodeInfoDto,
-    NodeUsageDto,
-    UserUsageDto,
-)
-from .subscription import (
-    GetAllSubscriptionsResponseDto,
-    GetSubscriptionByUsernameResponseDto,
-    GetSubscriptionInfoResponseDto,
-    SubscriptionInfoResponseDto,  # Legacy alias
-    UserSubscription,
-    GetRawSubscriptionByShortUuidResponseDto,
-    RawSettings,
-    GetSubscriptionByShortUUIDResponseDto,
-    GetSubscriptionByUUIDResponseDto,
-)
-from .subscriptions_settings import (
-    GetSubscriptionSettingsResponseDto,
-    ResponseModificationHeader,
-    ResponseModifications,
-    ResponseRule,
-    ResponseRuleCondition,
-    ResponseRules,
-    SubscriptionSettingsResponseDto,
-    UpdateSubscriptionSettingsRequestDto,
-    UpdateSubscriptionSettingsResponseDto,
-    CustomRemarksDto,
-    HwidSettingsDto,
-    # Backward compatibility aliases
-    CustomRemarks,
-    HwidSettings,
-)
-from .subscriptions_template import (
-    CreateSubscriptionTemplateRequestDto,
-    CreateSubscriptionTemplateResponseDto,
-    DeleteSubscriptionTemplateResponseDto,
-    GetTemplatesResponseDto,
-    TemplateInfoDto,
-    GetTemplateResponseDto,
-    TemplateResponseDto,
-    UpdateTemplateRequestDto,
-    UpdateTemplateResponseDto,
-)
-from .system import (
-    BandwidthStatistic,
-    BandwidthStatisticResponseDto,
-    CPUStatistic,
-    GetBandwidthStatsResponseDto,
-    GetNodesStatisticsResponseDto,
-    GetRemnawaveHealthResponseDto,
-    GetStatsResponseDto,
-    MemoryStatistic,
-    NodeStatistic,
-    NodesStatisticResponseDto,
-    OnlineStatistic,
-    StatisticResponseDto,
-    StatusCounts,
-    UsersStatistic,
-    GetNodesMetricsResponseDto,
-    GetX25519KeyPairResponseDto, 
-    X25519KeyPair,
-    DebugSrrMatcherRequestDto,
-    DebugSrrMatcherResponseDto,
-    EncryptHappCryptoLinkRequestDto,
-    EncryptHappCryptoLinkResponseDto,
-)
-from .users import (
-    # Request DTOs
-    CreateUserRequestDto,
-    UpdateUserRequestDto,
-    RevokeUserRequestDto,
-    
-    # Response DTOs - Single User
-    CreateUserResponseDto,
-    UpdateUserResponseDto,
-    GetUserByUuidResponseDto,
-    GetUserByShortUuidResponseDto,
-    GetUserByUsernameResponseDto,
-    GetUserByIdResponseDto,
-    DisableUserResponseDto,
-    EnableUserResponseDto,
-    ResetUserTrafficResponseDto,
-    RevokeUserSubscriptionResponseDto,
-    ActivateAllInboundsResponseDto,
-    
-    # Response DTOs - Collections
-    GetAllUsersResponseDto,
-    GetAllTagsResponseDto,
-    GetUserSubscriptionRequestHistoryResponseDto,
-    
-    # Response DTOs - Arrays (RootModel)
-    TelegramUserResponseDto,
-    EmailUserResponseDto,
-    TagUserResponseDto,
-    
-    # Other Response DTOs
-    DeleteUserResponseDto,
-    
-    # Base DTOs
-    UserResponseDto,
-    UsersResponseDto,
-    TagsResponseDto,
-    SubscriptionRequestsResponseData,
-    
-    # Data DTOs
-    UserTrafficDto,
-    ActiveInternalSquadDto,
-    SubscriptionRequestRecord,
-    HappCrypto,
-    UserActiveInboundsDto,
-    UserLastConnectedNodeDto,
-
-    # Alias
-    GetSubscriptionRequestsResponseDto,
-)
-
-from .users_bulk_actions import (
-    BulkAllExtendExpirationDateRequestDto, 
-    BulkAllExtendExpirationDateResponseDto, 
-    BulkAllResetTrafficUsersResponseDto,
-    BulkAllUpdateUsersRequestDto,
-    BulkAllUpdateUsersResponseDto,
-    BulkDeleteUsersByStatusRequestDto, 
-    BulkDeleteUsersByStatusResponseDto, 
-    BulkDeleteUsersRequestDto, 
-    BulkDeleteUsersResponseDto, 
-    BulkEventResponseData, 
-    BulkExtendExpirationDateRequestDto, 
-    BulkExtendExpirationDateResponseDto, 
-    BulkResetTrafficUsersRequestDto, 
-    BulkResetTrafficUsersResponseDto, 
-    BulkResponseData, 
-    BulkResponseDto,
-    BulkRevokeUsersSubscriptionRequestDto, 
-    BulkRevokeUsersSubscriptionResponseDto, 
-    BulkUpdateUsersInternalSquadsRequestDto,
-    BulkUpdateUsersRequestDto, 
-    BulkUpdateUsersResponseDto, 
-    BulkUpdateUsersSquadsRequestDto, 
-    BulkUpdateUsersSquadsResponseDto, 
-    TagStr, 
-    UpdateUserFields,
-)
-from .users_stats import UserUsageByRange, UserUsageByRangeResponseDto
-from .xray_config import (
-    ConfigResponseDto,  # Legacy alias
-    GetConfigResponseDto,
-    UpdateConfigRequestDto,
-    UpdateConfigResponseDto,
-)
-from .subscription_request_history import (
-    GetAllSubscriptionRequestHistoryResponseDto,
-    GetSubscriptionRequestHistoryStatsResponseDto,
-    SubscriptionRequestHistoryRecord,
-    SubscriptionRequestHistoryData,
-    AppStatItem,
-    HourlyRequestStat,
-    SubscriptionRequestHistoryStatsData
-)
-from .webhook import (
-    UserEventDto, 
-    UserHwidDeviceEventDto,
-    HwidUserDeviceDto,
-    LastConnectedNodeDto,
-    InternalSquadDto,
-    BaseUserDto,
-    UserDto,
-    NodeDto,
-    ConfigProfileInboundDto,
-    InfraProviderDto,
-    LoginAttemptDto,
-    ServiceEventDto,
-    NodeEventDto,
-    CustomErrorEventDto,
-    CrmEventDto,
-    WebhookPayloadDto,
-    UserTrafficDto
-)
-from .passkeys import (
-    DeletePasskeyRequestDto,
-    DeletePasskeyResponseDto,
-    GetAllPasskeysResponseDto,
-    GetPasskeyRegistrationOptionsResponseDto,
-    PasskeyDto,
-    VerifyPasskeyRegistrationRequestDto,
-    VerifyPasskeyRegistrationResponseDto,
 )
 from .external_squads import (
     AddUsersToExternalSquadResponseDto,
@@ -384,16 +63,153 @@ from .external_squads import (
     UpdateExternalSquadRequestDto,
     UpdateExternalSquadResponseDto,
 )
-from .snippets import (
-    CreateSnippetRequestDto,
-    CreateSnippetResponseDto,
-    DeleteSnippetRequestDto,
-    DeleteSnippetResponseDto,
-    GetSnippetsResponseDto,
-    SnippetItem,
-    SnippetsData,
-    UpdateSnippetRequestDto,
-    UpdateSnippetResponseDto,
+from .hosts import (
+    CreateHostInboundData,
+    CreateHostRequestDto,
+    CreateHostResponseDto,
+    DeleteHostResponseDto,
+    GetAllHostsResponseDto,
+    GetAllHostTagsResponseDto,
+    GetOneHostResponseDto,
+    HostInboundData,
+    HostResponseDto,
+    HostsResponseDto,  # Legacy alias
+    ReorderHostItem,
+    ReorderHostRequestDto,
+    ReorderHostResponseDto,
+    UpdateHostRequestDto,
+    UpdateHostResponseDto,
+)
+from .hosts_bulk_actions import (
+    BulkDeleteHostsResponseDto,
+    BulkDisableHostsResponseDto,
+    BulkEnableHostsResponseDto,
+    SetInboundToManyHostsRequestDto,
+    SetInboundToManyHostsResponseDto,
+    SetPortToManyHostsRequestDto,
+    SetPortToManyHostsResponseDto,
+)
+from .hwid import (
+    CreateHWIDUser,  # Legacy alias
+    CreateUserHwidDeviceRequestDto,
+    CreateUserHwidDeviceResponseDto,
+    DeleteUserAllHwidDeviceRequestDto,
+    DeleteUserHwidDeviceRequestDto,
+    DeleteUserHwidDeviceResponseDto,
+    GetHwidStatisticsResponseDto,
+    GetTopUsersByHwidDevicesResponseDto,
+    GetUserHwidDevicesResponseDto,
+    HWIDDeleteRequest,  # Legacy alias
+    HWIDUserResponseDto,  # Legacy alias
+    HWIDUserResponseDtoList,  # Legacy alias
+    TopUserByHwidDevicesDto,
+    TopUsersByHwidDevicesData,
+)
+from .inbounds import (
+    AllInboundsData,
+    FullInboundResponseDto,
+    FullInboundsResponseDto,
+    FullInboundStatistic,
+    GetAllInboundsResponseDto,
+    GetFullInboundsResponseDto,
+    GetInboundsByProfileUuidResponseDto,
+    GetInboundsResponseDto,
+    InboundResponseDto,
+    InboundsByProfileData,
+    InboundsResponseDto,  # Legacy alias
+)
+from .inbounds_bulk_actions import (
+    AddInboundToNodesResponseDto,
+    AddInboundToUsersResponseDto,
+    RemoveInboundFromNodesResponseDto,
+    RemoveInboundFromUsersResponseDto,
+)
+from .infra_billing import (
+    CreateInfraBillingHistoryRecordRequestDto,
+    CreateInfraBillingHistoryRecordResponseDto,
+    CreateInfraBillingNodeRequestDto,
+    CreateInfraBillingNodeResponseDto,
+    CreateInfraProviderRequestDto,
+    CreateInfraProviderResponseDto,
+    DeleteInfraBillingHistoryRecordByUuidResponseDto,
+    DeleteInfraBillingNodeByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraBillingNodeResponseDto)
+    DeleteInfraBillingNodeResponseDto,  # LEGACY
+    DeleteInfraProviderByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraProviderResponseDto)
+    DeleteInfraProviderResponseDto,  # LEGACY
+    GetAllInfraBillingHistoryResponseDto,  # LEGACY
+    GetAllInfraBillingNodesResponseDto,  # LEGACY
+    GetAllInfraProvidersResponseDto,  # LEGACY
+    GetInfraBillingHistoryByUuidResponseDto,
+    GetInfraBillingHistoryRecordsResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
+    GetInfraBillingNodeByUuidResponseDto,
+    GetInfraBillingNodesResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingNodesResponseDto)
+    GetInfraProviderByUuidResponseDto,
+    GetInfraProvidersResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraProvidersResponseDto)
+    InfraBillingHistoryDto,
+    InfraBillingNodeDto,
+    InfraProviderDto,
+    NodeDto,
+    UpdateInfraBillingNodeRequestDto,
+    UpdateInfraBillingNodeResponseDto,
+    UpdateInfraProviderRequestDto,
+    UpdateInfraProviderResponseDto,
+)
+from .internal_squads import (
+    AddUsersToInternalSquadRequestDto,
+    AddUsersToInternalSquadResponseDto,
+    CreateInternalSquadRequestDto,
+    CreateInternalSquadResponseDto,
+    DeleteInternalSquadResponseDto,
+    DeleteUsersFromInternalSquadRequestDto,
+    DeleteUsersFromInternalSquadResponseDto,
+    GetAllInternalSquadsResponseDto,
+    GetInternalSquadAccessibleNodesResponseDto,
+    GetInternalSquadByUuidResponseDto,
+    InternalSquadDto,
+    UpdateInternalSquadRequestDto,
+    UpdateInternalSquadResponseDto,
+)
+from .keygen import GetPubKeyResponseDto, PubKeyResponseDto  # Legacy alias
+from .nodes import (
+    CreateNodeRequestDto,
+    CreateNodeResponseDto,
+    DeleteNodeResponseDto,
+    DisableNodeResponseDto,
+    EnableNodeResponseDto,
+    ExcludedInbounds,
+    GetAllNodesResponseDto,
+    GetOneNodeResponseDto,
+    NodeConfigProfileDto,
+    NodeConfigProfileRequestDto,
+    NodeResponseDto,
+    NodesResponseDto,  # Legacy alias
+    ReorderNodeRequestDto,
+    ReorderNodeResponseDto,
+    ResetNodeTrafficRequestDto,
+    ResetNodeTrafficResponseDto,
+    RestartAllNodesRequestBodyDto,
+    RestartAllNodesRequestDto,  # Legacy alias,
+    RestartAllNodesResponseDto,
+    RestartNodeResponseDto,
+    UpdateNodeRequestDto,
+    UpdateNodeResponseDto,
+)
+from .nodes_usage_history import (
+    GetNodesUsageByRangeResponseDto,
+    GetNodeUserUsageByRangeResponseDto,
+    GetUserAccessibleNodesResponseDto,
+    NodeInfoDto,
+    NodeUsageDto,
+    UserUsageDto,
+)
+from .passkeys import (
+    DeletePasskeyRequestDto,
+    DeletePasskeyResponseDto,
+    GetAllPasskeysResponseDto,
+    GetPasskeyRegistrationOptionsResponseDto,
+    PasskeyDto,
+    VerifyPasskeyRegistrationRequestDto,
+    VerifyPasskeyRegistrationResponseDto,
 )
 from .remnawave_settings import (
     BrandingSettings,
@@ -408,6 +224,182 @@ from .remnawave_settings import (
     UpdateRemnawaveSettingsRequestDto,
     UpdateRemnawaveSettingsResponseDto,
     YandexOAuth2Settings,
+)
+from .snippets import (
+    CreateSnippetRequestDto,
+    CreateSnippetResponseDto,
+    DeleteSnippetRequestDto,
+    DeleteSnippetResponseDto,
+    GetSnippetsResponseDto,
+    SnippetItem,
+    SnippetsData,
+    UpdateSnippetRequestDto,
+    UpdateSnippetResponseDto,
+)
+from .subscription import (
+    GetAllSubscriptionsResponseDto,
+    GetRawSubscriptionByShortUuidResponseDto,
+    GetSubscriptionByShortUUIDResponseDto,
+    GetSubscriptionByUsernameResponseDto,
+    GetSubscriptionByUUIDResponseDto,
+    GetSubscriptionInfoResponseDto,
+    RawSettings,
+    SubscriptionInfoResponseDto,  # Legacy alias
+    UserSubscription,
+)
+from .subscription_request_history import (
+    AppStatItem,
+    GetAllSubscriptionRequestHistoryResponseDto,
+    GetSubscriptionRequestHistoryStatsResponseDto,
+    HourlyRequestStat,
+    SubscriptionRequestHistoryData,
+    SubscriptionRequestHistoryRecord,
+    SubscriptionRequestHistoryStatsData,
+)
+from .subscriptions_settings import (
+    # Backward compatibility aliases
+    CustomRemarks,
+    CustomRemarksDto,
+    GetSubscriptionSettingsResponseDto,
+    HwidSettings,
+    HwidSettingsDto,
+    ResponseModificationHeader,
+    ResponseModifications,
+    ResponseRule,
+    ResponseRuleCondition,
+    ResponseRules,
+    SubscriptionSettingsResponseDto,
+    UpdateSubscriptionSettingsRequestDto,
+    UpdateSubscriptionSettingsResponseDto,
+)
+from .subscriptions_template import (
+    CreateSubscriptionTemplateRequestDto,
+    CreateSubscriptionTemplateResponseDto,
+    DeleteSubscriptionTemplateResponseDto,
+    GetTemplateResponseDto,
+    GetTemplatesResponseDto,
+    TemplateInfoDto,
+    TemplateResponseDto,
+    UpdateTemplateRequestDto,
+    UpdateTemplateResponseDto,
+)
+from .system import (
+    BandwidthStatistic,
+    BandwidthStatisticResponseDto,
+    CPUStatistic,
+    DebugSrrMatcherRequestDto,
+    DebugSrrMatcherResponseDto,
+    EncryptHappCryptoLinkRequestDto,
+    EncryptHappCryptoLinkResponseDto,
+    GetBandwidthStatsResponseDto,
+    GetNodesMetricsResponseDto,
+    GetNodesStatisticsResponseDto,
+    GetRemnawaveHealthResponseDto,
+    GetStatsResponseDto,
+    GetX25519KeyPairResponseDto,
+    MemoryStatistic,
+    NodesStatisticResponseDto,
+    NodeStatistic,
+    OnlineStatistic,
+    StatisticResponseDto,
+    StatusCounts,
+    UsersStatistic,
+    X25519KeyPair,
+)
+from .users import (
+    ActivateAllInboundsResponseDto,
+    ActiveInternalSquadDto,
+    # Request DTOs
+    CreateUserRequestDto,
+    # Response DTOs - Single User
+    CreateUserResponseDto,
+    # Other Response DTOs
+    DeleteUserResponseDto,
+    DisableUserResponseDto,
+    EmailUserResponseDto,
+    EnableUserResponseDto,
+    GetAllTagsResponseDto,
+    # Response DTOs - Collections
+    GetAllUsersResponseDto,
+    # Alias
+    GetSubscriptionRequestsResponseDto,
+    GetUserByIdResponseDto,
+    GetUserByShortUuidResponseDto,
+    GetUserByUsernameResponseDto,
+    GetUserByUuidResponseDto,
+    GetUserSubscriptionRequestHistoryResponseDto,
+    HappCrypto,
+    ResetUserTrafficResponseDto,
+    RevokeUserRequestDto,
+    RevokeUserSubscriptionResponseDto,
+    SubscriptionRequestRecord,
+    SubscriptionRequestsResponseData,
+    TagsResponseDto,
+    TagUserResponseDto,
+    # Response DTOs - Arrays (RootModel)
+    TelegramUserResponseDto,
+    UpdateUserRequestDto,
+    UpdateUserResponseDto,
+    UserActiveInboundsDto,
+    UserLastConnectedNodeDto,
+    # Base DTOs
+    UserResponseDto,
+    UsersResponseDto,
+    # Data DTOs
+    UserTrafficDto,
+)
+from .users_bulk_actions import (
+    BulkAllExtendExpirationDateRequestDto,
+    BulkAllExtendExpirationDateResponseDto,
+    BulkAllResetTrafficUsersResponseDto,
+    BulkAllUpdateUsersRequestDto,
+    BulkAllUpdateUsersResponseDto,
+    BulkDeleteUsersByStatusRequestDto,
+    BulkDeleteUsersByStatusResponseDto,
+    BulkDeleteUsersRequestDto,
+    BulkDeleteUsersResponseDto,
+    BulkEventResponseData,
+    BulkExtendExpirationDateRequestDto,
+    BulkExtendExpirationDateResponseDto,
+    BulkResetTrafficUsersRequestDto,
+    BulkResetTrafficUsersResponseDto,
+    BulkResponseData,
+    BulkResponseDto,
+    BulkRevokeUsersSubscriptionRequestDto,
+    BulkRevokeUsersSubscriptionResponseDto,
+    BulkUpdateUsersInternalSquadsRequestDto,
+    BulkUpdateUsersRequestDto,
+    BulkUpdateUsersResponseDto,
+    BulkUpdateUsersSquadsRequestDto,
+    BulkUpdateUsersSquadsResponseDto,
+    TagStr,
+    UpdateUserFields,
+)
+from .users_stats import UserUsageByRange, UserUsageByRangeResponseDto
+from .webhook import (
+    BaseUserDto,
+    ConfigProfileInboundDto,
+    CrmEventDto,
+    CustomErrorEventDto,
+    HwidUserDeviceDto,
+    InfraProviderDto,
+    InternalSquadDto,
+    LastConnectedNodeDto,
+    LoginAttemptDto,
+    NodeDto,
+    NodeEventDto,
+    ServiceEventDto,
+    UserDto,
+    UserEventDto,
+    UserHwidDeviceEventDto,
+    UserTrafficDto,
+    WebhookPayloadDto,
+)
+from .xray_config import (
+    ConfigResponseDto,  # Legacy alias
+    GetConfigResponseDto,
+    UpdateConfigRequestDto,
+    UpdateConfigResponseDto,
 )
 
 __all__ = [
@@ -663,12 +655,12 @@ __all__ = [
     "GetAllConfigProfilesResponsePaginated",
     # Infra billing models
     "CreateInfraBillingHistoryRecordRequestDto",
-    "CreateInfraBillingHistoryRecordResponseDto", 
+    "CreateInfraBillingHistoryRecordResponseDto",
     "CreateInfraBillingNodeRequestDto",
     "CreateInfraBillingNodeResponseDto",
     "CreateInfraProviderRequestDto",
-    "CreateInfraProviderResponseDto",   
-    "DeleteInfraBillingHistoryRecordByUuidResponseDto",  
+    "CreateInfraProviderResponseDto",
+    "DeleteInfraBillingHistoryRecordByUuidResponseDto",
     "DeleteInfraBillingNodeByUuidResponseDto",  # ПЕРЕИМЕНОВАНА (было DeleteInfraBillingNodeResponseDto)
     "DeleteInfraProviderByUuidResponseDto",  # ПЕРЕИМЕНОВАНА (было DeleteInfraProviderResponseDto)
     "GetInfraBillingHistoryRecordsResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
@@ -716,40 +708,33 @@ __all__ = [
     "SubscriptionRequestHistoryRecord",
     "SubscriptionRequestHistoryData",
     "AppStatItem",
-    "HourlyRequestStat", 
+    "HourlyRequestStat",
     "SubscriptionRequestHistoryStatsData",
     # Webhook models
-     # USER
+    # USER
     "LastConnectedNodeDto",
     "InternalSquadDto",
     "BaseUserDto",
     "UserDto",
     "UserEventDto",
     "UserTrafficDto",
-
     # HWID DEVICES
     "HwidUserDeviceDto",
     "UserHwidDeviceEventDto",
-
     # SERVICE EVENTS
     "LoginAttemptDto",
     "ServiceEventDto",
-
     # NODE ENTITIES
     "ConfigProfileInboundDto",
     "InfraProviderDto",
     "NodeDto",
     "NodeEventDto",
-
     # ERROR EVENTS
     "CustomErrorEventDto",
-
     # CRM EVENTS
     "CrmEventDto",
-
     # WEBHOOK PAYLOAD
     "WebhookPayloadDto",
-    
     # Passkeys models
     "DeletePasskeyRequestDto",
     "DeletePasskeyResponseDto",
@@ -758,7 +743,6 @@ __all__ = [
     "PasskeyDto",
     "VerifyPasskeyRegistrationRequestDto",
     "VerifyPasskeyRegistrationResponseDto",
-    
     # External squads models
     "AddUsersToExternalSquadResponseDto",
     "CreateExternalSquadRequestDto",
@@ -774,9 +758,7 @@ __all__ = [
     "TemplateType",
     "UpdateExternalSquadRequestDto",
     "UpdateExternalSquadResponseDto",
-    
     # Snippets models
-
     "CreateSnippetRequestDto",
     "CreateSnippetResponseDto",
     "DeleteSnippetRequestDto",
@@ -786,9 +768,7 @@ __all__ = [
     "SnippetsData",
     "UpdateSnippetRequestDto",
     "UpdateSnippetResponseDto",
-    
     # Remnawave settings models
-    
     "BrandingSettings",
     "GetRemnawaveSettingsResponseDto",
     "GitHubOAuth2Settings",

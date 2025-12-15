@@ -1,7 +1,9 @@
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Union
+from uuid import UUID
 
 from rapid_api_client import Path, Query
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     CreateUserRequestDto,
     CreateUserResponseDto,
@@ -57,7 +59,7 @@ class UsersController(BaseController):
     @delete("/users/{uuid}", response_class=DeleteUserResponseDto)
     async def delete_user(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> DeleteUserResponseDto:
         """Delete user"""
         ...
@@ -65,7 +67,7 @@ class UsersController(BaseController):
     @post("/users/{uuid}/actions/revoke", response_class=UpdateUserResponseDto)
     async def revoke_user_subscription(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
         body: Optional[Annotated[RevokeUserRequestDto, PydanticBody()]] = None,
     ) -> UpdateUserResponseDto:
         """Revoke User Subscription"""
@@ -74,7 +76,7 @@ class UsersController(BaseController):
     @post("/users/{uuid}/actions/disable", response_class=UpdateUserResponseDto)
     async def disable_user(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> UpdateUserResponseDto:
         """Disable User"""
         ...
@@ -82,7 +84,7 @@ class UsersController(BaseController):
     @post("/users/{uuid}/actions/enable", response_class=UpdateUserResponseDto)
     async def enable_user(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> UpdateUserResponseDto:
         """Enable User"""
         ...
@@ -90,7 +92,7 @@ class UsersController(BaseController):
     @post("/users/{uuid}/actions/reset-traffic", response_class=UpdateUserResponseDto)
     async def reset_user_traffic(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> UpdateUserResponseDto:
         """Reset User Traffic"""
         ...
@@ -98,7 +100,7 @@ class UsersController(BaseController):
     @get("/users/{uuid}", response_class=GetUserByUuidResponseDto)
     async def get_user_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> GetUserByUuidResponseDto:
         """Get user by UUID"""
         ...
@@ -116,7 +118,7 @@ class UsersController(BaseController):
     )
     async def get_user_accessible_nodes(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> GetUserAccessibleNodesResponseDto:
         """Get user accessible nodes"""
         ...
@@ -127,7 +129,7 @@ class UsersController(BaseController):
     )
     async def get_user_subscription_request_history(
         self,
-        uuid: Annotated[str, Path(description="UUID of the user")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
     ) -> GetUserSubscriptionRequestHistoryResponseDto:
         """Get user subscription request history, recent 24 records"""
         ...

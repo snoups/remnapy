@@ -23,11 +23,11 @@ class NodesUsageResponseDto(RootModel[List[NodeUsageResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -39,11 +39,11 @@ class GetNodesUsageByRangeResponseDto(RootModel[List[NodeUsageResponseDto]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -67,11 +67,11 @@ class NodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseDto]
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -83,11 +83,11 @@ class GetNodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseD
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -107,11 +107,11 @@ class GetUserUsageByRangeResponseDto(RootModel[List[UserUsageByRangeItem]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)
@@ -131,11 +131,11 @@ class GetNodeUserUsageByRangeResponseDto(RootModel[List[NodeUserUsageItem]]):
 
     def __getitem__(self, item):
         return self.root[item]
-    
+
     def __bool__(self):
         """Return True if list is not empty"""
         return bool(self.root)
-    
+
     def __len__(self):
         """Return length of list"""
         return len(self.root)

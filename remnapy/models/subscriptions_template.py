@@ -2,6 +2,7 @@ from typing import Annotated, Any, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
+
 from remnapy.enums import TemplateType
 
 

@@ -1,6 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path, Query
+
 from remnapy.models import (
     GetNodesUsageByRangeResponseDto,
     GetNodeUserUsageByRangeResponseDto,
@@ -26,7 +28,7 @@ class NodesUserUsageHistoryController(BaseController):
     )
     async def get_node_user_usage_by_range(
         self,
-        uuid: Annotated[str, Path(description="UUID of the node")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the node")],
         start: Annotated[str, Query(description="Start date", format="date-time")],
         end: Annotated[str, Query(description="End date", format="date-time")],
     ) -> GetNodeUserUsageByRangeResponseDto:

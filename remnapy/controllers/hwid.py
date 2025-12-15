@@ -1,4 +1,5 @@
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Union
+from uuid import UUID
 
 from rapid_api_client import Path, PydanticBody, Query
 
@@ -59,7 +60,7 @@ class HWIDUserController(BaseController):
     @get("/hwid/devices/{uuid}", response_class=GetUserHwidDevicesResponseDto)
     async def get_hwid_user(
         self,
-        uuid: Annotated[str, Path(description="UUID of the User")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the User")],
     ) -> GetUserHwidDevicesResponseDto:
         """Get a user HWID device"""
         ...

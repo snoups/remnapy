@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from rapid_api_client.annotations import JsonBody
+
 from remnapy.models import GetConfigResponseDto, UpdateConfigResponseDto
 from remnapy.rapid import BaseController, get, put
 

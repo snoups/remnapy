@@ -74,7 +74,7 @@ class BaseUserDto(BaseModel):
 
     hwid_device_limit: Optional[int] = None
 
-    external_squad_uuid: Optional[str]
+    external_squad_uuid: Optional[UUID]
 
     created_at: datetime
     updated_at: datetime

@@ -1,7 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     CreateNodeRequestDto,
     CreateNodeResponseDto,
@@ -42,7 +44,7 @@ class NodesController(BaseController):
     @get("/nodes/{uuid}", response_class=GetOneNodeResponseDto)
     async def get_one_node(
         self,
-        uuid: Annotated[str, Path(description="Node UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
     ) -> GetOneNodeResponseDto:
         """Get One Node"""
         ...
@@ -50,7 +52,7 @@ class NodesController(BaseController):
     @delete("/nodes/{uuid}", response_class=DeleteNodeResponseDto)
     async def delete_node(
         self,
-        uuid: Annotated[str, Path(description="Node UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
     ) -> DeleteNodeResponseDto:
         """Delete Node"""
         ...
@@ -66,7 +68,7 @@ class NodesController(BaseController):
     @post("/nodes/{uuid}/actions/enable", response_class=EnableNodeResponseDto)
     async def enable_node(
         self,
-        uuid: Annotated[str, Path(description="Node UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
     ) -> EnableNodeResponseDto:
         """Enable Node"""
         ...
@@ -74,7 +76,7 @@ class NodesController(BaseController):
     @post("/nodes/{uuid}/actions/disable", response_class=DisableNodeResponseDto)
     async def disable_node(
         self,
-        uuid: Annotated[str, Path(description="Node UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
     ) -> DisableNodeResponseDto:
         """Disable Node"""
         ...
@@ -82,7 +84,7 @@ class NodesController(BaseController):
     @post("/nodes/{uuid}/actions/restart", response_class=RestartNodeResponseDto)
     async def restart_node(
         self,
-        uuid: Annotated[str, Path(description="Node UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
     ) -> RestartNodeResponseDto:
         """Restart Node"""
         ...

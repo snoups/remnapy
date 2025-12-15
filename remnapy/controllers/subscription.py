@@ -1,6 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
+
 from remnapy.enums import ClientType
 from remnapy.models import GetSubscriptionInfoResponseDto
 from remnapy.rapid import BaseController, get
@@ -11,7 +13,9 @@ class SubscriptionController(BaseController):
     @get("/sub/{short_uuid}/info", response_class=GetSubscriptionInfoResponseDto)
     async def get_subscription_info_by_short_uuid(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the user")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the user")
+        ],
     ) -> GetSubscriptionInfoResponseDto:
         """None"""
         ...
@@ -19,7 +23,9 @@ class SubscriptionController(BaseController):
     @get("/sub/{short_uuid}", response_class=str)
     async def get_subscription(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the user")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the user")
+        ],
     ) -> str:
         """None"""
         ...
@@ -28,7 +34,9 @@ class SubscriptionController(BaseController):
     async def get_subscription_by_client_type(
         self,
         client_type: Annotated[ClientType, Path(description="Client type")],
-        short_uuid: Annotated[str, Path(description="Short UUID of the user")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the user")
+        ],
     ) -> str:
         """None"""
         ...
@@ -36,7 +44,9 @@ class SubscriptionController(BaseController):
     @get("/sub/outline/{short_uuid}/{type}/{encoded_tag}", response_class=str)
     async def get_subscription_with_type(
         self,
-        short_uuid: Annotated[str, Path(description="Short UUID of the user")],
+        short_uuid: Annotated[
+            Union[str, UUID], Path(description="Short UUID of the user")
+        ],
         type: Annotated[
             str,
             Path(

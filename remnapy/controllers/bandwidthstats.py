@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from rapid_api_client import Query
+
 from remnapy.models import (
     GetNodesRealtimeUsageResponseDto,
     GetNodesUsageByRangeResponseDto,

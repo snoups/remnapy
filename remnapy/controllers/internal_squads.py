@@ -1,7 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     AddUsersToInternalSquadRequestDto,
     AddUsersToInternalSquadResponseDto,
@@ -44,7 +46,9 @@ class InternalSquadsController(BaseController):
     @get("/internal-squads/{uuid}", response_class=GetInternalSquadByUuidResponseDto)
     async def get_internal_squad_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the internal squad")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
     ) -> GetInternalSquadByUuidResponseDto:
         """Get internal squad by uuid"""
         ...
@@ -52,7 +56,9 @@ class InternalSquadsController(BaseController):
     @delete("/internal-squads/{uuid}", response_class=DeleteInternalSquadResponseDto)
     async def delete_internal_squad(
         self,
-        uuid: Annotated[str, Path(description="UUID of the internal squad")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
     ) -> DeleteInternalSquadResponseDto:
         """Delete internal squad"""
         ...
@@ -63,7 +69,9 @@ class InternalSquadsController(BaseController):
     )
     async def add_users_to_internal_squad(
         self,
-        uuid: Annotated[str, Path(description="UUID of the internal squad")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
     ) -> AddUsersToInternalSquadResponseDto:
         """Add users to internal squad"""
         ...
@@ -74,7 +82,9 @@ class InternalSquadsController(BaseController):
     )
     async def remove_users_from_internal_squad(
         self,
-        uuid: Annotated[str, Path(description="UUID of the internal squad")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
     ) -> DeleteUsersFromInternalSquadResponseDto:
         """Delete users from internal squad"""
         ...
@@ -85,7 +95,9 @@ class InternalSquadsController(BaseController):
     )
     async def get_accessible_nodes(
         self,
-        uuid: Annotated[str, Path(description="UUID of the internal squad")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
     ) -> GetInternalSquadAccessibleNodesResponseDto:
         """Get accessible nodes for internal squad"""
         ...

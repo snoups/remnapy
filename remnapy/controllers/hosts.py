@@ -1,7 +1,9 @@
-from typing import Annotated, List
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     CreateHostRequestDto,
     CreateHostResponseDto,
@@ -14,7 +16,7 @@ from remnapy.models import (
     UpdateHostRequestDto,
     UpdateHostResponseDto,
 )
-from remnapy.rapid import AttributeBody, BaseController, delete, get, patch, post
+from remnapy.rapid import BaseController, delete, get, patch, post
 
 
 class HostsController(BaseController):
@@ -51,7 +53,7 @@ class HostsController(BaseController):
     @delete("/hosts/{uuid}", response_class=DeleteHostResponseDto)
     async def delete_host(
         self,
-        uuid: Annotated[str, Path(description="UUID of the host")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the host")],
     ) -> DeleteHostResponseDto:
         """Delete Host"""
         ...
@@ -59,7 +61,7 @@ class HostsController(BaseController):
     @get("/hosts/{uuid}", response_class=GetOneHostResponseDto)
     async def get_one_host(
         self,
-        uuid: Annotated[str, Path(description="UUID of the host")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the host")],
     ) -> GetOneHostResponseDto:
         """Get One Host"""
         ...

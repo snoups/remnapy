@@ -1,6 +1,7 @@
 from typing import Annotated, Any, Dict, Optional
 
 from pydantic import BaseModel, Field, StringConstraints
+
 from remnapy.enums.auth import OAuth2Provider
 
 

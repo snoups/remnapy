@@ -1,7 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     CreateConfigProfileRequestDto,
     CreateConfigProfileResponseDto,
@@ -49,7 +51,9 @@ class ConfigProfilesController(BaseController):
     )
     async def get_inbounds_by_profile_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the config profile")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the config profile")
+        ],
     ) -> GetInboundsByProfileUuidResponseDto:
         """Get inbounds by profile uuid"""
         ...
@@ -57,7 +61,9 @@ class ConfigProfilesController(BaseController):
     @get("/config-profiles/{uuid}", response_class=GetConfigProfileByUuidResponseDto)
     async def get_config_profile_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the config profile")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the config profile")
+        ],
     ) -> GetConfigProfileByUuidResponseDto:
         """Get config profile by uuid"""
         ...
@@ -65,7 +71,9 @@ class ConfigProfilesController(BaseController):
     @delete("/config-profiles/{uuid}", response_class=DeleteConfigProfileResponseDto)
     async def delete_config_profile_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the config profile")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the config profile")
+        ],
     ) -> DeleteConfigProfileResponseDto:
         """Delete config profile"""
         ...
@@ -77,7 +85,9 @@ class ConfigProfilesController(BaseController):
     )
     async def get_computed_config_profile_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the config profile")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the config profile")
+        ],
     ) -> GetConfigProfileByUuidResponseDto:
         """Get computed config profile by uuid"""
         ...

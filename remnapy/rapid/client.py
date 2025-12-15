@@ -20,6 +20,7 @@ from rapid_api_client.annotations import Header, JsonBody, Path, Query
 from rapid_api_client.client import RapidParameter, RapidParameters, pydantic_xml
 from rapid_api_client.typing import BM, T
 from rapid_api_client.utils import filter_none_values, find_annotation
+
 from remnapy.exceptions import ApiError, ApiErrorResponse, handle_api_error
 from remnapy.rapid import AttributeBody
 from remnapy.utils.serializer import orjson_default

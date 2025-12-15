@@ -1,7 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
+
 from remnapy.models import (
     CreateInfraBillingHistoryRecordRequestDto,
     CreateInfraBillingHistoryRecordResponseDto,
@@ -52,7 +54,9 @@ class InfraBillingController(BaseController):
     )
     async def get_infra_provider_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the infra provider")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the infra provider")
+        ],
     ) -> GetInfraProviderByUuidResponseDto:
         """Get infra provider by uuid"""
         ...
@@ -63,7 +67,9 @@ class InfraBillingController(BaseController):
     )
     async def delete_infra_provider_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the infra provider")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the infra provider")
+        ],
     ) -> DeleteInfraProviderByUuidResponseDto:
         """Delete infra provider by uuid"""
         ...
@@ -95,7 +101,9 @@ class InfraBillingController(BaseController):
     )
     async def delete_infra_billing_history_record_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the billing history record")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the billing history record")
+        ],
     ) -> DeleteInfraBillingHistoryRecordByUuidResponseDto:
         """Delete infra billing history"""
         ...
@@ -127,7 +135,9 @@ class InfraBillingController(BaseController):
     )
     async def delete_infra_billing_node_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the infra billing node")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the infra billing node")
+        ],
     ) -> DeleteInfraBillingNodeByUuidResponseDto:
         """Delete infra billing node"""
         ...

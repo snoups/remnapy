@@ -1,6 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
+
 from remnapy.models import (
     GetAllInboundsResponseDto,
     GetInboundsByProfileUuidResponseDto,
@@ -22,7 +24,9 @@ class InboundsController(BaseController):
     )
     async def get_inbounds_by_profile_uuid(
         self,
-        uuid: Annotated[str, Path(description="UUID of the config profile")],
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the config profile")
+        ],
     ) -> GetInboundsByProfileUuidResponseDto:
         """Get inbounds by profile uuid"""
         ...

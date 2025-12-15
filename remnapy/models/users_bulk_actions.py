@@ -3,6 +3,7 @@ from typing import Annotated, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
+
 from remnapy.enums import TrafficLimitStrategy, UserStatus
 
 # Type alias for tag validation

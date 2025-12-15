@@ -3,6 +3,7 @@ from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
+
 from remnapy.enums import TrafficLimitStrategy, UserStatus
 from remnapy.utils.happ_crypt import create_happ_crypto_link
 

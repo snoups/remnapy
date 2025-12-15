@@ -1,6 +1,8 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client.annotations import Path, PydanticBody
+
 from remnapy.models import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,
@@ -40,7 +42,7 @@ class SubscriptionsTemplateController(BaseController):
     @get("/subscription-templates/{uuid}", response_class=GetTemplateResponseDto)
     async def get_template_by_uuid(
         self,
-        uuid: Annotated[str, Path(description="Template UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Template UUID")],
     ) -> GetTemplateResponseDto:
         """Get subscription template by uuid"""
         ...
@@ -51,7 +53,7 @@ class SubscriptionsTemplateController(BaseController):
     )
     async def delete_template(
         self,
-        uuid: Annotated[str, Path(description="Template UUID")],
+        uuid: Annotated[Union[str, UUID], Path(description="Template UUID")],
     ) -> DeleteSubscriptionTemplateResponseDto:
         """Delete subscription template"""
         ...

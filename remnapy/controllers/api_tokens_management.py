@@ -1,4 +1,5 @@
-from typing import Annotated
+from typing import Annotated, Union
+from uuid import UUID
 
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
@@ -24,7 +25,7 @@ class APITokensManagementController(BaseController):
     @delete("/tokens/{uuid}", response_class=DeleteApiTokenResponseDto)
     async def delete(
         self,
-        uuid: Annotated[str, Path(description="UUID of the API token")],
+        uuid: Annotated[Union[str, UUID], Path(description="UUID of the API token")],
     ) -> DeleteApiTokenResponseDto:
         """Delete API token"""
         ...
