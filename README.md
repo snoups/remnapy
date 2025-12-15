@@ -6,10 +6,9 @@
 [![Stars](https://img.shields.io/github/stars/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/stargazers)
 [![Forks](https://img.shields.io/github/forks/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/network/members)
 [![Issues](https://img.shields.io/github/issues/snoups/remnapy.svg)](https://github.com/snoups/remnapy/issues)
-[![Supported python versions](https://img.shields.io/pypi/pyversions/snoups.svg)](https://pypi.python.org/pypi/remnapy)
-[![Downloads](https://img.shields.io/pypi/dm/snoups.svg)](https://pypi.python.org/pypi/remnapy)
-[![PyPi Package Version](https://img.shields.io/pypi/v/snoups)](https://pypi.python.org/pypi/remnapy)
-[![Publish Python Package](https://github.com/snoups/remnapy/actions/workflows/upload.yml/badge.svg?branch=production)](https://github.com/snoups/remnapy/actions/workflows/upload.yml)
+[![Supported python versions](https://img.shields.io/pypi/pyversions/remnapy.svg)](https://pypi.python.org/pypi/remnapy)
+[![Downloads](https://img.shields.io/pypi/dm/remnapy.svg)](https://pypi.python.org/pypi/remnapy)
+[![PyPi Package Version](https://img.shields.io/pypi/v/remnapy)](https://pypi.python.org/pypi/remnapy)
 
 A Python SDK client for interacting with the **[Remnawave API](https://docs.rw/)**.
 This library simplifies working with the API by providing convenient controllers, Pydantic models for requests and responses, and fast serialization with `orjson`. 
