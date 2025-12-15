@@ -74,38 +74,12 @@ class BaseUserDto(BaseModel):
 
     hwid_device_limit: Optional[int] = None
 
-    externalSquadUuid: Optional[str]
+    external_squad_uuid: Optional[str]
 
     created_at: datetime
     updated_at: datetime
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
-
-    # Backward compatibility properties
-    @property
-    def used_traffic_bytes(self) -> int:
-        """Backward compatibility property"""
-        return self.user_traffic.used_traffic_bytes
-
-    @property
-    def lifetime_used_traffic_bytes(self) -> int:
-        """Backward compatibility property"""
-        return self.user_traffic.lifetime_used_traffic_bytes
-
-    @property
-    def online_at(self) -> Optional[datetime]:
-        """Backward compatibility property"""
-        return self.user_traffic.online_at
-
-    @property
-    def first_connected_at(self) -> Optional[datetime]:
-        """Backward compatibility property"""
-        return self.user_traffic.first_connected_at
-
-    @property
-    def last_connected_node_uuid(self) -> Optional[UUID]:
-        """Backward compatibility property"""
-        return self.user_traffic.last_connected_node_uuid
 
 
 class UserDto(BaseUserDto):

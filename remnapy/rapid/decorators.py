@@ -4,7 +4,7 @@ from typing import Any, Callable, Coroutine, Type
 
 from httpx import AsyncClient, Response
 from pydantic import TypeAdapter
-from rapid_api_client.typing import BM, T
+from rapid_api_client.typing import T
 
 from .client import BaseController, CustomRapidParameters
 
@@ -12,21 +12,15 @@ from .client import BaseController, CustomRapidParameters
 def http(
     method: str,
     path: str,
-    response_class: Type[BM | str | bytes | Response] | TypeAdapter[T] = Response,
+    response_class: Type[T] | TypeAdapter[T] = Response,
     timeout: float | None = None,
-) -> Callable[
-    [Callable], Callable[..., Coroutine[Any, Any, BM | str | bytes | Response | T]]
-]:
-    def decorator(
-        func: Callable,
-    ) -> Callable[..., Coroutine[Any, Any, BM | str | bytes | Response | T]]:
+) -> Callable[[Callable[..., T]], Callable[..., Coroutine[T, Any, T]]]:
+    def decorator(func: Callable[..., T]) -> Callable[..., Coroutine[T, Any, T]]:
         sig = signature(func)
         rapid_parameters = CustomRapidParameters.from_sig(sig)
 
         @wraps(func)
-        async def wrapper(
-            api: BaseController, *args, **kwargs
-        ) -> BM | str | bytes | Response | T:
+        async def wrapper(api: BaseController, *args, **kwargs) -> T:
             assert isinstance(api, BaseController), (
                 f"{api} should be an instance of BaseController"
             )
