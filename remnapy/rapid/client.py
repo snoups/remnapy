@@ -140,7 +140,6 @@ class BaseController(RapidApi):
                 logging.error(
                     "Pydantic validation error\n"
                     f"Model: {response_class.__name__}\n"
-                    f"Raw data: {data}\n"
                     f"Errors: {exception.errors()}"
                 )
                 raise
@@ -238,7 +237,7 @@ class CustomRapidParameters(RapidParameters):
                 if (value := first_body_param.get_value(ba)) is not None:
                     assert isinstance(value, BaseModel)
                     return "json", value.model_dump(
-                        exclude_none=True, by_alias=True, mode="json"
+                        exclude_unset=True, by_alias=True, mode="json"
                     )
             elif isinstance(first_body_param.annot, JsonBody):
                 if (value := first_body_param.get_value(ba)) is not None:
