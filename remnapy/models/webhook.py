@@ -47,7 +47,6 @@ class UserTrafficDto(BaseModel):
 
 
 class BaseUserDto(BaseModel):
-    id: int
     uuid: UUID
     short_uuid: str
     username: str
@@ -83,7 +82,9 @@ class BaseUserDto(BaseModel):
 
 
 class UserDto(BaseUserDto):
-    subscription_url: str = Field(alias="subscriptionUrl")
+    subscription_url: Optional[str] = Field(
+        alias="subscriptionUrl"
+    )  # TODO: Remove Optional when fixed
     active_internal_squads: List[InternalSquadDto] = Field(default_factory=list)
     user_traffic: UserTrafficDto = Field(alias="userTraffic")
 
