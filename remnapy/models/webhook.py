@@ -83,7 +83,7 @@ class BaseUserDto(BaseModel):
 
 class UserDto(BaseUserDto):
     subscription_url: Optional[str] = Field(
-        alias="subscriptionUrl"
+        None, alias="subscriptionUrl"
     )  # TODO: Remove Optional when fixed
     active_internal_squads: List[InternalSquadDto] = Field(default_factory=list)
     user_traffic: UserTrafficDto = Field(alias="userTraffic")
