@@ -407,9 +407,19 @@ class TorrentBlockerEventDto(BaseModel):
 # ---------------- WEBHOOK PAYLOAD ---------------- #
 
 
+class WebhookMetaDto(BaseModel):
+    """Extra metadata for notification-style events (null for most events)."""
+
+    expiration: Optional[int] = None
+    not_connected_after_hours: Optional[int] = None
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
 class WebhookPayloadDto(BaseModel):
     event: str
     timestamp: datetime
+    meta: Optional[WebhookMetaDto] = None
     data: Union[
         UserDto,
         NodeDto,
@@ -461,4 +471,7 @@ class WebhookPayloadDto(BaseModel):
         else:
             timestamp = timestamp_raw
 
-        return cls(event=event, data=data, timestamp=timestamp)
+        meta_raw = payload.get("meta")
+        meta = WebhookMetaDto(**meta_raw) if meta_raw else None
+
+        return cls(event=event, data=data, timestamp=timestamp, meta=meta)
