@@ -5,6 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field, RootModel, StringConstraints
 
 from remnapy.models.internal_squads import InboundsDto
+from remnapy.models.webhook import NodeSystemDto, NodeVersionsDto
 
 
 class ExcludedInbounds(BaseModel):
@@ -59,6 +60,7 @@ class CreateNodeRequestDto(BaseModel):
     name: Annotated[str, StringConstraints(min_length=3, max_length=30)]
     address: Annotated[str, StringConstraints(min_length=2)]
     port: Optional[int] = Field(None, ge=1, le=65535)
+    proxy_url: Optional[str] = Field(None, serialization_alias="proxyUrl")
     is_traffic_tracking_active: Optional[bool] = Field(
         False,
         serialization_alias="isTrafficTrackingActive",
@@ -72,19 +74,20 @@ class CreateNodeRequestDto(BaseModel):
     traffic_reset_day: Optional[int] = Field(
         None, serialization_alias="trafficResetDay", ge=1, le=31
     )
-    excluded_inbounds: Optional[List[UUID]] = Field(
-        None, serialization_alias="excludedInbounds"
-    )
     country_code: Annotated[Optional[str], StringConstraints(max_length=2)] = Field(
         "XX", serialization_alias="countryCode"
     )
     consumption_multiplier: Optional[float] = Field(
         None, serialization_alias="consumptionMultiplier", ge=0.1
     )
+    node_consumption_multiplier: Optional[float] = Field(
+        None, serialization_alias="nodeConsumptionMultiplier", ge=0, le=100
+    )
     config_profile: NodeConfigProfileRequestDto = Field(
         serialization_alias="configProfile"
     )
     provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
+    note: Annotated[Optional[str], StringConstraints(max_length=255)] = None
     tags: Optional[
         List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, serialization_alias="tags", max_length=10)
@@ -100,6 +103,7 @@ class UpdateNodeRequestDto(BaseModel):
     )
     address: Annotated[Optional[str], StringConstraints(min_length=2)] = None
     port: Optional[float] = Field(None, ge=1, le=65535)  # ИСПРАВЛЕН тип на float
+    proxy_url: Optional[str] = Field(None, serialization_alias="proxyUrl")
     is_traffic_tracking_active: Optional[bool] = Field(
         None, serialization_alias="isTrafficTrackingActive"
     )
@@ -112,19 +116,20 @@ class UpdateNodeRequestDto(BaseModel):
     traffic_reset_day: Optional[float] = Field(
         None, serialization_alias="trafficResetDay", ge=1, le=31
     )
-    excluded_inbounds: Optional[List[UUID]] = Field(
-        None, serialization_alias="excludedInbounds"
-    )
     country_code: Annotated[Optional[str], StringConstraints(max_length=2)] = Field(
         None, serialization_alias="countryCode"
     )
     consumption_multiplier: Optional[float] = Field(
         None, serialization_alias="consumptionMultiplier", ge=0.1
     )
+    node_consumption_multiplier: Optional[float] = Field(
+        None, serialization_alias="nodeConsumptionMultiplier", ge=0, le=100
+    )
     config_profile: Optional[NodeConfigProfileRequestDto] = Field(
         None, serialization_alias="configProfile"
     )
     provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
+    note: Annotated[Optional[str], StringConstraints(max_length=255)] = None
     tags: Optional[
         List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, serialization_alias="tags", max_length=10)
@@ -142,13 +147,12 @@ class NodeResponseDto(BaseModel):
     name: str
     address: str
     port: Optional[int] = None
+    proxy_url: Optional[str] = Field(None, alias="proxyUrl")
     is_connected: bool = Field(alias="isConnected")
     is_disabled: bool = Field(alias="isDisabled")
     is_connecting: bool = Field(alias="isConnecting")
     last_status_change: Optional[datetime] = Field(None, alias="lastStatusChange")
     last_status_message: Optional[str] = Field(None, alias="lastStatusMessage")
-    xray_version: Optional[str] = Field(None, alias="xrayVersion")
-    node_version: Optional[str] = Field(None, alias="nodeVersion")
     xray_uptime: float = Field(0, alias="xrayUptime")
     is_traffic_tracking_active: bool = Field(alias="isTrafficTrackingActive")
     traffic_reset_day: Optional[int] = Field(None, alias="trafficResetDay")
@@ -159,9 +163,12 @@ class NodeResponseDto(BaseModel):
     view_position: int = Field(alias="viewPosition")
     country_code: str = Field(alias="countryCode")
     consumption_multiplier: float = Field(alias="consumptionMultiplier")
-    cpu_count: Optional[int] = Field(None, alias="cpuCount")
-    cpu_model: Optional[str] = Field(None, alias="cpuModel")
-    total_ram: Optional[str] = Field(None, alias="totalRam")
+    node_consumption_multiplier: Optional[float] = Field(
+        None, alias="nodeConsumptionMultiplier"
+    )
+    system: Optional[NodeSystemDto] = None
+    versions: Optional[NodeVersionsDto] = None
+    note: Optional[str] = None
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
     config_profile: NodeConfigProfileDto = Field(alias="configProfile")
@@ -246,6 +253,10 @@ class DeleteNodeResponseDto(BaseModel):
         return self.is_deleted
 
 
+class RestartNodeRequestBodyDto(BaseModel):
+    force_restart: bool = Field(default=False, serialization_alias="forceRestart")
+
+
 class RestartAllNodesRequestBodyDto(BaseModel):
     force_restart: bool = Field(default=False, alias="forceRestart")
 
@@ -305,10 +316,33 @@ class NodesBulkActionsResponseDto(BaseModel):
     event_sent: bool = Field(alias="eventSent")
 
 
-class BulkNodesUpdateRequestDto(NodesBulkActionsRequestDto):
-    """OpenAPI alias for bulk nodes update request"""
+class NodesUpdateFieldsDto(BaseModel):
+    """Fields to update for many nodes at once"""
 
-    pass
+    country_code: Annotated[Optional[str], StringConstraints(max_length=2)] = Field(
+        None, serialization_alias="countryCode"
+    )
+    consumption_multiplier: Optional[float] = Field(
+        None, serialization_alias="consumptionMultiplier", ge=0.1
+    )
+    node_consumption_multiplier: Optional[float] = Field(
+        None, serialization_alias="nodeConsumptionMultiplier", ge=0, le=100
+    )
+    provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
+    tags: Optional[
+        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+    ] = Field(None, serialization_alias="tags", max_length=10)
+    active_plugin_uuid: Optional[UUID] = Field(
+        None, serialization_alias="activePluginUuid"
+    )
+    note: Annotated[Optional[str], StringConstraints(max_length=255)] = None
+
+
+class BulkNodesUpdateRequestDto(BaseModel):
+    """Request to update many nodes at once"""
+
+    uuids: List[UUID] = Field(min_length=1)
+    fields: NodesUpdateFieldsDto
 
 
 class BulkNodesUpdateResponseDto(NodesBulkActionsResponseDto):

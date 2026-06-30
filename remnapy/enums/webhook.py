@@ -23,12 +23,10 @@ TUserEvents = Literal[
     "user.limited",
     "user.expired",
     "user.traffic_reset",
-    "user.expires_in_72_hours",
-    "user.expires_in_48_hours",
-    "user.expires_in_24_hours",
-    "user.expired_24_hours_ago",
     "user.first_connected",
     "user.bandwidth_usage_threshold_reached",
+    "user.not_connected",
+    "user.expiration",
 ]
 
 TServiceEvents = Literal[

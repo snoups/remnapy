@@ -21,10 +21,10 @@ from remnapy.models import (
     ProfileModificationResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
-    ResetNodeTrafficRequestDto,
     ResetNodeTrafficResponseDto,
     RestartAllNodesRequestBodyDto,
     RestartAllNodesResponseDto,
+    RestartNodeRequestBodyDto,
     RestartNodeResponseDto,
     UpdateNodeRequestDto,
     UpdateNodeResponseDto,
@@ -99,6 +99,7 @@ class NodesController(BaseController):
     async def restart_node(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
+        body: Annotated[RestartNodeRequestBodyDto, PydanticBody()],
     ) -> RestartNodeResponseDto:
         """Restart Node"""
         ...
@@ -128,14 +129,6 @@ class NodesController(BaseController):
         uuid: Annotated[Union[str, UUID], Path(description="UUID of the node")],
     ) -> ResetNodeTrafficResponseDto:
         """Reset traffic for individual node"""
-        ...
-
-    @post("/nodes/actions/reset-traffic", response_class=ResetNodeTrafficResponseDto)
-    async def reset_traffic_all_nodes(
-        self,
-        body: Annotated[ResetNodeTrafficRequestDto, PydanticBody()],
-    ) -> ResetNodeTrafficResponseDto:
-        """Reset Traffic All Nodes"""
         ...
 
     @post(

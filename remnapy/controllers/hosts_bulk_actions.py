@@ -7,12 +7,10 @@ from remnapy.models import (
     BulkDeleteHostsResponseDto,
     BulkDisableHostsResponseDto,
     BulkEnableHostsResponseDto,
-    SetInboundToManyHostsRequestDto,
-    SetInboundToManyHostsResponseDto,
-    SetPortToManyHostsRequestDto,
-    SetPortToManyHostsResponseDto,
+    UpdateManyHostsRequestDto,
+    UpdateManyHostsResponseDto,
 )
-from remnapy.rapid import AttributeBody, BaseController, post
+from remnapy.rapid import AttributeBody, BaseController, patch, post
 
 
 class HostsBulkActionsController(BaseController):
@@ -40,21 +38,10 @@ class HostsBulkActionsController(BaseController):
         """Enable many hosts"""
         ...
 
-    @post(
-        "/hosts/bulk/set-inbound",
-        response_class=SetInboundToManyHostsResponseDto,
-    )
-    async def set_inbound_to_hosts(
+    @patch("/hosts/bulk/update", response_class=UpdateManyHostsResponseDto)
+    async def update_hosts(
         self,
-        body: Annotated[SetInboundToManyHostsRequestDto, PydanticBody()],
-    ) -> SetInboundToManyHostsResponseDto:
-        """Set inbound to many hosts"""
-        ...
-
-    @post("/hosts/bulk/set-port", response_class=SetPortToManyHostsResponseDto)
-    async def set_port_to_hosts(
-        self,
-        body: Annotated[SetPortToManyHostsRequestDto, PydanticBody()],
-    ) -> SetPortToManyHostsResponseDto:
-        """Set port to many hosts"""
+        body: Annotated[UpdateManyHostsRequestDto, PydanticBody()],
+    ) -> UpdateManyHostsResponseDto:
+        """Update many hosts"""
         ...

@@ -2,20 +2,21 @@ from typing import Annotated, Union
 from uuid import UUID
 
 from rapid_api_client import Path, Query
+from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models.bandwidthstats import (
     GetLegacyStatsNodesUsersUsageResponseDto,
     GetLegacyStatsUserUsageResponseDto,
-    GetNodesRealtimeUsageResponseDto,
     GetNodesUsageByRangeResponseDto,
     GetNodeUserUsageByRangeResponseDto,
-    GetStatsNodesRealtimeUsageResponseDto,
     GetStatsNodesUsageResponseDto,
+    GetStatsNodesUsersUsageRequestDto,
+    GetStatsNodesUsersUsageResponseDto,
     GetStatsNodeUsersUsageResponseDto,
     GetStatsUserUsageResponseDto,
     GetUserUsageByRangeResponseDto,
 )
-from remnapy.rapid import BaseController, get
+from remnapy.rapid import BaseController, get, post
 
 
 class BandWidthStatsController(BaseController):
@@ -52,16 +53,6 @@ class BandWidthStatsController(BaseController):
         ...
 
     # ============ New Stats Endpoints ============
-
-    @get(
-        "/bandwidth-stats/nodes/realtime",
-        response_class=GetStatsNodesRealtimeUsageResponseDto,
-    )
-    async def get_nodes_realtime_usage(
-        self,
-    ) -> GetStatsNodesRealtimeUsageResponseDto:
-        """Get Nodes Realtime Usage"""
-        ...
 
     @get(
         "/bandwidth-stats/nodes/{uuid}/users/legacy",
@@ -131,4 +122,15 @@ class BandWidthStatsController(BaseController):
         end: Annotated[str, Query(description="End date")],
     ) -> GetLegacyStatsUserUsageResponseDto:
         """Get User Usage by Range (Legacy Stats)"""
+        ...
+
+    @post(
+        "/bandwidth-stats/nodes/users",
+        response_class=GetStatsNodesUsersUsageResponseDto,
+    )
+    async def get_stats_nodes_users_usage(
+        self,
+        body: Annotated[GetStatsNodesUsersUsageRequestDto, PydanticBody()],
+    ) -> GetStatsNodesUsersUsageResponseDto:
+        """Get Nodes Users Usage by Nodes UUIDs"""
         ...

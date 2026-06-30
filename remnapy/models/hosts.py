@@ -3,7 +3,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel, StringConstraints
 
-from remnapy.enums import ALPN, Fingerprint, SecurityLayer, SubscriptionType
+from remnapy.enums import ALPN, MihomoIpVersion, SecurityLayer, SubscriptionType
+
+HostTag = Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]
 
 
 class ReorderHostItem(BaseModel):
@@ -39,8 +41,7 @@ class UpdateHostRequestDto(BaseModel):
     sni: Optional[str] = None
     host: Optional[str] = None
     alpn: Optional[ALPN] = None
-    fingerprint: Optional[Fingerprint] = None
-    allow_insecure: Optional[bool] = Field(None, serialization_alias="allowInsecure")
+    fingerprint: Optional[str] = None
     is_disabled: Optional[bool] = Field(None, serialization_alias="isDisabled")
     security_layer: Optional[SecurityLayer] = Field(
         None, serialization_alias="securityLayer"
@@ -48,9 +49,7 @@ class UpdateHostRequestDto(BaseModel):
     server_description: Optional[str] = Field(
         None, serialization_alias="serverDescription", max_length=30
     )
-    tag: Optional[
-        Annotated[str, StringConstraints(max_length=32, pattern=r"^[A-Z0-9_:]+$")]
-    ] = None
+    tags: Optional[Annotated[List[HostTag], Field(max_length=10)]] = None
     is_hidden: Optional[bool] = Field(None, serialization_alias="isHidden")
     override_sni_from_address: Optional[bool] = Field(
         None, serialization_alias="overrideSniFromAddress"
@@ -61,12 +60,22 @@ class UpdateHostRequestDto(BaseModel):
     )
     shuffle_host: Optional[bool] = Field(None, serialization_alias="shuffleHost")
     mihomo_x25519: Optional[bool] = Field(None, serialization_alias="mihomoX25519")
-    x_http_extra_params: Optional[Dict[str, Any]] = Field(
-        None, serialization_alias="xHttpExtraParams"
+    mihomo_ip_version: Optional[MihomoIpVersion] = Field(
+        None, serialization_alias="mihomoIpVersion"
+    )
+    xhttp_extra_params: Optional[Dict[str, Any]] = Field(
+        None, serialization_alias="xhttpExtraParams"
     )
     mux_params: Optional[Dict[str, Any]] = Field(None, serialization_alias="muxParams")
     sockopt_params: Optional[Dict[str, Any]] = Field(
         None, serialization_alias="sockoptParams"
+    )
+    final_mask: Optional[Any] = Field(None, serialization_alias="finalMask")
+    pinned_peer_cert_sha256: Optional[str] = Field(
+        None, serialization_alias="pinnedPeerCertSha256"
+    )
+    verify_peer_cert_by_name: Optional[str] = Field(
+        None, serialization_alias="verifyPeerCertByName"
     )
     nodes: Optional[List[UUID]] = None
     xray_json_template_uuid: Optional[UUID] = Field(
@@ -97,22 +106,25 @@ class HostResponseDto(BaseModel):
     host: str | None = Field(alias="host")
     alpn: str | None = Field(alias="alpn")
     fingerprint: str | None = Field(alias="fingerprint")
-    x_http_extra_params: Dict[str, Any] | None = Field(alias="xHttpExtraParams")
+    xhttp_extra_params: Dict[str, Any] | None = Field(alias="xhttpExtraParams")
     mux_params: Dict[str, Any] | None = Field(alias="muxParams")
     sockopt_params: Dict[str, Any] | None = Field(alias="sockoptParams")
+    final_mask: Any | None = Field(None, alias="finalMask")
     inbound: HostInboundData
     server_description: str | None = Field(alias="serverDescription")
-    tag: str | None = Field(alias="tag")
+    tags: List[str] = Field(default_factory=list, alias="tags")
     vless_route_id: int | None = Field(alias="vlessRouteId")
+    pinned_peer_cert_sha256: str | None = Field(None, alias="pinnedPeerCertSha256")
+    verify_peer_cert_by_name: str | None = Field(None, alias="verifyPeerCertByName")
     shuffle_host: bool = Field(alias="shuffleHost")
     mihomo_x25519: bool = Field(alias="mihomoX25519")
+    mihomo_ip_version: MihomoIpVersion | None = Field(None, alias="mihomoIpVersion")
     nodes: List[UUID]
     is_disabled: bool = Field(False, alias="isDisabled")
     security_layer: SecurityLayer = Field(SecurityLayer.DEFAULT, alias="securityLayer")
     is_hidden: bool = Field(False, alias="isHidden")
     override_sni_from_address: bool = Field(False, alias="overrideSniFromAddress")
     keep_blank_sni: bool = Field(False, alias="keepSniBlank")
-    allow_insecure: bool = Field(False, alias="allowInsecure")
     xray_json_template_uuid: UUID | None = Field(alias="xrayJsonTemplateUuid")
     excluded_internal_squads: List[UUID] = Field(
         default_factory=list, alias="excludedInternalSquads"
@@ -137,27 +149,34 @@ class CreateHostRequestDto(BaseModel):
     sni: Optional[str] = None
     host: Optional[str] = None
     alpn: Optional[ALPN] = None
-    fingerprint: Optional[Fingerprint] = None
-    x_http_extra_params: Optional[Dict[str, Any]] = Field(
-        None, serialization_alias="xHttpExtraParams"
+    fingerprint: Optional[str] = None
+    xhttp_extra_params: Optional[Dict[str, Any]] = Field(
+        None, serialization_alias="xhttpExtraParams"
     )
     mux_params: Optional[Dict[str, Any]] = Field(None, serialization_alias="muxParams")
     sockopt_params: Optional[Dict[str, Any]] = Field(
         None, serialization_alias="sockoptParams"
     )
+    final_mask: Optional[Any] = Field(None, serialization_alias="finalMask")
     server_description: Optional[str] = Field(
         None, serialization_alias="serverDescription", max_length=30
     )
-    tag: Optional[
-        Annotated[str, StringConstraints(max_length=32, pattern=r"^[A-Z0-9_:]+$")]
-    ] = None
+    tags: Annotated[List[HostTag], Field(max_length=10)] = Field(default_factory=list)
     vless_route_id: Optional[int] = Field(
         None, serialization_alias="vlessRouteId", ge=0, le=65535
     )
+    pinned_peer_cert_sha256: Optional[str] = Field(
+        None, serialization_alias="pinnedPeerCertSha256"
+    )
+    verify_peer_cert_by_name: Optional[str] = Field(
+        None, serialization_alias="verifyPeerCertByName"
+    )
     shuffle_host: bool = Field(False, serialization_alias="shuffleHost")
     mihomo_x25519: bool = Field(False, serialization_alias="mihomoX25519")
+    mihomo_ip_version: Optional[MihomoIpVersion] = Field(
+        None, serialization_alias="mihomoIpVersion"
+    )
     nodes: List[UUID] = Field(default_factory=list)
-    allow_insecure: bool = Field(False, serialization_alias="allowInsecure")
     is_disabled: bool = Field(False, serialization_alias="isDisabled")
     security_layer: SecurityLayer = Field(
         SecurityLayer.DEFAULT, serialization_alias="securityLayer"

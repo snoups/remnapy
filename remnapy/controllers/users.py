@@ -19,6 +19,7 @@ from remnapy.models import (
     GetUserByUsernameResponseDto,
     GetUserByUuidResponseDto,
     GetUserSubscriptionRequestHistoryResponseDto,
+    GetUsersStreamResponseDto,
     ResetUserTrafficResponseDto,
     ResolveUserRequestBodyDto,
     ResolveUserResponseDto,
@@ -60,6 +61,19 @@ class UsersController(BaseController):
         ] = None,
     ) -> GetAllUsersResponseDto:
         """Get all users"""
+        ...
+
+    @get("/users/stream", response_class=GetUsersStreamResponseDto)
+    async def get_users_stream(
+        self,
+        size: Annotated[
+            Optional[int], Query(default=None, description="Page size")
+        ] = None,
+        cursor: Annotated[
+            Optional[str], Query(default=None, description="Keyset pagination cursor")
+        ] = None,
+    ) -> GetUsersStreamResponseDto:
+        """Get all users using cursor-based (keyset) pagination"""
         ...
 
     @delete("/users/{uuid}", response_class=DeleteUserResponseDto)

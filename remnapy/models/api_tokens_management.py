@@ -1,44 +1,65 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 
 class CreateApiTokenRequestDto(BaseModel):
-    token_name: str = Field(serialization_alias="tokenName")
-
-
-class CreateApiTokenResponseData(BaseModel):
-    token: str
-    uuid: str
-
-
-class CreateApiTokenResponseDto(CreateApiTokenResponseData):
-    pass
-
-
-class DeleteApiTokenResponseDto(BaseModel):
-    is_deleted: bool = Field(..., alias="isDeleted")
+    name: str
+    expires_in_days: int = Field(serialization_alias="expiresInDays")
+    scopes: List[str] = Field(default_factory=lambda: ["*"])
 
 
 class ApiTokenDto(BaseModel):
     uuid: str
-    token: str
-    token_name: str = Field(..., alias="tokenName")
+    name: str
+    expire_at: datetime = Field(..., alias="expireAt")
+    scopes: List[str]
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")
 
 
+class CreateApiTokenResponseDto(ApiTokenDto):
+    token: str
+
+
+class DeleteApiTokenResponseDto(BaseModel):
+    response: bool
+
+
 class DocsInfoDto(BaseModel):
-    is_docs_enabled: bool = Field(..., alias="isDocsEnabled")
+    enabled: bool
     scalar_path: Optional[str] = Field(None, alias="scalarPath")
     swagger_path: Optional[str] = Field(None, alias="swaggerPath")
 
 
 class FindAllApiTokensResponseData(BaseModel):
-    api_keys: List[ApiTokenDto] = Field(..., alias="apiKeys")
+    tokens: List[ApiTokenDto]
     docs: DocsInfoDto
 
 
 class FindAllApiTokensResponseDto(FindAllApiTokensResponseData):
+    pass
+
+
+class ApiTokenScopeEndpointDto(BaseModel):
+    key: str
+    kind: str
+    method: str
+    path: str
+    description: str
+
+
+class ApiTokenScopeResourceDto(BaseModel):
+    resource: str
+    resource_scopes: List[str] = Field(..., alias="resourceScopes")
+    endpoints: List[ApiTokenScopeEndpointDto]
+
+
+class GetApiTokenScopesResponseData(BaseModel):
+    wildcard: str
+    resources: List[ApiTokenScopeResourceDto]
+
+
+class GetApiTokenScopesResponseDto(GetApiTokenScopesResponseData):
     pass

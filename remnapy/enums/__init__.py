@@ -3,6 +3,7 @@ from .auth import OAuth2Provider
 from .client_type import ClientType
 from .error_code import ErrorCode
 from .fingerprint import Fingerprint
+from .mihomo import MihomoIpVersion
 from .security_layer import SecurityLayer
 from .subscriptions_settings import (
     ResponseRuleConditionOperator,
@@ -33,6 +34,7 @@ __all__ = [
     "ClientType",
     "ALPN",
     "Fingerprint",
+    "MihomoIpVersion",
     "SecurityLayer",
     "TemplateType",
     "ResponseRuleConditionOperator",

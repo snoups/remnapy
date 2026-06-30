@@ -37,12 +37,16 @@ class UserTrafficDto(BaseModel):
 
 class UserResponseDto(BaseModel):
     uuid: UUID
+    id: Optional[int] = None
     short_uuid: str = Field(alias="shortUuid")
     username: str
     status: UserStatus = Field(default=UserStatus.ACTIVE)
     user_traffic: UserTrafficDto = Field(alias="userTraffic")
-    sub_last_user_agent: Optional[str] = Field(None, alias="subLastUserAgent")
-    sub_last_opened_at: Optional[datetime] = Field(None, alias="subLastOpenedAt")
+    traffic_limit_bytes: Optional[float] = Field(None, alias="trafficLimitBytes")
+    traffic_limit_strategy: Optional[TrafficLimitStrategy] = Field(
+        None, alias="trafficLimitStrategy"
+    )
+    external_squad_uuid: Optional[UUID] = Field(None, alias="externalSquadUuid")
     expire_at: datetime = Field(alias="expireAt")
     sub_revoked_at: Optional[datetime] = Field(None, alias="subRevokedAt")
     last_traffic_reset_at: Optional[datetime] = Field(None, alias="lastTrafficResetAt")
@@ -89,12 +93,22 @@ class UserResponseDto(BaseModel):
         return self.user_traffic.last_connected_node_uuid
 
 
+class HwidCheckupInfo(BaseModel):
+    subscription_allowed: bool = Field(alias="subscriptionAllowed")
+    max_device_reached: bool = Field(alias="maxDeviceReached")
+    hwid_not_supported: bool = Field(alias="hwidNotSupported")
+    limit_bypassed: bool = Field(alias="limitBypassed")
+
+
 class ConvertedUserInfo(BaseModel):
     days_left: int = Field(alias="daysLeft")
     traffic_limit: str = Field(alias="trafficLimit")
     traffic_used: str = Field(alias="trafficUsed")
     lifetime_traffic_used: str = Field(alias="lifetimeTrafficUsed")
-    is_hwid_limited: bool = Field(alias="isHwidLimited")
+    # 2.8.0: isHwidLimited (bool) заменён на объект hwidCheckup. Оба поля
+    # опциональны для совместимости со старым и новым контрактом панели.
+    is_hwid_limited: Optional[bool] = Field(None, alias="isHwidLimited")
+    hwid_checkup: Optional[HwidCheckupInfo] = Field(None, alias="hwidCheckup")
 
 
 class Passwords(BaseModel):
@@ -177,13 +191,33 @@ class RawHost(BaseModel):
     xray_json_template: Optional[Dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
 
 
+class ResolvedProxyConfig(BaseModel):
+    """Resolved proxy config returned in raw subscription"""
+
+    final_remark: str = Field(alias="finalRemark")
+    address: str
+    port: int
+    protocol: str
+    protocol_options: Dict[str, Any] = Field(alias="protocolOptions")
+    transport: str
+    transport_options: Dict[str, Any] = Field(alias="transportOptions")
+    security: str
+    security_options: Optional[Dict[str, Any]] = Field(None, alias="securityOptions")
+    stream_overrides: Dict[str, Any] = Field(alias="streamOverrides")
+    mux: Dict[str, Any]
+    client_overrides: Dict[str, Any] = Field(alias="clientOverrides")
+    metadata: Dict[str, Any]
+
+
 class RawSubscriptionResponse(BaseModel):
     """Raw subscription response data"""
 
     user: UserResponseDto
     converted_user_info: ConvertedUserInfo = Field(alias="convertedUserInfo")
     headers: Dict[str, str]
-    raw_hosts: Optional[List[RawHost]] = Field(None, alias="rawHosts")
+    resolved_proxy_configs: List[ResolvedProxyConfig] = Field(
+        alias="resolvedProxyConfigs"
+    )
 
 
 class GetRawSubscriptionByShortUuidResponseDto(RawSubscriptionResponse):

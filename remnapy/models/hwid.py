@@ -12,6 +12,7 @@ class CreateUserHwidDeviceRequestDto(BaseModel):
     os_version: Optional[str] = Field(None, serialization_alias="osVersion")
     device_model: Optional[str] = Field(None, serialization_alias="deviceModel")
     user_agent: Optional[str] = Field(None, serialization_alias="userAgent")
+    request_ip: Optional[str] = Field(None, serialization_alias="requestIp")
 
 
 class DeleteUserHwidDeviceRequestDto(BaseModel):
@@ -21,11 +22,15 @@ class DeleteUserHwidDeviceRequestDto(BaseModel):
 
 class HwidDeviceDto(BaseModel):
     hwid: str
-    user_uuid: UUID = Field(alias="userUuid")
+    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
+    # опциональны для совместимости со старым и новым контрактом панели.
+    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
+    user_id: Optional[int] = Field(None, alias="userId")
     platform: Optional[str] = None
     os_version: Optional[str] = Field(None, alias="osVersion")
     device_model: Optional[str] = Field(None, alias="deviceModel")
     user_agent: Optional[str] = Field(None, alias="userAgent")
+    request_ip: Optional[str] = Field(None, alias="requestIp")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
 
@@ -50,14 +55,15 @@ class GetUserHwidDevicesResponseDto(BaseModel):
     devices: List[HwidDeviceDto]
 
 
-class PlatformStatItem(BaseModel):
-    platform: str
-    count: float
-
-
 class AppStatItem(BaseModel):
     app: str
     count: float
+
+
+class PlatformStatItem(BaseModel):
+    platform: str
+    count: float
+    by_app: List[AppStatItem] = Field(default_factory=list, alias="byApp")
 
 
 class HwidStats(BaseModel):
@@ -68,7 +74,6 @@ class HwidStats(BaseModel):
 
 class HwidStatisticsData(BaseModel):
     by_platform: List[PlatformStatItem] = Field(alias="byPlatform")
-    by_app: List[AppStatItem] = Field(alias="byApp")
     stats: HwidStats
 
 

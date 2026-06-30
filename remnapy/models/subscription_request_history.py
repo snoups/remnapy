@@ -7,9 +7,12 @@ from pydantic import BaseModel, Field
 
 class SubscriptionRequestHistoryRecord(BaseModel):
     id: int
-    user_uuid: UUID = Field(alias="userUuid")
-    request_ip: Optional[str] = Field(alias="requestIp")
-    user_agent: Optional[str] = Field(alias="userAgent")
+    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
+    # опциональны для совместимости со старым и новым контрактом панели.
+    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
+    user_id: Optional[int] = Field(None, alias="userId")
+    request_ip: Optional[str] = Field(None, alias="requestIp")
+    user_agent: Optional[str] = Field(None, alias="userAgent")
     request_at: datetime = Field(alias="requestAt")
 
 
