@@ -306,6 +306,20 @@ class GetStatsNodeUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
         return self.root
 
 
+class GetStatsNodesUsersUsageRequestDto(BaseModel):
+    """Request for stats users usage across multiple nodes"""
+
+    nodes_uuids: List[UUID] = Field(serialization_alias="nodesUuids", min_length=1)
+
+
+class GetStatsNodesUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
+    """Response for stats users usage across multiple nodes"""
+
+    @property
+    def response(self) -> StatsNodeUsersUsageData:
+        return self.root
+
+
 # Stats User Usage (with charts)
 
 

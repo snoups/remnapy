@@ -124,12 +124,21 @@ class RuntimeMetric(BaseModel):
     heap_total: Optional[float] = Field(None, alias="heapTotal")
     heap_used: Optional[float] = Field(None, alias="heapUsed")
     external: Optional[float] = None
+    array_buffers: Optional[float] = Field(None, alias="arrayBuffers")
+    event_loop_delay_ms: Optional[float] = Field(None, alias="eventLoopDelayMs")
+    event_loop_p99_ms: Optional[float] = Field(None, alias="eventLoopP99Ms")
+    active_handles: Optional[float] = Field(None, alias="activeHandles")
+    uptime: Optional[float] = None
+    pid: Optional[float] = None
+    timestamp: Optional[float] = None
+    instance_id: Optional[str] = Field(None, alias="instanceId")
     instance_type: Optional[str] = Field(None, alias="instanceType")
 
 
 class GetRemnawaveHealthResponseDto(BaseModel):
-    pm2_stats: Optional[List[PM2Stat]] = Field(None, alias="pm2Stats")
-    runtime_metrics: Optional[List[RuntimeMetric]] = Field(None, alias="runtimeMetrics")
+    runtime_metrics: List[RuntimeMetric] = Field(
+        default_factory=list, alias="runtimeMetrics"
+    )
 
 
 class TrafficStatDto(BaseModel):

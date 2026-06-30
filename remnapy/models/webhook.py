@@ -56,10 +56,8 @@ class BaseUserDto(BaseModel):
     status: TUsersStatus
     user_traffic: UserTrafficDto
 
-    traffic_limit_bytes: int
+    traffic_limit_bytes: float
     traffic_limit_strategy: TResetPeriods
-    sub_last_user_agent: Optional[str] = None
-    sub_last_opened_at: Optional[datetime] = None
 
     expire_at: datetime
     sub_revoked_at: Optional[datetime] = None

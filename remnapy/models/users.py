@@ -149,7 +149,7 @@ class UserResponseDto(BaseModel):
     short_uuid: str = Field(alias="shortUuid")
     username: str
     status: UserStatus = Field(default=UserStatus.ACTIVE)
-    traffic_limit_bytes: int = Field(0, alias="trafficLimitBytes")
+    traffic_limit_bytes: float = Field(0, alias="trafficLimitBytes")
     traffic_limit_strategy: TrafficLimitStrategy = Field(
         TrafficLimitStrategy.NO_RESET, alias="trafficLimitStrategy"
     )
@@ -165,8 +165,6 @@ class UserResponseDto(BaseModel):
     ss_password: str = Field(alias="ssPassword")
     last_trigger_threshold: int = Field(0, alias="lastTriggeredThreshold")
     sub_revoked_at: Optional[datetime] = Field(None, alias="subRevokedAt")
-    sub_last_user_agent: Optional[str] = Field(None, alias="subLastUserAgent")
-    sub_last_opened_at: Optional[datetime] = Field(None, alias="subLastOpenedAt")
     last_traffic_reset_at: Optional[datetime] = Field(None, alias="lastTrafficResetAt")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
@@ -262,10 +260,13 @@ class SubscriptionRequestRecord(BaseModel):
     """Subscription request history record"""
 
     id: int
-    user_uuid: UUID = Field(alias="userUuid")
+    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
+    # опциональны для совместимости со старым и новым контрактом панели.
+    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
+    user_id: Optional[int] = Field(None, alias="userId")
     request_at: datetime = Field(alias="requestAt")
-    request_ip: Optional[str] = Field(alias="requestIp")
-    user_agent: Optional[str] = Field(alias="userAgent")
+    request_ip: Optional[str] = Field(None, alias="requestIp")
+    user_agent: Optional[str] = Field(None, alias="userAgent")
 
 
 class SubscriptionRequestsResponseData(BaseModel):
@@ -350,6 +351,20 @@ class UsersResponseDto(BaseModel):
 
 class GetAllUsersResponseDto(UsersResponseDto):
     """Response for get all users"""
+
+    pass
+
+
+class UsersStreamResponseDto(BaseModel):
+    """Users collection with cursor-based pagination"""
+
+    users: list[UserResponseDto]
+    next_cursor: Optional[str] = Field(None, alias="nextCursor")
+    has_more: bool = Field(alias="hasMore")
+
+
+class GetUsersStreamResponseDto(UsersStreamResponseDto):
+    """Response for cursor-based users stream"""
 
     pass
 

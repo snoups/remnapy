@@ -7,7 +7,6 @@ from .hosts import HostsController
 from .hosts_bulk_actions import HostsBulkActionsController
 from .hwid import HWIDUserController
 from .inbounds import InboundsController
-from .inbounds_bulk_actions import InboundsBulkActionsController
 from .infra_billing import InfraBillingController
 from .internal_squads import InternalSquadsController
 from .ip_control import IpControlController
@@ -28,7 +27,6 @@ from .system import SystemController
 from .users import UsersController
 from .users_bulk_actions import UsersBulkActionsController
 from .webhooks import WebhookUtility
-from .xray_config import XrayConfigController
 
 __all__ = [
     "APITokensManagementController",
@@ -39,7 +37,6 @@ __all__ = [
     "HostsBulkActionsController",
     "HWIDUserController",
     "InboundsController",
-    "InboundsBulkActionsController",
     "InfraBillingController",
     "InternalSquadsController",
     "KeygenController",
@@ -52,7 +49,6 @@ __all__ = [
     "UsersController",
     "UsersBulkActionsController",
     "WebhookUtility",
-    "XrayConfigController",
     "SubscriptionRequestHistoryController",
     "PasskeysController",
     "ExternalSquadsController",

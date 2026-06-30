@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
@@ -62,6 +62,14 @@ class ResponseModifications(BaseModel):
             "(treated as False)."
         ),
     )
+    additional_extended_clients_regex: Optional[List[str]] = Field(
+        None, alias="additionalExtendedClientsRegex"
+    )
+    disable_hwid_check: Optional[bool] = Field(None, alias="disableHwidCheck")
+    encryption: Optional[Dict[str, Any]] = None
+    exclude_hosts_by_tags: Optional[
+        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+    ] = Field(None, alias="excludeHostsByTags")
 
 
 class ResponseRule(BaseModel):

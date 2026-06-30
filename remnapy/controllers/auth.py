@@ -13,8 +13,6 @@ from remnapy.models import (
     OAuth2CallbackResponseDto,
     RegisterRequestDto,
     RegisterResponseDto,
-    TelegramCallbackRequestDto,
-    TelegramCallbackResponseDto,
     VerifyPasskeyAuthenticationRequestDto,
     VerifyPasskeyAuthenticationResponseDto,
 )
@@ -43,14 +41,6 @@ class AuthController(BaseController):
         self,
     ) -> GetStatusResponseDto:
         """Get status"""
-        ...
-
-    @post("/auth/oauth2/tg/callback", response_class=TelegramCallbackResponseDto)
-    async def oauth2_tg_callback(
-        self,
-        body: Annotated[TelegramCallbackRequestDto, PydanticBody()],
-    ) -> TelegramCallbackResponseDto:
-        """OAuth2 Telegram callback"""
         ...
 
     @post("/auth/oauth2/authorize", response_class=OAuth2AuthorizeResponseDto)

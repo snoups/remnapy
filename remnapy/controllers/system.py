@@ -5,8 +5,6 @@ from rapid_api_client import PydanticBody
 from remnapy.models import (
     DebugSrrMatcherRequestDto,
     DebugSrrMatcherResponseDto,
-    EncryptHappCryptoLinkRequestDto,
-    EncryptHappCryptoLinkResponseDto,
     GetBandwidthStatsResponseDto,
     GetMetadataResponseDto,
     GetNodesMetricsResponseDto,
@@ -67,14 +65,6 @@ class SystemController(BaseController):
         self,
     ) -> GetX25519KeyPairResponseDto:
         """Get X25519 Key Pair"""
-        ...
-
-    @post("/system/tools/happ/encrypt", response_class=EncryptHappCryptoLinkResponseDto)
-    async def encrypt_happ_crypto_link(
-        self,
-        body: Annotated[EncryptHappCryptoLinkRequestDto, PydanticBody()],
-    ) -> EncryptHappCryptoLinkResponseDto:
-        """Encrypt Happ Crypto Link"""
         ...
 
     @post("/system/testers/srr-matcher", response_class=DebugSrrMatcherResponseDto)
