@@ -144,6 +144,7 @@ class ReorderNodeRequestDto(BaseModel):
 
 class NodeResponseDto(BaseModel):
     uuid: UUID
+    id: int
     name: str
     address: str
     port: Optional[int] = None

@@ -20,7 +20,7 @@ class NodeInfoDto(BaseModel):
 
 
 class GetUserAccessibleNodesResponse(BaseModel):
-    user_uuid: UUID = Field(alias="userUuid")
+    user_id: int = Field(alias="userId")
     active_nodes: List[NodeInfoDto] = Field(default_factory=list, alias="activeNodes")
 
 

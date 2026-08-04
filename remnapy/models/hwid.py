@@ -1,13 +1,12 @@
 from datetime import datetime
 from typing import List, Optional
-from uuid import UUID
 
 from pydantic import BaseModel, Field
 
 
 class CreateUserHwidDeviceRequestDto(BaseModel):
     hwid: str
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
     platform: Optional[str] = None
     os_version: Optional[str] = Field(None, serialization_alias="osVersion")
     device_model: Optional[str] = Field(None, serialization_alias="deviceModel")
@@ -16,16 +15,13 @@ class CreateUserHwidDeviceRequestDto(BaseModel):
 
 
 class DeleteUserHwidDeviceRequestDto(BaseModel):
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
     hwid: str
 
 
 class HwidDeviceDto(BaseModel):
     hwid: str
-    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
-    user_id: Optional[int] = Field(None, alias="userId")
+    user_id: int = Field(alias="userId")
     platform: Optional[str] = None
     os_version: Optional[str] = Field(None, alias="osVersion")
     device_model: Optional[str] = Field(None, alias="deviceModel")
@@ -82,13 +78,12 @@ class GetHwidStatisticsResponseDto(HwidStatisticsData):
 
 
 class DeleteUserAllHwidDeviceRequestDto(BaseModel):
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
 
 
 class TopUserByHwidDevicesDto(BaseModel):
     """Top user by HWID devices"""
 
-    user_uuid: UUID = Field(alias="userUuid")
     id: int
     username: str
     devices_count: float = Field(alias="devicesCount")
