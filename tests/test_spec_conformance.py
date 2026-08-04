@@ -71,13 +71,20 @@ def test_path_params_match():
     assert not mismatches, "Path-параметры расходятся:\n" + "\n".join(mismatches)
 
 
-def _field_diff(model_name: str, schema: dict | None, spec: dict) -> tuple[set[str], set[str]]:
-    """(поля спеки, которых нет в модели; поля модели, которых нет в спеке)."""
+def _field_diff(
+    model_name: str, schema: dict | None, spec: dict, *, strip_response: bool
+) -> tuple[set[str], set[str]]:
+    """(поля спеки, которых нет в модели; поля модели, которых нет в спеке).
+
+    `strip_response` должен быть True только для схем/моделей ответа — тело
+    запроса никогда не оборачивается в конверт `response`, и поле с таким
+    именем там настоящее (см. `VerifyPasskeyRegistrationBodyDto`).
+    """
     model = getattr(models, model_name, None)
     if model is None or not hasattr(model, "model_fields"):
         return set(), set()
-    expected = schema_fields(schema, spec)
-    actual = model_fields(model)
+    expected = schema_fields(schema, spec, strip_response=strip_response)
+    actual = model_fields(model, strip_response=strip_response)
     return expected - actual, actual - expected
 
 
@@ -103,7 +110,7 @@ def test_models_match_spec(kind):
         if (model_name, kind) in ALLOWED_FIELD_DIFFS:
             continue
 
-        missing, extra = _field_diff(model_name, schema, spec)
+        missing, extra = _field_diff(model_name, schema, spec, strip_response=(kind == "response"))
         if missing or extra:
             lines = [f"  {shape[0]} {shape[1]} — {model_name} ({endpoint.file}::{endpoint.func})"]
             lines += [f"    + нет в SDK: {field}" for field in sorted(missing)]

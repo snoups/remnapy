@@ -108,14 +108,26 @@ def _parse_decorator(
     )
 
 
-def schema_fields(schema: dict[str, Any] | None, spec: dict[str, Any]) -> set[str]:
+def schema_fields(
+    schema: dict[str, Any] | None, spec: dict[str, Any], *, strip_response: bool = True
+) -> set[str]:
     """Развернуть JSON-схему в плоское множество путей полей.
 
     Массивы обозначаются суффиксом `[]`, вложенность — точкой:
-    `users[]activeInternalSquads[]uuid`. Конверт `response` снимается.
+    `users[]activeInternalSquads[]uuid`. Конверт `response` снимается, если
+    `strip_response=True` (по умолчанию; выключайте для схем тела запроса —
+    там поле `response`, если есть, настоящее, а не конверт).
+
+    Поле, которое после снятия конверта превращается в пустую строку
+    (конверт без единого вложенного свойства, напр. `{"response": {}}`),
+    отбрасывается — это не название поля, а артефакт разворачивания.
     """
     fields = _walk_schema(schema, spec, seen=frozenset(), depth=0)
-    return {_strip_envelope(field) for field in fields}
+    return {
+        stripped
+        for field in fields
+        if (stripped := _strip_envelope(field, strip_response=strip_response))
+    }
 
 
 def _walk_schema(
@@ -157,13 +169,22 @@ def _walk_schema(
     return set()
 
 
-def model_fields(model: type) -> set[str]:
+def model_fields(model: type, *, strip_response: bool = True) -> set[str]:
     """Развернуть pydantic-модель в плоское множество путей полей.
 
     Формат путей совпадает с `schema_fields`. Обёртка `RootModel` снимается.
+    `strip_response` управляет тем, снимается ли конверт `response` (см.
+    `_strip_envelope`) — для тел запросов его нужно отключать.
+
+    Поле, схлопнувшееся после снятия конверта в пустую строку, отбрасывается
+    (см. `schema_fields`) — по той же причине, симметрично.
     """
     fields = _walk_model(model, seen=frozenset(), depth=0)
-    return {_strip_envelope(field) for field in fields}
+    return {
+        stripped
+        for field in fields
+        if (stripped := _strip_envelope(field, strip_response=strip_response))
+    }
 
 
 def _walk_model(model: type, seen: frozenset[type], depth: int) -> set[str]:
@@ -212,9 +233,17 @@ def _unwrap_annotation(annotation: Any) -> list[Any]:
     return [annotation]
 
 
-def _strip_envelope(field: str) -> str:
-    """Убрать внешний конверт `response.` (спека) или `root.` (RootModel)."""
-    for envelope in ("response", "root"):
+def _strip_envelope(field: str, *, strip_response: bool = True) -> str:
+    """Убрать внешний конверт `response.` (спека) или `root.` (RootModel).
+
+    Конверт `response` существует только у схем ответа — панель никогда не
+    оборачивает в него тело запроса, поэтому у request-схем/моделей поле
+    `response`, если оно есть, настоящее и не должно вырезаться
+    (`strip_response=False`). Конверт `root` (разворачивание pydantic
+    `RootModel`) — отдельная механика и снимается всегда.
+    """
+    envelopes = ("response", "root") if strip_response else ("root",)
+    for envelope in envelopes:
         if field == envelope:
             return ""
         if field.startswith(f"{envelope}."):
