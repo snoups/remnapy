@@ -11,8 +11,8 @@ from remnapy.models import (
     GetSubpageConfigByShortUuidRequestBodyDto,
     GetSubpageConfigByShortUuidResponseDto,
     GetSubscriptionByShortUUIDResponseDto,
+    GetSubscriptionByUserIdResponseDto,
     GetSubscriptionByUsernameResponseDto,
-    GetSubscriptionByUUIDResponseDto,
 )
 from remnapy.rapid import BaseController, get
 
@@ -58,13 +58,13 @@ class SubscriptionsController(BaseController):
         ...
 
     @get(
-        "/subscriptions/by-uuid/{uuid}", response_class=GetSubscriptionByUUIDResponseDto
+        "/subscriptions/by-id/{userId}", response_class=GetSubscriptionByUserIdResponseDto
     )
-    async def get_subscription_by_uuid(
+    async def get_subscription_by_user_id(
         self,
-        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
-    ) -> GetSubscriptionByUUIDResponseDto:
-        """None"""
+        userId: Annotated[int, Path(description="ID of the user")],
+    ) -> GetSubscriptionByUserIdResponseDto:
+        """Get subscription by User ID"""
         ...
 
     @get(

@@ -124,3 +124,43 @@ class ReorderInternalSquadsRequestDto(BaseModel):
 
 class ReorderInternalSquadsResponseDto(GetAllInternalSquadsResponse):
     pass
+
+
+class InternalSquadUsageUser(BaseModel):
+    """Traffic usage of a single user in the squad"""
+
+    id: int
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class GetInternalSquadUsageResponseDto(BaseModel):
+    """Response for GET /api/internal-squads/{uuid}/usage"""
+
+    squad_uuid: UUID = Field(alias="squadUuid")
+    users: List[InternalSquadUsageUser]
+    next_cursor: Optional[str] = Field(None, alias="nextCursor")
+    has_more: bool = Field(alias="hasMore")
+
+
+class AddManyUsersToInternalSquadRequestDto(BaseModel):
+    """Request body for POST /api/internal-squads/{uuid}/bulk-actions/add-many-users"""
+
+    user_ids: List[int] = Field(..., serialization_alias="userIds", description="List of user IDs")
+
+
+class AddManyUsersToInternalSquadResponseDto(BulkActionsResponseDto):
+    """Response for POST /api/internal-squads/{uuid}/bulk-actions/add-many-users"""
+
+    pass
+
+
+class DeleteManyUsersFromInternalSquadRequestDto(BaseModel):
+    """Request body for DELETE /api/internal-squads/{uuid}/bulk-actions/remove-many-users"""
+
+    user_ids: List[int] = Field(..., serialization_alias="userIds", description="List of user IDs")
+
+
+class DeleteManyUsersFromInternalSquadResponseDto(BulkActionsResponseDto):
+    """Response for DELETE /api/internal-squads/{uuid}/bulk-actions/remove-many-users"""
+
+    pass

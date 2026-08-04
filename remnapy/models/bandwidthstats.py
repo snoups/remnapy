@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel
 
+from remnapy.models.internal_squads import GetInternalSquadUsageResponseDto
+
 # ============ Legacy Models (Deprecated) ============
 
 
@@ -338,3 +340,54 @@ class GetStatsUserUsageResponseDto(RootModel[StatsUserUsageData]):
     @property
     def response(self) -> StatsUserUsageData:
         return self.root
+
+
+# Squad and node usage (3.2.1)
+
+
+class SquadUserUsageNode(BaseModel):
+    """Per-node traffic for a day"""
+
+    uuid: UUID
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class SquadUserUsageDay(BaseModel):
+    """Daily traffic breakdown"""
+
+    date: str
+    nodes: List[SquadUserUsageNode]
+
+
+class GetInternalSquadUserUsageResponseDto(BaseModel):
+    """Response for GET /api/bandwidth-stats/internal-squads/{squadUuid}/users/{userId}/usage"""
+
+    days: List[SquadUserUsageDay]
+
+
+class GetNodesUsageRequestDto(BaseModel):
+    """Request body for POST /api/bandwidth-stats/nodes/usage"""
+
+    nodes_uuids: List[UUID] = Field(
+        ..., serialization_alias="nodesUuids", description="Node UUIDs to aggregate over"
+    )
+
+
+class NodeUsageUser(BaseModel):
+    """User traffic on a node"""
+
+    id: int
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class NodeUsageEntry(BaseModel):
+    """Per-node user traffic list"""
+
+    uuid: UUID
+    users: List[NodeUsageUser]
+
+
+class GetNodesUsageResponseDto(BaseModel):
+    """Response for POST /api/bandwidth-stats/nodes/usage"""
+
+    nodes: List[NodeUsageEntry]

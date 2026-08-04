@@ -1,20 +1,25 @@
-from typing import Annotated, Union
+from typing import Annotated, Optional, Union
 from uuid import UUID
 
-from rapid_api_client import Path
+from rapid_api_client import Path, Query
 from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
+    AddManyUsersToInternalSquadRequestDto,
+    AddManyUsersToInternalSquadResponseDto,
     AddUsersToInternalSquadRequestDto,
     AddUsersToInternalSquadResponseDto,
     CreateInternalSquadRequestDto,
     CreateInternalSquadResponseDto,
     DeleteInternalSquadResponseDto,
+    DeleteManyUsersFromInternalSquadRequestDto,
+    DeleteManyUsersFromInternalSquadResponseDto,
     DeleteUsersFromInternalSquadRequestDto,
     DeleteUsersFromInternalSquadResponseDto,
     GetAllInternalSquadsResponseDto,
     GetInternalSquadAccessibleNodesResponseDto,
     GetInternalSquadByUuidResponseDto,
+    GetInternalSquadUsageResponseDto,
     ReorderInternalSquadsRequestDto,
     ReorderInternalSquadsResponseDto,
     UpdateInternalSquadRequestDto,
@@ -113,4 +118,57 @@ class InternalSquadsController(BaseController):
         body: Annotated[ReorderInternalSquadsRequestDto, PydanticBody()],
     ) -> ReorderInternalSquadsResponseDto:
         """Reorder internal squads"""
+        ...
+
+    @get(
+        "/internal-squads/{uuid}/usage",
+        response_class=GetInternalSquadUsageResponseDto,
+    )
+    async def get_internal_squad_usage(
+        self,
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
+        start: Annotated[str, Query(description="Start date")],
+        end: Annotated[str, Query(description="End date")],
+        min_total_bytes: Annotated[
+            Optional[float],
+            Query(default=None, alias="minTotalBytes", description="Minimum total bytes"),
+        ] = None,
+        limit: Annotated[
+            Optional[int], Query(default=None, description="Number of users to return")
+        ] = None,
+        cursor: Annotated[
+            Optional[str], Query(default=None, description="Pagination cursor")
+        ] = None,
+    ) -> GetInternalSquadUsageResponseDto:
+        """Get internal squad usage"""
+        ...
+
+    @post(
+        "/internal-squads/{uuid}/bulk-actions/add-many-users",
+        response_class=AddManyUsersToInternalSquadResponseDto,
+    )
+    async def add_many_users_to_internal_squad(
+        self,
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
+        body: Annotated[AddManyUsersToInternalSquadRequestDto, PydanticBody()],
+    ) -> AddManyUsersToInternalSquadResponseDto:
+        """Add many users to internal squad"""
+        ...
+
+    @delete(
+        "/internal-squads/{uuid}/bulk-actions/remove-many-users",
+        response_class=DeleteManyUsersFromInternalSquadResponseDto,
+    )
+    async def remove_many_users_from_internal_squad(
+        self,
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
+        body: Annotated[DeleteManyUsersFromInternalSquadRequestDto, PydanticBody()],
+    ) -> DeleteManyUsersFromInternalSquadResponseDto:
+        """Remove many users from internal squad"""
         ...

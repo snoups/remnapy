@@ -289,7 +289,9 @@ class GetSubscriptionByShortUUIDResponseDto(GetSubscriptionByUsernameResponseDto
     pass
 
 
-class GetSubscriptionByUUIDResponseDto(GetSubscriptionByUsernameResponseDto):
+class GetSubscriptionByUserIdResponseDto(GetSubscriptionByUsernameResponseDto):
+    """Response for GET /api/subscriptions/by-id/{userId}"""
+
     pass
 
 

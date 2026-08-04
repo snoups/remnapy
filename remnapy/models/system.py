@@ -299,3 +299,80 @@ class GetMetadataResponseDto(MetadataResponse):
     """Get metadata response"""
 
     pass
+
+
+class ConfigurationNotifications(BaseModel):
+    """Webhook and notification thresholds"""
+
+    webhook: bool
+    bandwidth_usage: List[float] = Field(alias="bandwidthUsage")
+    not_connected_after: List[float] = Field(alias="notConnectedAfter")
+    expiration_notifications: List[float] = Field(alias="expirationNotifications")
+
+
+class ConfigurationService(BaseModel):
+    """Service-level toggles"""
+
+    clean_usage_history: bool = Field(alias="cleanUsageHistory")
+    disable_user_usage_records: bool = Field(alias="disableUserUsageRecords")
+    disable_srh_records: bool = Field(alias="disableSrhRecords")
+    export_to_redis_stream: bool = Field(alias="exportToRedisStream")
+
+
+class ConfigurationMisc(BaseModel):
+    """Miscellaneous panel configuration"""
+
+    short_uuid_length: int = Field(alias="shortUuidLength")
+    sub_public_domain: str = Field(alias="subPublicDomain")
+    user_usage_ignore_below_bytes: float = Field(alias="userUsageIgnoreBelowBytes")
+
+
+class GetConfigurationResponseDto(BaseModel):
+    """Response for GET /api/system/configuration"""
+
+    notifications: ConfigurationNotifications
+    service: ConfigurationService
+    misc: ConfigurationMisc
+
+
+class StatsDigestUsers(BaseModel):
+    """User counters for the digest period"""
+
+    created_count: float = Field(alias="createdCount")
+    expired_count: float = Field(alias="expiredCount")
+
+
+class StatsDigestTraffic(BaseModel):
+    """Traffic counters for the digest period"""
+
+    total_bytes: str = Field(alias="totalBytes")
+    by_users_created_in_range_bytes: str = Field(alias="byUsersCreatedInRangeBytes")
+
+
+class StatsDigestHwidDevices(BaseModel):
+    """HWID device counters for the digest period"""
+
+    created_count: float = Field(alias="createdCount")
+
+
+class GetStatsDigestResponseDto(BaseModel):
+    """Response for GET /api/system/stats/digest"""
+
+    users: StatsDigestUsers
+    traffic: StatsDigestTraffic
+    hwid_devices: StatsDigestHwidDevices = Field(alias="hwidDevices")
+
+
+class HttpStatsRoute(BaseModel):
+    """Request counter for a single route"""
+
+    method: str
+    route: str
+    count: int
+
+
+class GetHttpStatsResponseDto(BaseModel):
+    """Response for GET /api/system/stats/http"""
+
+    routes: List[HttpStatsRoute]
+    total: int

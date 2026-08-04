@@ -1,13 +1,16 @@
-from typing import Annotated, Union
+from typing import Annotated, Optional, Union
 from uuid import UUID
 
 from rapid_api_client import Path, Query
 from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models.bandwidthstats import (
+    GetInternalSquadUserUsageResponseDto,
     GetLegacyStatsNodesUsersUsageResponseDto,
     GetLegacyStatsUserUsageResponseDto,
     GetNodesUsageByRangeResponseDto,
+    GetNodesUsageRequestDto,
+    GetNodesUsageResponseDto,
     GetNodeUserUsageByRangeResponseDto,
     GetStatsNodesUsageResponseDto,
     GetStatsNodesUsersUsageRequestDto,
@@ -16,6 +19,7 @@ from remnapy.models.bandwidthstats import (
     GetStatsUserUsageResponseDto,
     GetUserUsageByRangeResponseDto,
 )
+from remnapy.models.internal_squads import GetInternalSquadUsageResponseDto
 from remnapy.rapid import BaseController, get, post
 
 
@@ -133,4 +137,63 @@ class BandWidthStatsController(BaseController):
         body: Annotated[GetStatsNodesUsersUsageRequestDto, PydanticBody()],
     ) -> GetStatsNodesUsersUsageResponseDto:
         """Get Nodes Users Usage by Nodes UUIDs"""
+        ...
+
+    @get(
+        "/bandwidth-stats/internal-squads/{uuid}/usage",
+        response_class=GetInternalSquadUsageResponseDto,
+    )
+    async def get_internal_squad_usage(
+        self,
+        uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the internal squad")
+        ],
+        start: Annotated[str, Query(description="Start date")],
+        end: Annotated[str, Query(description="End date")],
+        min_total_bytes: Annotated[
+            Optional[float],
+            Query(default=None, alias="minTotalBytes", description="Minimum total bytes"),
+        ] = None,
+        limit: Annotated[
+            Optional[int], Query(default=None, description="Number of users to return")
+        ] = None,
+        cursor: Annotated[
+            Optional[str], Query(default=None, description="Pagination cursor")
+        ] = None,
+    ) -> GetInternalSquadUsageResponseDto:
+        """Get internal squad usage"""
+        ...
+
+    @get(
+        "/bandwidth-stats/internal-squads/{squadUuid}/users/{userId}/usage",
+        response_class=GetInternalSquadUserUsageResponseDto,
+    )
+    async def get_internal_squad_user_usage(
+        self,
+        squad_uuid: Annotated[
+            Union[str, UUID],
+            Path(description="UUID of the internal squad", alias="squadUuid"),
+        ],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
+        start: Annotated[str, Query(description="Start date")],
+        end: Annotated[str, Query(description="End date")],
+    ) -> GetInternalSquadUserUsageResponseDto:
+        """Get internal squad user usage"""
+        ...
+
+    @post(
+        "/bandwidth-stats/nodes/usage",
+        response_class=GetNodesUsageResponseDto,
+    )
+    async def get_nodes_usage(
+        self,
+        body: Annotated[GetNodesUsageRequestDto, PydanticBody()],
+        start: Annotated[str, Query(description="Start date")],
+        end: Annotated[str, Query(description="End date")],
+        min_total_bytes: Annotated[
+            Optional[float],
+            Query(default=None, alias="minTotalBytes", description="Minimum total bytes"),
+        ] = None,
+    ) -> GetNodesUsageResponseDto:
+        """Get nodes usage by node UUIDs"""
         ...
