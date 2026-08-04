@@ -102,7 +102,7 @@ class GetNodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseD
 
 
 class UserUsageByRangeItem(BaseModel):
-    """Deprecated: Use LegacyUserUsageItem instead"""
+    """Deprecated: endpoint removed from the API in 3.2.1"""
 
     user_uuid: UUID = Field(alias="userUuid")
     node_uuid: UUID = Field(alias="nodeUuid")
@@ -112,33 +112,7 @@ class UserUsageByRangeItem(BaseModel):
 
 
 class GetUserUsageByRangeResponseDto(RootModel[List[UserUsageByRangeItem]]):
-    """Deprecated: Use GetLegacyStatsUserUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class NodeUserUsageItem(BaseModel):
-    """Deprecated: Use LegacyNodeUserUsageItem instead"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    username: str
-    node_uuid: UUID = Field(alias="nodeUuid")
-    total: int
-    date: str
-
-
-class GetNodeUserUsageByRangeResponseDto(RootModel[List[NodeUserUsageItem]]):
-    """Deprecated: Use GetLegacyStatsNodesUsersUsageResponseDto instead"""
+    """Deprecated: endpoint removed from the API in 3.2.1"""
 
     def __iter__(self):
         return iter(self.root)
@@ -154,60 +128,6 @@ class GetNodeUserUsageByRangeResponseDto(RootModel[List[NodeUserUsageItem]]):
 
 
 # ============ New Stats Models ============
-
-# Legacy Stats Models
-
-
-class LegacyUserUsageItem(BaseModel):
-    """Legacy user usage item"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    node_uuid: UUID = Field(alias="nodeUuid")
-    node_name: str = Field(alias="nodeName")
-    country_code: str = Field(alias="countryCode")
-    total: int
-    date: str
-
-
-class GetLegacyStatsUserUsageResponseDto(RootModel[List[LegacyUserUsageItem]]):
-    """Response for legacy user usage"""
-
-    @property
-    def response(self) -> List[LegacyUserUsageItem]:
-        return self.root
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-
-class LegacyNodeUserUsageItem(BaseModel):
-    """Legacy node user usage item"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    username: str
-    node_uuid: UUID = Field(alias="nodeUuid")
-    total: int
-    date: str
-
-
-class GetLegacyStatsNodesUsersUsageResponseDto(
-    RootModel[List[LegacyNodeUserUsageItem]]
-):
-    """Response for legacy nodes users usage"""
-
-    @property
-    def response(self) -> List[LegacyNodeUserUsageItem]:
-        return self.root
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
 
 # Realtime Stats
 

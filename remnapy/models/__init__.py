@@ -25,13 +25,10 @@ from .auth import (
 )
 from .bandwidthstats import (
     GetInternalSquadUserUsageResponseDto,
-    GetLegacyStatsNodesUsersUsageResponseDto,
-    GetLegacyStatsUserUsageResponseDto,
     GetNodesRealtimeUsageResponseDto,
     GetNodesUsageByRangeResponseDto,
     GetNodesUsageRequestDto,
     GetNodesUsageResponseDto,
-    GetNodeUserUsageByRangeResponseDto,
     GetStatsNodesRealtimeUsageResponseDto,
     GetStatsNodesUsageResponseDto,
     GetStatsNodesUsersUsageRequestDto,
@@ -39,9 +36,7 @@ from .bandwidthstats import (
     GetStatsNodeUsersUsageResponseDto,
     GetStatsUserUsageResponseDto,
     GetUserUsageByRangeResponseDto,
-    LegacyNodeUserUsageItem,
     # Data Models
-    LegacyUserUsageItem,
     NodeRealtimeUsageItem,
     NodeRealtimeUsageResponseDto,
     NodeSeriesItem,
@@ -734,16 +729,12 @@ __all__ = [
     "NodeUsageResponseDto",
     "NodesRealtimeUsageResponseDto",  # Legacy alias
     "NodesUsageResponseDto",  # Legacy alias
-    "GetLegacyStatsUserUsageResponseDto",
-    "GetLegacyStatsNodesUsersUsageResponseDto",
     "GetStatsNodesRealtimeUsageResponseDto",
     "GetStatsNodesUsageResponseDto",
     "GetStatsNodesUsersUsageRequestDto",
     "GetStatsNodesUsersUsageResponseDto",
     "GetStatsNodeUsersUsageResponseDto",
     "GetStatsUserUsageResponseDto",
-    "LegacyUserUsageItem",
-    "LegacyNodeUserUsageItem",
     "NodeRealtimeUsageItem",
     "TopNodeItem",
     "TopUserItem",
