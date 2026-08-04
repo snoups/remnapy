@@ -305,9 +305,11 @@ class ConfigurationNotifications(BaseModel):
     """Webhook and notification thresholds"""
 
     webhook: bool
-    bandwidth_usage: List[float] = Field(alias="bandwidthUsage")
-    not_connected_after: List[float] = Field(alias="notConnectedAfter")
-    expiration_notifications: List[float] = Field(alias="expirationNotifications")
+    bandwidth_usage: Optional[List[float]] = Field(alias="bandwidthUsage")
+    not_connected_after: Optional[List[float]] = Field(alias="notConnectedAfter")
+    expiration_notifications: Optional[List[float]] = Field(
+        alias="expirationNotifications"
+    )
 
 
 class ConfigurationService(BaseModel):

@@ -89,14 +89,19 @@ class BandWidthStatsController(BaseController):
         start: Annotated[str, Query(description="Start date")],
         end: Annotated[str, Query(description="End date")],
         min_total_bytes: Annotated[
-            Optional[float],
-            Query(default=None, alias="minTotalBytes", description="Minimum total bytes"),
-        ] = None,
+            int,
+            Query(
+                default=0, ge=0, alias="minTotalBytes", description="Minimum total bytes"
+            ),
+        ] = 0,
         limit: Annotated[
-            Optional[int], Query(default=None, description="Number of users to return")
-        ] = None,
+            int,
+            Query(
+                default=250, ge=1, le=1000, description="Number of users to return"
+            ),
+        ] = 250,
         cursor: Annotated[
-            Optional[str], Query(default=None, description="Pagination cursor")
+            Optional[int], Query(default=None, description="Pagination cursor")
         ] = None,
     ) -> GetInternalSquadUsageResponseDto:
         """Get internal squad usage"""
@@ -129,9 +134,11 @@ class BandWidthStatsController(BaseController):
         start: Annotated[str, Query(description="Start date")],
         end: Annotated[str, Query(description="End date")],
         min_total_bytes: Annotated[
-            Optional[float],
-            Query(default=None, alias="minTotalBytes", description="Minimum total bytes"),
-        ] = None,
+            int,
+            Query(
+                default=0, ge=0, alias="minTotalBytes", description="Minimum total bytes"
+            ),
+        ] = 0,
     ) -> GetNodesUsageResponseDto:
         """Get nodes usage by node UUIDs"""
         ...
