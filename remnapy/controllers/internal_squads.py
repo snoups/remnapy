@@ -144,7 +144,14 @@ class InternalSquadsController(BaseController):
             ),
         ] = 250,
         cursor: Annotated[
-            Optional[int], Query(default=None, description="Pagination cursor")
+            Optional[int],
+            Query(
+                default=None,
+                description=(
+                    "Pagination cursor; pass the previous response's nextCursor "
+                    "converted to an integer"
+                ),
+            ),
         ] = None,
     ) -> GetInternalSquadUsageResponseDto:
         """Get internal squad usage"""

@@ -67,7 +67,14 @@ class UsersController(BaseController):
             Optional[int], Query(default=None, description="Page size")
         ] = None,
         cursor: Annotated[
-            Optional[str], Query(default=None, description="Keyset pagination cursor")
+            Optional[int],
+            Query(
+                default=None,
+                description=(
+                    "Keyset pagination cursor; pass the previous response's "
+                    "nextCursor converted to an integer"
+                ),
+            ),
         ] = None,
     ) -> GetUsersStreamResponseDto:
         """Get all users using cursor-based (keyset) pagination"""
