@@ -33,15 +33,12 @@ class BandwidthStatisticResponseDto(BaseModel):
 
 class CPUStatistic(BaseModel):
     cores: float
-    physical_cores: Optional[float] = Field(None, alias="physicalCores")
 
 
 class MemoryStatistic(BaseModel):
     total: float
     free: float
     used: float
-    active: Optional[float] = None
-    available: Optional[float] = None
 
 
 class StatusCounts(BaseModel):

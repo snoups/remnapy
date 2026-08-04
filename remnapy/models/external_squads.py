@@ -35,20 +35,10 @@ class ExternalSquadTemplateDto(BaseModel):
 class ExternalSquadSubscriptionSettingsDto(BaseModel):
     """External squad subscription settings"""
 
-    profile_title: Optional[str] = Field(None, alias="profileTitle")
-    support_link: Optional[str] = Field(None, alias="supportLink")
-    profile_update_interval: Optional[int] = Field(
-        None, alias="profileUpdateInterval", ge=1
-    )
-    is_profile_webpage_url_enabled: Optional[bool] = Field(
-        None, alias="isProfileWebpageUrlEnabled"
-    )
     serve_json_at_base_subscription: Optional[bool] = Field(
         None, alias="serveJsonAtBaseSubscription"
     )
     is_show_custom_remarks: Optional[bool] = Field(None, alias="isShowCustomRemarks")
-    happ_announce: Optional[str] = Field(None, alias="happAnnounce")
-    happ_routing: Optional[str] = Field(None, alias="happRouting")
     randomize_hosts: Optional[bool] = Field(None, alias="randomizeHosts")
 
 
@@ -75,7 +65,12 @@ class ExternalSquadDto(BaseModel):
     host_overrides: Optional[ExternalSquadHostOverridesDto] = Field(
         None, alias="hostOverrides"
     )
-    response_headers: Optional[Dict[str, str]] = Field(None, alias="responseHeaders")
+    response_headers_add: Optional[Dict[str, str]] = Field(
+        None, alias="responseHeadersAdd"
+    )
+    response_headers_remove: Optional[List[str]] = Field(
+        None, alias="responseHeadersRemove"
+    )
     hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
     custom_remarks: Optional[CustomRemarksDto] = Field(None, alias="customRemarks")
     subpage_config_uuid: Optional[UUID] = Field(None, alias="subpageConfigUuid")
@@ -125,8 +120,11 @@ class UpdateExternalSquadRequestDto(BaseModel):
     )
     hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
     custom_remarks: Optional[CustomRemarksDto] = Field(None, alias="customRemarks")
-    response_headers: Optional[Dict[str, str]] = Field(
-        None, serialization_alias="responseHeaders"
+    response_headers_add: Optional[Dict[str, str]] = Field(
+        None, serialization_alias="responseHeadersAdd"
+    )
+    response_headers_remove: Optional[List[str]] = Field(
+        None, serialization_alias="responseHeadersRemove"
     )
     subpage_config_uuid: Optional[UUID] = Field(
         None, serialization_alias="subpageConfigUuid"
