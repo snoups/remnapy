@@ -252,11 +252,10 @@ class SubscriptionRequestRecord(BaseModel):
     """Subscription request history record"""
 
     id: int
-    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
-    user_id: Optional[int] = Field(None, alias="userId")
+    user_id: int = Field(alias="userId")
     request_at: datetime = Field(alias="requestAt")
+    srr_response_type: str = Field(alias="srrResponseType")
+    srr_rule_name: Optional[str] = Field(None, alias="srrRuleName")
     request_ip: Optional[str] = Field(None, alias="requestIp")
     user_agent: Optional[str] = Field(None, alias="userAgent")
 
