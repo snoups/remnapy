@@ -118,16 +118,15 @@ def schema_fields(
     `strip_response=True` (по умолчанию; выключайте для схем тела запроса —
     там поле `response`, если есть, настоящее, а не конверт).
 
-    Поле, которое после снятия конверта превращается в пустую строку
-    (конверт без единого вложенного свойства, напр. `{"response": {}}`),
-    отбрасывается — это не название поля, а артефакт разворачивания.
+    Если снимать конверт не с чего (всё содержимое схемы/модели — это сам
+    конверт целиком, без единого вложенного свойства, напр.
+    `{"response": {}}`), поле остаётся под именем конверта (`response`
+    / `root`) вместо того, чтобы схлопнуться в пустую строку — иначе такой
+    endpoint пропадает из отчёта вместо того, чтобы быть в нём поимённо
+    (см. `_strip_envelope`).
     """
     fields = _walk_schema(schema, spec, seen=frozenset(), depth=0)
-    return {
-        stripped
-        for field in fields
-        if (stripped := _strip_envelope(field, strip_response=strip_response))
-    }
+    return {_strip_envelope(field, strip_response=strip_response) for field in fields}
 
 
 def _walk_schema(
@@ -176,15 +175,12 @@ def model_fields(model: type, *, strip_response: bool = True) -> set[str]:
     `strip_response` управляет тем, снимается ли конверт `response` (см.
     `_strip_envelope`) — для тел запросов его нужно отключать.
 
-    Поле, схлопнувшееся после снятия конверта в пустую строку, отбрасывается
-    (см. `schema_fields`) — по той же причине, симметрично.
+    Как и в `schema_fields`, поле, которое нечего снимать кроме самого
+    конверта, остаётся под именем конверта, а не схлопывается в пустую
+    строку.
     """
     fields = _walk_model(model, seen=frozenset(), depth=0)
-    return {
-        stripped
-        for field in fields
-        if (stripped := _strip_envelope(field, strip_response=strip_response))
-    }
+    return {_strip_envelope(field, strip_response=strip_response) for field in fields}
 
 
 def _walk_model(model: type, seen: frozenset[type], depth: int) -> set[str]:
@@ -241,11 +237,18 @@ def _strip_envelope(field: str, *, strip_response: bool = True) -> str:
     `response`, если оно есть, настоящее и не должно вырезаться
     (`strip_response=False`). Конверт `root` (разворачивание pydantic
     `RootModel`) — отдельная механика и снимается всегда.
+
+    Если поле — это конверт целиком и снимать нечего (напр. схема ответа
+    `{"response": {}}` без единого вложенного свойства, или модель без полей),
+    имя конверта не срезается до пустой строки: пустая строка — это не имя
+    поля, а исчезновение endpoint'а из отчёта. Вместо этого возвращается имя
+    самого конверта (`response`/`root`), чтобы такой endpoint остался в
+    выводе под читаемым именем.
     """
     envelopes = ("response", "root") if strip_response else ("root",)
     for envelope in envelopes:
         if field == envelope:
-            return ""
+            return field
         if field.startswith(f"{envelope}."):
             return field[len(envelope) + 1 :]
         if field.startswith(f"{envelope}[]"):
