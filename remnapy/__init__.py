@@ -8,6 +8,7 @@ from remnapy.controllers import (
     AuthController,
     BandWidthStatsController,
     ConfigProfilesController,
+    ConnectionsController,
     ExternalSquadsController,
     HostsBulkActionsController,
     HostsController,
@@ -15,7 +16,6 @@ from remnapy.controllers import (
     InboundsController,
     InfraBillingController,
     InternalSquadsController,
-    IpControlController,
     KeygenController,
     MetadataController,
     NodePluginsController,
@@ -100,7 +100,7 @@ class RemnawaveSDK:
         self.snippets = SnippetsController(self._client)
         self.remnawave_settings = RemnawaveSettingsController(self._client)
         self.subscription_page_config = SubscriptionPageConfigController(self._client)
-        self.ip_control = IpControlController(self._client)
+        self.connections = ConnectionsController(self._client)
         self.node_plugins = NodePluginsController(self._client)
         self.metadata = MetadataController(self._client)
 
