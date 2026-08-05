@@ -35,7 +35,8 @@ pip install git+https://github.com/snoups/remnapy.git@development
 
 | Contract Version | Remnawave Panel Version |
 | ---------------- | ----------------------- |
-| 2.8.0            | >=2.8.0                 |
+| 3.2.1            | >=3.2.0                 |
+| 2.8.0            | >=2.8.0, <3.0.0         |
 | 2.7.0            | >=2.7.0, <2.8.0         |
 | 2.6.3            | >=2.6.3                 |
 | 2.3.0            | >=2.3.0, <2.4.0         |

@@ -1,7 +1,7 @@
 [project]
 name = "remnapy"
 dynamic = ["version"]
-description = "A Python SDK for interacting with the Remnawave API v2.7.1."
+description = "A Python SDK for interacting with the Remnawave API v3.2.1."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11,<3.14"
