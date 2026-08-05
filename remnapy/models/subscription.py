@@ -36,7 +36,6 @@ class UserTrafficDto(BaseModel):
 
 
 class UserResponseDto(BaseModel):
-    uuid: UUID
     id: Optional[int] = None
     short_uuid: str = Field(alias="shortUuid")
     username: str
@@ -105,9 +104,6 @@ class ConvertedUserInfo(BaseModel):
     traffic_limit: str = Field(alias="trafficLimit")
     traffic_used: str = Field(alias="trafficUsed")
     lifetime_traffic_used: str = Field(alias="lifetimeTrafficUsed")
-    # 2.8.0: isHwidLimited (bool) заменён на объект hwidCheckup. Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    is_hwid_limited: Optional[bool] = Field(None, alias="isHwidLimited")
     hwid_checkup: Optional[HwidCheckupInfo] = Field(None, alias="hwidCheckup")
 
 
@@ -191,6 +187,113 @@ class RawHost(BaseModel):
     xray_json_template: Optional[Dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
 
 
+class ResolvedProtocolOptions(BaseModel):
+    """Protocol-specific options, shape depends on `protocol` (vless/trojan/shadowsocks/hysteria)"""
+
+    encryption: Optional[str] = None
+    id: Optional[str] = None
+    flow: Optional[str] = None
+    password: Optional[str] = None
+    method: Optional[str] = None
+    uot: Optional[bool] = None
+    uot_version: Optional[int] = Field(None, alias="uotVersion")
+    version: Optional[int] = None
+
+
+class ResolvedHttpHeaderRequest(BaseModel):
+    version: Optional[str] = None
+    method: Optional[str] = None
+    path: Optional[List[str]] = None
+    headers: Optional[Dict[str, Any]] = None
+
+
+class ResolvedHttpHeaderResponse(BaseModel):
+    version: Optional[str] = None
+    status: Optional[str] = None
+    reason: Optional[str] = None
+    headers: Optional[Dict[str, Any]] = None
+
+
+class ResolvedTransportHeader(BaseModel):
+    type: Optional[str] = None
+    request: Optional[ResolvedHttpHeaderRequest] = None
+    response: Optional[ResolvedHttpHeaderResponse] = None
+
+
+class ResolvedTransportOptions(BaseModel):
+    """Transport-specific options, shape depends on `transport` (tcp/xhttp/ws/httpupgrade/grpc/kcp/hysteria)"""
+
+    header: Optional[ResolvedTransportHeader] = None
+    path: Optional[str] = None
+    host: Optional[str] = None
+    mode: Optional[str] = None
+    extra: Optional[Dict[str, Any]] = None
+    headers: Optional[Dict[str, Any]] = None
+    heartbeat_period: Optional[float] = Field(None, alias="heartbeatPeriod")
+    authority: Optional[str] = None
+    service_name: Optional[str] = Field(None, alias="serviceName")
+    multi_mode: Optional[bool] = Field(None, alias="multiMode")
+    client_mtu: Optional[int] = Field(None, alias="clientMtu")
+    client_tti: Optional[int] = Field(None, alias="clientTti")
+    congestion: Optional[bool] = None
+    version: Optional[int] = None
+    auth: Optional[str] = None
+
+
+class ResolvedSecurityOptions(BaseModel):
+    """Security-specific options, shape depends on `security` (tls/reality/none)"""
+
+    pinned_peer_cert_sha256: Optional[str] = Field(None, alias="pinnedPeerCertSha256")
+    verify_peer_cert_by_name: Optional[str] = Field(
+        None, alias="verifyPeerCertByName"
+    )
+    alpn: Optional[str] = None
+    enable_session_resumption: Optional[bool] = Field(
+        None, alias="enableSessionResumption"
+    )
+    fingerprint: Optional[str] = None
+    server_name: Optional[str] = Field(None, alias="serverName")
+    ech_config_list: Optional[str] = Field(None, alias="echConfigList")
+    ech_force_query: Optional[str] = Field(None, alias="echForceQuery")
+    ech_sockopt: Optional[Any] = Field(None, alias="echSockopt")
+    public_key: Optional[str] = Field(None, alias="publicKey")
+    short_id: Optional[str] = Field(None, alias="shortId")
+    spider_x: Optional[str] = Field(None, alias="spiderX")
+    mldsa65_verify: Optional[str] = Field(None, alias="mldsa65Verify")
+
+
+class ResolvedStreamOverrides(BaseModel):
+    final_mask: Optional[Any] = Field(alias="finalMask")
+    sockopt: Optional[Any] = None
+
+
+class ResolvedClientOverrides(BaseModel):
+    shuffle_host: bool = Field(alias="shuffleHost")
+    mihomo_x25519: bool = Field(alias="mihomoX25519")
+    mihomo_ip_version: Optional[str] = Field(alias="mihomoIpVersion")
+    server_description: Optional[str] = Field(alias="serverDescription")
+    xray_json_template: Optional[Any] = Field(alias="xrayJsonTemplate")
+
+
+class ResolvedProxyConfigMetadata(BaseModel):
+    uuid: UUID
+    tags: List[str]
+    exclude_from_subscription_types: List[str] = Field(
+        alias="excludeFromSubscriptionTypes"
+    )
+    inbound_tag: str = Field(alias="inboundTag")
+    config_profile_uuid: Optional[UUID] = Field(alias="configProfileUuid")
+    config_profile_inbound_uuid: Optional[UUID] = Field(
+        alias="configProfileInboundUuid"
+    )
+    is_disabled: bool = Field(alias="isDisabled")
+    is_hidden: bool = Field(alias="isHidden")
+    view_position: int = Field(alias="viewPosition")
+    remark: str
+    vless_route_id: Optional[int] = Field(alias="vlessRouteId")
+    raw_inbound: Optional[Any] = Field(alias="rawInbound")
+
+
 class ResolvedProxyConfig(BaseModel):
     """Resolved proxy config returned in raw subscription"""
 
@@ -198,15 +301,17 @@ class ResolvedProxyConfig(BaseModel):
     address: str
     port: int
     protocol: str
-    protocol_options: Dict[str, Any] = Field(alias="protocolOptions")
+    protocol_options: ResolvedProtocolOptions = Field(alias="protocolOptions")
     transport: str
-    transport_options: Dict[str, Any] = Field(alias="transportOptions")
+    transport_options: ResolvedTransportOptions = Field(alias="transportOptions")
     security: str
-    security_options: Optional[Dict[str, Any]] = Field(None, alias="securityOptions")
-    stream_overrides: Dict[str, Any] = Field(alias="streamOverrides")
-    mux: Dict[str, Any]
-    client_overrides: Dict[str, Any] = Field(alias="clientOverrides")
-    metadata: Dict[str, Any]
+    security_options: Optional[ResolvedSecurityOptions] = Field(
+        None, alias="securityOptions"
+    )
+    stream_overrides: ResolvedStreamOverrides = Field(alias="streamOverrides")
+    mux: Optional[Dict[str, Any]] = None
+    client_overrides: ResolvedClientOverrides = Field(alias="clientOverrides")
+    metadata: ResolvedProxyConfigMetadata
 
 
 class RawSubscriptionResponse(BaseModel):

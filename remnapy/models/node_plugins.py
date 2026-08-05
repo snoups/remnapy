@@ -6,7 +6,6 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 
 class TorrentBlockerUserDto(BaseModel):
-    uuid: UUID
     username: str
 
 
@@ -89,7 +88,9 @@ class TorrentBlockerStatsDto(BaseModel):
 
 
 class TorrentBlockerTopUserDto(BaseModel):
-    uuid: UUID
+    model_config = ConfigDict(populate_by_name=True)
+
+    user_id: float = Field(alias="userId")
     color: str
     username: str
     total: float

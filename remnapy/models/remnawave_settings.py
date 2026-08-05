@@ -26,6 +26,7 @@ class PocketIdOAuth2Settings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
+    frontend_domain: str | None = Field(alias="frontendDomain")
     plain_domain: str | None = Field(alias="plainDomain")
     allowed_emails: List[str] = Field(alias="allowedEmails")
 

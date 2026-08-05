@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -27,15 +27,8 @@ class DeleteApiTokenResponseDto(BaseModel):
     response: bool
 
 
-class DocsInfoDto(BaseModel):
-    enabled: bool
-    scalar_path: Optional[str] = Field(None, alias="scalarPath")
-    swagger_path: Optional[str] = Field(None, alias="swaggerPath")
-
-
 class FindAllApiTokensResponseData(BaseModel):
     tokens: List[ApiTokenDto]
-    docs: DocsInfoDto
 
 
 class FindAllApiTokensResponseDto(FindAllApiTokensResponseData):

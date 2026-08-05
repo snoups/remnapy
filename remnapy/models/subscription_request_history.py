@@ -1,18 +1,16 @@
 from datetime import datetime
-from typing import List, Optional
-from uuid import UUID
+from typing import List
 
 from pydantic import BaseModel, Field
 
 
 class SubscriptionRequestHistoryRecord(BaseModel):
     id: int
-    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
-    user_id: Optional[int] = Field(None, alias="userId")
-    request_ip: Optional[str] = Field(None, alias="requestIp")
-    user_agent: Optional[str] = Field(None, alias="userAgent")
+    user_id: int = Field(alias="userId")
+    srr_response_type: str = Field(alias="srrResponseType")
+    srr_rule_name: str | None = Field(alias="srrRuleName")
+    request_ip: str | None = Field(alias="requestIp")
+    user_agent: str | None = Field(alias="userAgent")
     request_at: datetime = Field(alias="requestAt")
 
 

@@ -39,10 +39,10 @@ class BandWidthStatsController(BaseController):
         """Get Node Users Usage by Node UUID"""
         ...
 
-    @get("/bandwidth-stats/users/{uuid}", response_class=GetStatsUserUsageResponseDto)
+    @get("/bandwidth-stats/users/{userId}", response_class=GetStatsUserUsageResponseDto)
     async def get_stats_user_usage(
         self,
-        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
+        userId: Annotated[int, Path(description="ID of the user")],
         top_nodes_limit: Annotated[
             int,
             Query(description="Limit of top nodes to return", alias="topNodesLimit"),

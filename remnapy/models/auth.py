@@ -116,8 +116,8 @@ class OAuth2CallbackResponseDto(BaseModel):
 class GetPasskeyAuthenticationOptionsResponseDto(BaseModel):
     """Response with passkey authentication options"""
 
-    # Passkey options are complex WebAuthn objects
-    pass
+    # Passkey options are a free-form WebAuthn object per spec
+    response: Dict[str, Any]
 
 
 class VerifyPasskeyAuthenticationRequestDto(BaseModel):

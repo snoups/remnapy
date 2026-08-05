@@ -105,12 +105,12 @@ class SubscriptionsController(BaseController):
         ...
 
     @get(
-        "/subscriptions/connection-keys/{uuid}",
+        "/subscriptions/connection-keys/{userId}",
         response_class=GetConnectionKeysByUuidResponseDto,
     )
-    async def get_connection_keys_by_uuid(
+    async def get_connection_keys_by_user_id(
         self,
-        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
+        userId: Annotated[int, Path(description="ID of the user")],
     ) -> GetConnectionKeysByUuidResponseDto:
-        """Get connection keys (base64 format) by uuid"""
+        """Get connection keys (base64 format) by user ID"""
         ...

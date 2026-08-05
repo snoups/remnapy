@@ -6,7 +6,7 @@ class PubKeyData(BaseModel):
 
 
 class GetPubKeyResponseDto(BaseModel):
-    pub_key: str = Field(alias="pubKey")
+    secret_key: str = Field(alias="secretKey")
 
 
 # Legacy alias for backward compatibility

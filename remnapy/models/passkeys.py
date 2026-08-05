@@ -17,8 +17,8 @@ class PasskeyDto(BaseModel):
 class GetPasskeyRegistrationOptionsResponseDto(BaseModel):
     """Response with passkey registration options"""
 
-    # WebAuthn registration options are complex objects
-    pass
+    # WebAuthn registration options are a free-form object per spec
+    response: Dict[str, Any]
 
 
 class VerifyPasskeyRegistrationRequestDto(BaseModel):
