@@ -6,6 +6,7 @@ from .fingerprint import Fingerprint
 from .mihomo import MihomoIpVersion
 from .security_layer import SecurityLayer
 from .subscriptions_settings import (
+    ResponseModificationEncryptionMethod,
     ResponseRuleConditionOperator,
     ResponseRuleOperator,
     ResponseRuleVersion,
@@ -20,6 +21,7 @@ from .webhook import (
     TNodeEvents,
     TResetPeriods,
     TServiceEvents,
+    TSubpageConfigAction,
     TTorrentBlockerEvents,
     TUserEvents,
     TUserHwidDevicesEvents,
@@ -42,6 +44,7 @@ __all__ = [
     "ResponseRuleVersion",
     "ResponseType",
     "SubscriptionType",
+    "ResponseModificationEncryptionMethod",
     # Webhook enums
     "TNodeEvents",
     "TUserEvents",
@@ -52,4 +55,5 @@ __all__ = [
     "TResetPeriods",
     "TUsersStatus",
     "TTorrentBlockerEvents",
+    "TSubpageConfigAction",
 ]

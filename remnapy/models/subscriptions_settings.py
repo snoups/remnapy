@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Annotated, Dict, List, Literal, Optional
+from typing import Annotated, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
 
 from remnapy.enums import (
+    ResponseModificationEncryptionMethod,
     ResponseRuleConditionOperator,
     ResponseRuleOperator,
     ResponseRuleVersion,
@@ -34,7 +35,7 @@ class ResponseModificationHeader(BaseModel):
 class ResponseModificationEncryption(BaseModel):
     """Encryption parameters applied to the response body when a rule matches"""
 
-    method: Literal["age1", "age1pq1"]
+    method: ResponseModificationEncryptionMethod
     key: str
 
 

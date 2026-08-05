@@ -45,6 +45,13 @@ class ResponseRuleVersion(StrEnum):
     V1 = "1"
 
 
+class ResponseModificationEncryptionMethod(StrEnum):
+    """Encryption methods for `ResponseModificationEncryption.method`"""
+
+    AGE1 = "age1"
+    AGE1PQ1 = "age1pq1"
+
+
 class SubscriptionType(StrEnum):
     """Subscription output types (used e.g. to exclude hosts from specific types)"""
 
