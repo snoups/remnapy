@@ -201,6 +201,8 @@ class ResolvedProtocolOptions(BaseModel):
 
 
 class ResolvedHttpHeaderRequest(BaseModel):
+    """HTTP request block for the `tcp` transport's `http` header camouflage"""
+
     version: Optional[str] = None
     method: Optional[str] = None
     path: Optional[List[str]] = None
@@ -208,6 +210,8 @@ class ResolvedHttpHeaderRequest(BaseModel):
 
 
 class ResolvedHttpHeaderResponse(BaseModel):
+    """HTTP response block for the `tcp` transport's `http` header camouflage"""
+
     version: Optional[str] = None
     status: Optional[str] = None
     reason: Optional[str] = None
@@ -215,6 +219,8 @@ class ResolvedHttpHeaderResponse(BaseModel):
 
 
 class ResolvedTransportHeader(BaseModel):
+    """`tcp` transport header config, either `none` or `http` camouflage"""
+
     type: Optional[str] = None
     request: Optional[ResolvedHttpHeaderRequest] = None
     response: Optional[ResolvedHttpHeaderResponse] = None
@@ -263,11 +269,15 @@ class ResolvedSecurityOptions(BaseModel):
 
 
 class ResolvedStreamOverrides(BaseModel):
+    """Low-level stream overrides (final packet mask, raw socket options)"""
+
     final_mask: Optional[Any] = Field(alias="finalMask")
-    sockopt: Optional[Any] = None
+    sockopt: Optional[Any]
 
 
 class ResolvedClientOverrides(BaseModel):
+    """Client-side rendering overrides applied to the resolved proxy config"""
+
     shuffle_host: bool = Field(alias="shuffleHost")
     mihomo_x25519: bool = Field(alias="mihomoX25519")
     mihomo_ip_version: Optional[str] = Field(alias="mihomoIpVersion")
@@ -276,6 +286,8 @@ class ResolvedClientOverrides(BaseModel):
 
 
 class ResolvedProxyConfigMetadata(BaseModel):
+    """Inbound/host metadata backing the resolved proxy config"""
+
     uuid: UUID
     tags: List[str]
     exclude_from_subscription_types: List[str] = Field(
@@ -309,7 +321,7 @@ class ResolvedProxyConfig(BaseModel):
         None, alias="securityOptions"
     )
     stream_overrides: ResolvedStreamOverrides = Field(alias="streamOverrides")
-    mux: Optional[Dict[str, Any]] = None
+    mux: Optional[Dict[str, Any]]
     client_overrides: ResolvedClientOverrides = Field(alias="clientOverrides")
     metadata: ResolvedProxyConfigMetadata
 
