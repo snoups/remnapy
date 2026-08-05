@@ -1,7 +1,7 @@
 import pytest
 
-from remnawave.exceptions import NotFoundError
-from remnawave.models import (
+from remnapy.exceptions import NotFoundError
+from remnapy.models import (
     CloneNodePluginRequestDto,
     CloneNodePluginResponseDto,
     CreateNodePluginRequestDto,

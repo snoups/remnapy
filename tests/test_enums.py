@@ -1,7 +1,7 @@
 """Tests for enum completeness against the OpenAPI spec."""
 import pytest
 
-from remnawave.enums import (
+from remnapy.enums import (
     ALPN,
     ClientType,
     Fingerprint,

@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from remnawave.models import (
+from remnapy.models import (
     # Users
     ResolveUserRequestBodyDto,
     ResolveUserResponseDto,
@@ -12,14 +12,14 @@ from remnawave.models import (
     GetRecapResponseDto,
     RecapThisMonth,
     RecapTotal,
-    # IP Control
-    FetchUsersIpsResponseDto,
-    FetchUsersIpsResultResponseDto,
-    FetchUsersIpsUserIp,
-    FetchUsersIpsUser,
-    FetchUsersIpsResult,
+    # Connections (replaces IP Control)
+    ConnectionsByNodeResponseDto,
+    ConnectionsByNodeResultResponseDto,
+    ConnectionIp,
+    ConnectionsByNodeUser,
+    ConnectionsByNodeResult,
     DropConnectionsRequestDto,
-    DropByUserUuids,
+    DropByUserIds,
     DropByIpAddresses,
     TargetAllNodes,
     TargetSpecificNodes,
@@ -35,21 +35,14 @@ from remnawave.models import (
     NodeSystemStatsDto,
     NodeVersionsDto,
 )
-from remnawave.enums import ResponseRuleVersion
+from remnapy.enums import ResponseRuleVersion
 
 
 class TestResolveUserRequestBodyDto:
-    def test_create_with_uuid(self):
-        uid = uuid4()
-        dto = ResolveUserRequestBodyDto(uuid=uid)
-        assert dto.uuid == uid
-        assert dto.id is None
-        assert dto.username is None
-
     def test_create_with_username(self):
         dto = ResolveUserRequestBodyDto(username="testuser")
         assert dto.username == "testuser"
-        assert dto.uuid is None
+        assert dto.id is None
 
     def test_create_with_short_uuid(self):
         dto = ResolveUserRequestBodyDto(short_uuid="abc123")
@@ -67,14 +60,11 @@ class TestResolveUserRequestBodyDto:
 
 class TestResolveUserResponseDto:
     def test_from_api_response(self):
-        uid = uuid4()
         dto = ResolveUserResponseDto(
-            uuid=uid,
             username="testuser",
             id=1,
             shortUuid="abc123",
         )
-        assert dto.uuid == uid
         assert dto.username == "testuser"
         assert dto.id == 1
         assert dto.short_uuid == "abc123"
@@ -105,13 +95,13 @@ class TestGetRecapResponseDto:
         assert isinstance(dto.init_date, datetime)
 
 
-class TestFetchUsersIpsModels:
+class TestConnectionsByNodeModels:
     def test_response_dto(self):
-        dto = FetchUsersIpsResponseDto(jobId="job-123")
+        dto = ConnectionsByNodeResponseDto(jobId="job-123")
         assert dto.job_id == "job-123"
 
     def test_result_not_completed(self):
-        dto = FetchUsersIpsResultResponseDto(
+        dto = ConnectionsByNodeResultResponseDto(
             isCompleted=False,
             isFailed=False,
             result=None,
@@ -122,7 +112,7 @@ class TestFetchUsersIpsModels:
 
     def test_result_completed(self):
         uid = uuid4()
-        dto = FetchUsersIpsResultResponseDto(
+        dto = ConnectionsByNodeResultResponseDto(
             isCompleted=True,
             isFailed=False,
             result={
@@ -130,7 +120,7 @@ class TestFetchUsersIpsModels:
                 "nodeUuid": str(uid),
                 "users": [
                     {
-                        "userId": "user-1",
+                        "userId": 1,
                         "ips": [
                             {"ip": "1.2.3.4", "lastSeen": "2025-01-01T00:00:00Z"},
                         ],
@@ -142,7 +132,7 @@ class TestFetchUsersIpsModels:
         assert dto.result.success is True
         assert dto.result.node_uuid == uid
         assert len(dto.result.users) == 1
-        assert dto.result.users[0].user_id == "user-1"
+        assert dto.result.users[0].user_id == 1
         assert dto.result.users[0].ips[0].ip == "1.2.3.4"
 
 
@@ -263,7 +253,7 @@ class TestWebhookNodeDto:
         assert versions.node == "0.5.0"
 
     def test_node_dto_has_new_fields(self):
-        from remnawave.models.webhook import NodeDto
+        from remnapy.models.webhook import NodeDto
 
         fields = NodeDto.model_fields
         assert "active_plugin_uuid" in fields
@@ -271,7 +261,7 @@ class TestWebhookNodeDto:
         assert "versions" in fields
 
     def test_node_dto_xray_uptime_is_float(self):
-        from remnawave.models.webhook import NodeDto
+        from remnapy.models.webhook import NodeDto
 
         field = NodeDto.model_fields["xray_uptime"]
         assert field.annotation == float or field.annotation is float
