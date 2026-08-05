@@ -28,24 +28,7 @@ ALLOWED_FIELD_DIFFS: dict[tuple[str, str], str] = {}
 
 # Известные, но не устранённые в этой волне расхождения по query-параметрам.
 # Ключ — (МЕТОД, нормализованный путь). Каждая запись обязана нести причину.
-ALLOWED_QUERY_PARAM_DIFFS: dict[tuple[str, str], str] = {
-    ("GET", "/hwid/devices"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
-        "в процессе, см. finding 7 fix wave 2."
-    ),
-    ("GET", "/node-plugins/torrent-blocker"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
-        "в процессе, см. finding 7 fix wave 2."
-    ),
-    ("GET", "/subscription-request-history"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
-        "в процессе, см. finding 7 fix wave 2."
-    ),
-    ("GET", "/users"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
-        "в процессе, см. finding 7 fix wave 2."
-    ),
-}
+ALLOWED_QUERY_PARAM_DIFFS: dict[tuple[str, str], str] = {}
 
 
 def _spec_by_shape() -> dict[tuple[str, str], tuple[str, dict]]:

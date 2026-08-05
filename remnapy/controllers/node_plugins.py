@@ -1,4 +1,4 @@
-from typing import Annotated, Optional
+from typing import Annotated, Dict, List, Optional
 
 from rapid_api_client import Path, PydanticBody, Query
 
@@ -16,6 +16,8 @@ from remnapy.models import (
     PluginExecutorResponseDto,
     ReorderNodePluginsRequestDto,
     ReorderNodePluginsResponseDto,
+    TableFilter,
+    TableSort,
     TruncateTorrentBlockerReportsResponseDto,
     UpdateNodePluginRequestDto,
     UpdateNodePluginResponseDto,
@@ -35,6 +37,22 @@ class NodePluginsController(BaseController):
         ] = None,
         start: Annotated[
             Optional[int], Query(default=None, ge=0, description="Offset")
+        ] = None,
+        filters: Annotated[
+            Optional[List[TableFilter]],
+            Query(default=None, description="Column filters"),
+        ] = None,
+        filter_modes: Annotated[
+            Optional[Dict[str, str]],
+            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+        ] = None,
+        global_filter_mode: Annotated[
+            Optional[str],
+            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+        ] = None,
+        sorting: Annotated[
+            Optional[List[TableSort]],
+            Query(default=None, description="Sort order"),
         ] = None,
     ) -> GetTorrentBlockerReportsResponseDto:
         """Get Torrent Blocker Reports"""

@@ -1,4 +1,4 @@
-from typing import Annotated, Optional, Union
+from typing import Annotated, Dict, List, Optional, Union
 from uuid import UUID
 
 from rapid_api_client import Path, Query
@@ -26,6 +26,8 @@ from remnapy.models import (
     ResolveUserResponseDto,
     RevokeUserRequestDto,
     RevokeUserSubscriptionResponseDto,
+    TableFilter,
+    TableSort,
     UpdateUserRequestDto,
     UpdateUserResponseDto,
 )
@@ -58,8 +60,30 @@ class UsersController(BaseController):
         size: Annotated[
             Optional[int], Query(default=None, description="Page size for pagination")
         ] = None,
+        filters: Annotated[
+            Optional[List[TableFilter]],
+            Query(default=None, description="Column filters"),
+        ] = None,
+        filter_modes: Annotated[
+            Optional[Dict[str, str]],
+            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+        ] = None,
+        global_filter_mode: Annotated[
+            Optional[str],
+            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+        ] = None,
+        sorting: Annotated[
+            Optional[List[TableSort]],
+            Query(default=None, description="Sort order"),
+        ] = None,
     ) -> GetAllUsersResponseDto:
-        """Get all users"""
+        """Get all users using offset-based pagination.
+
+        `filters`/`filter_modes`/`global_filter_mode`/`sorting` mirror the
+        panel's TanStack Table controls; per the spec, they are primarily
+        intended for the frontend and rely on expensive `LIKE`-style
+        operators server-side.
+        """
         ...
 
     @get("/users/stream", response_class=GetUsersStreamResponseDto)

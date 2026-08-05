@@ -453,6 +453,7 @@ from .system import (
     UsersStatistic,
     X25519KeyPair,
 )
+from .table_query import TableFilter, TableSort
 from .users import (
     ActivateAllInboundsResponseDto,
     ActiveInternalSquadDto,
@@ -719,6 +720,9 @@ __all__ = [
     "StatsDigestHwidDevices",
     "GetHttpStatsResponseDto",
     "HttpStatsRoute",
+    # Table query models (shared filter/sort params, e.g. GET /users)
+    "TableFilter",
+    "TableSort",
     # HWID models
     "CreateHWIDUser",  # Legacy alias
     "CreateUserHwidDeviceRequestDto",

@@ -27,6 +27,19 @@ from remnapy.rapid import AttributeBody
 from remnapy.utils.serializer import orjson_default
 
 
+def _query_json_default(obj: Any) -> Any:
+    """`orjson` fallback for JSON-encoding structured query-parameter values.
+
+    Unlike `orjson_default`, this does not `exclude_none`: a structured
+    query value (e.g. a TanStack Table filter) may have a field whose spec
+    meaning is genuinely `null` (e.g. `TableFilter.value=None`), and
+    dropping it would silently change what gets sent.
+    """
+    if isinstance(obj, BaseModel):
+        return obj.model_dump(mode="json", by_alias=True)
+    raise TypeError(f"Cannot serialize {obj!r} for a query parameter")
+
+
 class BaseController(RapidApi):
     def _build_request(
         self,
@@ -184,6 +197,29 @@ class CustomRapidParameters(RapidParameters):
                 )
 
         return out
+
+    def get_query(self, ba: BoundArguments) -> Dict[str, Any]:
+        """
+        Builds query parameters for the request.
+
+        Scalar `Query` values (str, int, bool, enum, UUID, datetime, ...)
+        are passed through unchanged -- httpx serializes those correctly on
+        its own. Some Remnawave endpoints (TanStack Table-style list
+        filtering, e.g. `GET /users`) have query parameters that validate to
+        a `list` or `dict` (structured filter/sort entries); httpx has no
+        correct way to serialize those as a query string (it falls back to
+        Python's `repr()`, which is not valid JSON and not understood by the
+        panel). The panel's own query schema JSON-decodes any string-typed
+        value for these parameters before validating it, so such values are
+        JSON-encoded into a single string here instead.
+        """
+        values = filter_none_values(
+            {p.get_name(): p.get_value(ba) for p in self.query_parameters}
+        )
+        for name, value in values.items():
+            if isinstance(value, (list, dict)):
+                values[name] = orjson.dumps(value, default=_query_json_default).decode()
+        return values
 
     def get_body(self, ba: BoundArguments) -> Tuple[str | None, Any]:
         """

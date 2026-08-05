@@ -1,4 +1,4 @@
-from typing import Annotated, Optional
+from typing import Annotated, Dict, List, Optional
 
 from rapid_api_client import Path, PydanticBody, Query
 
@@ -11,6 +11,8 @@ from remnapy.models import (
     GetTopUsersByHwidDevicesResponseDto,
     GetUserHwidDevicesResponseDto,
     HWIDDeleteRequest,
+    TableFilter,
+    TableSort,
 )
 from remnapy.rapid import BaseController, get, post
 
@@ -26,6 +28,22 @@ class HWIDUserController(BaseController):
         start: Annotated[
             Optional[int],
             Query(default=None, description="Start index (offset) of the results to return, default is 0"),
+        ] = None,
+        filters: Annotated[
+            Optional[List[TableFilter]],
+            Query(default=None, description="Column filters"),
+        ] = None,
+        filter_modes: Annotated[
+            Optional[Dict[str, str]],
+            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+        ] = None,
+        global_filter_mode: Annotated[
+            Optional[str],
+            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+        ] = None,
+        sorting: Annotated[
+            Optional[List[TableSort]],
+            Query(default=None, description="Sort order"),
         ] = None,
     ) -> GetUserHwidDevicesResponseDto:
         """Get all user HWID devices"""
