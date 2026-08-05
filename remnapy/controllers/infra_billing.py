@@ -1,7 +1,7 @@
-from typing import Annotated, Union
+from typing import Annotated, Optional, Union
 from uuid import UUID
 
-from rapid_api_client import Path
+from rapid_api_client import Path, Query
 from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
@@ -91,6 +91,20 @@ class InfraBillingController(BaseController):
     )
     async def get_infra_billing_history_records(
         self,
+        start: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Start index (offset) of the billing history records to return, default is 0",
+            ),
+        ] = None,
+        size: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Number of billing records to return, no more than 500",
+            ),
+        ] = None,
     ) -> GetInfraBillingHistoryRecordsResponseDto:
         """Get infra billing history"""
         ...

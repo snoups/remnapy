@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, Optional
 
 from rapid_api_client import PydanticBody, Query
 
@@ -39,6 +39,7 @@ class SystemController(BaseController):
     @get("/system/stats/bandwidth", response_class=GetBandwidthStatsResponseDto)
     async def get_bandwidth_stats(
         self,
+        tz: Annotated[Optional[str], Query(default=None)] = None,
     ) -> GetBandwidthStatsResponseDto:
         """Get System Bandwidth Statistics"""
         ...

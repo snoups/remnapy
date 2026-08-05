@@ -30,27 +30,20 @@ ALLOWED_FIELD_DIFFS: dict[tuple[str, str], str] = {}
 # Ключ — (МЕТОД, нормализованный путь). Каждая запись обязана нести причину.
 ALLOWED_QUERY_PARAM_DIFFS: dict[tuple[str, str], str] = {
     ("GET", "/hwid/devices"): (
-        "size/start объявлены через AttributeBody (тело), а не Query, хотя в спеке "
-        "это query-параметры; filterModes/filters/globalFilterMode/sorting (табличные "
-        "фильтры) не реализованы вовсе. Не в объёме этой волны — см. finding 7."
-    ),
-    ("GET", "/infra-billing/history"): (
-        "size/start отсутствуют как query-параметры в SDK. Не в объёме этой волны."
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
+        "в процессе, см. finding 7 fix wave 2."
     ),
     ("GET", "/node-plugins/torrent-blocker"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
-        "реализованы. Не в объёме этой волны."
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
+        "в процессе, см. finding 7 fix wave 2."
     ),
     ("GET", "/subscription-request-history"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
-        "реализованы. Не в объёме этой волны."
-    ),
-    ("GET", "/system/stats/bandwidth"): (
-        "Параметр tz (таймзона) отсутствует в SDK. Не в объёме этой волны."
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
+        "в процессе, см. finding 7 fix wave 2."
     ),
     ("GET", "/users"): (
-        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
-        "реализованы. Не в объёме этой волны."
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) — работа "
+        "в процессе, см. finding 7 fix wave 2."
     ),
 }
 
