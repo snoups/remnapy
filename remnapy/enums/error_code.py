@@ -229,6 +229,15 @@ class ErrorCode(StrEnum):
     INVALID_REMNAWAVE_INJECTOR = "A216"
     JOB_CREATION_FAILED = "A217"
     JOB_RESULT_FETCH_FAILED_OR_JOB_NOT_FOUND = "A218"
+    # A219 is documented twice in the spec with two unrelated messages:
+    # RemnawaveInternalServerErrorDto -> "Get all node plugins error" (below)
+    # RemnawaveNotFoundErrorDto -> "Connected nodes not found"
+    # A second member can't be added for the second meaning: StrEnum treats
+    # any member assigned an already-used value as an alias of the first
+    # (same object, `.name` resolves back to GET_ALL_NODE_PLUGINS_ERROR,
+    # dropped from iteration) rather than a distinct, independently-named
+    # member - verified with a throwaway StrEnum before settling on this
+    # comment instead of a colliding member.
     GET_ALL_NODE_PLUGINS_ERROR = "A219"
     NODE_PLUGIN_NOT_FOUND = "A220"
     GET_NODE_PLUGIN_BY_UUID_ERROR = "A221"
