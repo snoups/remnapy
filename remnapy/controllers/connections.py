@@ -19,7 +19,9 @@ class ConnectionsController(BaseController):
     @post("/connections/by-node/{nodeUuid}", response_class=ConnectionsByNodeResponseDto)
     async def connections_by_node(
         self,
-        nodeUuid: Annotated[Union[str, UUID], Path(description="UUID of the node")],
+        node_uuid: Annotated[
+            Union[str, UUID], Path(description="UUID of the node", alias="nodeUuid")
+        ],
     ) -> ConnectionsByNodeResponseDto:
         """Request Connections for Node.
 
@@ -33,7 +35,9 @@ class ConnectionsController(BaseController):
     @get("/connections/by-node/{jobId}", response_class=ConnectionsByNodeResultResponseDto)
     async def connections_by_node_result(
         self,
-        jobId: Annotated[str, Path(description="Job ID returned by connections_by_node")],
+        job_id: Annotated[
+            str, Path(description="Job ID returned by connections_by_node", alias="jobId")
+        ],
     ) -> ConnectionsByNodeResultResponseDto:
         """Get Connections for Node by Job ID.
 
@@ -46,7 +50,7 @@ class ConnectionsController(BaseController):
     @post("/connections/by-user/{userId}", response_class=ConnectionsByUserResponseDto)
     async def connections_by_user(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> ConnectionsByUserResponseDto:
         """Request Connections for User.
 
@@ -59,7 +63,9 @@ class ConnectionsController(BaseController):
     @get("/connections/by-user/{jobId}", response_class=ConnectionsByUserResultResponseDto)
     async def connections_by_user_result(
         self,
-        jobId: Annotated[str, Path(description="Job ID returned by connections_by_user")],
+        job_id: Annotated[
+            str, Path(description="Job ID returned by connections_by_user", alias="jobId")
+        ],
     ) -> ConnectionsByUserResultResponseDto:
         """Get Connections for User by Job ID.
 

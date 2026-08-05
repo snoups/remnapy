@@ -59,7 +59,7 @@ class HWIDUserController(BaseController):
     @get("/hwid/devices/{userId}", response_class=GetUserHwidDevicesResponseDto)
     async def get_hwid_user(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> GetUserHwidDevicesResponseDto:
         """Get a user HWID device"""
         ...

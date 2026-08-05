@@ -21,7 +21,7 @@ class TestHwidInfo:
     @pytest.mark.asyncio
     async def test_get_hwid_user(self, remnawave):
         """Тест получения HWID устройств конкретного пользователя"""
-        hwid = await remnawave.hwid.get_hwid_user(userId=REMNAWAVE_USER_ID)
+        hwid = await remnawave.hwid.get_hwid_user(user_id=REMNAWAVE_USER_ID)
         assert isinstance(hwid, GetUserHwidDevicesResponseDto)
         assert hasattr(hwid, "devices")
 
@@ -104,7 +104,7 @@ class TestHwidCRUD:
         assert any(item.hwid == test_hwid for item in response.devices)
 
         # Проверяем, что устройство действительно добавлено
-        hwid_check = await remnawave.hwid.get_hwid_user(userId=REMNAWAVE_USER_ID)
+        hwid_check = await remnawave.hwid.get_hwid_user(user_id=REMNAWAVE_USER_ID)
         assert any(device.hwid == test_hwid for device in hwid_check.devices)
 
     @pytest.mark.asyncio
@@ -132,7 +132,7 @@ class TestHwidCRUD:
         assert not any(item.hwid == test_hwid for item in response.devices)
 
         # Проверяем, что устройство действительно удалено
-        hwid_check = await remnawave.hwid.get_hwid_user(userId=REMNAWAVE_USER_ID)
+        hwid_check = await remnawave.hwid.get_hwid_user(user_id=REMNAWAVE_USER_ID)
         assert not any(device.hwid == test_hwid for device in hwid_check.devices)
 
     @pytest.mark.asyncio
@@ -151,7 +151,7 @@ class TestHwidCRUD:
         await remnawave.hwid.add_hwid_to_users(body=create_request)
 
         # Проверяем, что устройство добавлено
-        check_before = await remnawave.hwid.get_hwid_user(userId=REMNAWAVE_USER_ID)
+        check_before = await remnawave.hwid.get_hwid_user(user_id=REMNAWAVE_USER_ID)
         assert any(device.hwid == random_hwid for device in check_before.devices)
 
         # Теперь удалим все HWID устройства пользователя
@@ -164,5 +164,5 @@ class TestHwidCRUD:
         assert isinstance(response, DeleteUserHwidDeviceResponseDto)
 
         # Проверяем, что устройства действительно удалены
-        hwid_check = await remnawave.hwid.get_hwid_user(userId=REMNAWAVE_USER_ID)
+        hwid_check = await remnawave.hwid.get_hwid_user(user_id=REMNAWAVE_USER_ID)
         assert not any(device.hwid == random_hwid for device in hwid_check.devices)

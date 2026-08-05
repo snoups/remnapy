@@ -20,10 +20,39 @@ from tests.spec_utils import (
     sdk_endpoints,
     spec_endpoints,
     spec_path_params,
+    spec_query_params,
 )
 
 # Расхождения, признанные допустимыми. Каждая запись обязана нести причину.
 ALLOWED_FIELD_DIFFS: dict[tuple[str, str], str] = {}
+
+# Известные, но не устранённые в этой волне расхождения по query-параметрам.
+# Ключ — (МЕТОД, нормализованный путь). Каждая запись обязана нести причину.
+ALLOWED_QUERY_PARAM_DIFFS: dict[tuple[str, str], str] = {
+    ("GET", "/hwid/devices"): (
+        "size/start объявлены через AttributeBody (тело), а не Query, хотя в спеке "
+        "это query-параметры; filterModes/filters/globalFilterMode/sorting (табличные "
+        "фильтры) не реализованы вовсе. Не в объёме этой волны — см. finding 7."
+    ),
+    ("GET", "/infra-billing/history"): (
+        "size/start отсутствуют как query-параметры в SDK. Не в объёме этой волны."
+    ),
+    ("GET", "/node-plugins/torrent-blocker"): (
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
+        "реализованы. Не в объёме этой волны."
+    ),
+    ("GET", "/subscription-request-history"): (
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
+        "реализованы. Не в объёме этой волны."
+    ),
+    ("GET", "/system/stats/bandwidth"): (
+        "Параметр tz (таймзона) отсутствует в SDK. Не в объёме этой волны."
+    ),
+    ("GET", "/users"): (
+        "filterModes/filters/globalFilterMode/sorting (табличные фильтры) не "
+        "реализованы. Не в объёме этой волны."
+    ),
+}
 
 
 def _spec_by_shape() -> dict[tuple[str, str], tuple[str, dict]]:
@@ -69,6 +98,27 @@ def test_path_params_match():
         if expected != actual:
             mismatches.append(f"  {endpoint.file}::{endpoint.func}: {endpoint.path} -> ожидается {spec_path}")
     assert not mismatches, "Path-параметры расходятся:\n" + "\n".join(mismatches)
+
+
+def test_query_params_match():
+    """Имена query-параметров совпадают со спекой (alias-aware)."""
+    spec_shapes = _spec_by_shape()
+    mismatches = []
+    for shape, endpoint in sorted(_sdk_by_shape().items()):
+        if shape not in spec_shapes:
+            continue
+        if shape in ALLOWED_QUERY_PARAM_DIFFS:
+            continue
+        _, operation = spec_shapes[shape]
+        expected = spec_query_params(operation)
+        actual = endpoint.query_params
+        missing, extra = expected - actual, actual - expected
+        if missing or extra:
+            lines = [f"  {shape[0]} {shape[1]} ({endpoint.file}::{endpoint.func})"]
+            lines += [f"    + нет в SDK: {name}" for name in sorted(missing)]
+            lines += [f"    - лишнее в SDK: {name}" for name in sorted(extra)]
+            mismatches.append("\n".join(lines))
+    assert not mismatches, "Query-параметры расходятся:\n" + "\n".join(mismatches)
 
 
 def _field_diff(

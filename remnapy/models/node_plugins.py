@@ -57,7 +57,7 @@ class TorrentBlockerReportRecordDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: float
-    user_id: float = Field(alias="userId")
+    user_id: int = Field(alias="userId")
     node_id: float = Field(alias="nodeId")
     user: TorrentBlockerUserDto
     node: TorrentBlockerNodeDto
@@ -90,7 +90,7 @@ class TorrentBlockerStatsDto(BaseModel):
 class TorrentBlockerTopUserDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    user_id: float = Field(alias="userId")
+    user_id: int = Field(alias="userId")
     color: str
     username: str
     total: float

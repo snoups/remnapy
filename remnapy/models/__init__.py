@@ -25,8 +25,6 @@ from .auth import (
 )
 from .bandwidthstats import (
     GetInternalSquadUserUsageResponseDto,
-    GetNodesRealtimeUsageResponseDto,
-    GetNodesUsageByRangeResponseDto,
     GetNodesUsageRequestDto,
     GetNodesUsageResponseDto,
     GetStatsNodesRealtimeUsageResponseDto,
@@ -35,7 +33,6 @@ from .bandwidthstats import (
     GetStatsNodesUsersUsageResponseDto,
     GetStatsNodeUsersUsageResponseDto,
     GetStatsUserUsageResponseDto,
-    GetUserUsageByRangeResponseDto,
     # Data Models
     NodeRealtimeUsageItem,
     NodeRealtimeUsageResponseDto,
@@ -219,7 +216,7 @@ from .connections import (
     TargetAllNodes,
     TargetSpecificNodes,
 )
-from .keygen import GetPubKeyResponseDto, PubKeyResponseDto  # Legacy alias
+from .keygen import GetNodeSecretKeyResponseDto
 from .metadata import (
     GetMetadataResponseDto as MetadataResponseDto,
 )
@@ -294,7 +291,6 @@ from .nodes import (
 )
 from .nodes_usage_history import (
     GetNodesUsageByRangeResponseDto,
-    GetNodeUserUsageByRangeResponseDto,
     GetUserAccessibleNodesResponseDto,
     NodeInfoDto,
     NodeUsageDto,
@@ -535,7 +531,6 @@ from .webhook import (
     HwidUserDeviceDto,
     InfraProviderDto,
     InternalSquadDto,
-    LastConnectedNodeDto,
     LoginAttemptDto,
     NodeDto,
     NodeEventDto,
@@ -635,8 +630,7 @@ __all__ = [
     "GetInternalSquadAccessibleNodesResponseDto",
     "InboundsByProfileData",
     # Keygen models
-    "GetPubKeyResponseDto",
-    "PubKeyResponseDto",  # Legacy alias
+    "GetNodeSecretKeyResponseDto",
     # Subscription models
     "GetAllSubscriptionsResponseDto",
     "GetSubscriptionByUsernameResponseDto",
@@ -741,10 +735,6 @@ __all__ = [
     "TopUserByHwidDevicesDto",
     "TopUsersByHwidDevicesData",
     # Bandwidth stats models
-    "GetNodeUserUsageByRangeResponseDto",
-    "GetNodesRealtimeUsageResponseDto",
-    "GetNodesUsageByRangeResponseDto",
-    "GetUserUsageByRangeResponseDto",
     "NodeRealtimeUsageResponseDto",
     "NodeUsageResponseDto",
     "NodesRealtimeUsageResponseDto",  # Legacy alias
@@ -914,7 +904,6 @@ __all__ = [
     "DeleteManyUsersFromInternalSquadRequestDto",
     "DeleteManyUsersFromInternalSquadResponseDto",
     # Nodes usage history models
-    "GetNodeUserUsageByRangeResponseDto",
     "GetNodesUsageByRangeResponseDto",
     "GetUserAccessibleNodesResponseDto",
     "NodeInfoDto",
@@ -930,7 +919,6 @@ __all__ = [
     "SubscriptionRequestHistoryStatsData",
     # Webhook models
     # USER
-    "LastConnectedNodeDto",
     "InternalSquadDto",
     "BaseUserDto",
     "UserDto",

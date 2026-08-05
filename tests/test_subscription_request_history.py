@@ -1,5 +1,6 @@
 import pytest
 
+from remnapy.exceptions import ApiError
 from remnapy.models import (
     GetAllSubscriptionRequestHistoryResponseDto,
     GetSubscriptionRequestHistoryStatsResponseDto,
@@ -24,11 +25,13 @@ class TestSubscriptionRequestHistory:
             if response.total > 0 and len(response.records) > 0:
                 record = response.records[0]
                 assert hasattr(record, "id")
-                assert hasattr(record, "user_uuid")
+                assert hasattr(record, "user_id")
+                assert hasattr(record, "srr_response_type")
+                assert hasattr(record, "srr_rule_name")
                 assert hasattr(record, "request_at")
                 assert hasattr(record, "request_ip")
                 assert hasattr(record, "user_agent")
-        except Exception as e:
+        except ApiError as e:
             pytest.skip(f"Пропуск теста истории запросов подписок: {str(e)}")
 
     @pytest.mark.asyncio

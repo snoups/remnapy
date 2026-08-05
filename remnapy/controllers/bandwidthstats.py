@@ -6,7 +6,6 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models.bandwidthstats import (
     GetInternalSquadUserUsageResponseDto,
-    GetNodesUsageByRangeResponseDto,
     GetNodesUsageRequestDto,
     GetNodesUsageResponseDto,
     GetStatsNodesUsageResponseDto,
@@ -42,7 +41,7 @@ class BandWidthStatsController(BaseController):
     @get("/bandwidth-stats/users/{userId}", response_class=GetStatsUserUsageResponseDto)
     async def get_stats_user_usage(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
         top_nodes_limit: Annotated[
             int,
             Query(description="Limit of top nodes to return", alias="topNodesLimit"),
@@ -73,6 +72,12 @@ class BandWidthStatsController(BaseController):
     async def get_stats_nodes_users_usage(
         self,
         body: Annotated[GetStatsNodesUsersUsageRequestDto, PydanticBody()],
+        start: Annotated[str, Query(description="Start date")],
+        end: Annotated[str, Query(description="End date")],
+        top_users_limit: Annotated[
+            Optional[int],
+            Query(default=None, ge=1, alias="topUsersLimit", description="Limit of top users to return"),
+        ] = None,
     ) -> GetStatsNodesUsersUsageResponseDto:
         """Get Nodes Users Usage by Nodes UUIDs"""
         ...

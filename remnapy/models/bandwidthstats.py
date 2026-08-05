@@ -4,8 +4,6 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel
 
-from remnapy.models.internal_squads import GetInternalSquadUsageResponseDto
-
 # ============ Legacy Models (Deprecated) ============
 
 
@@ -39,22 +37,6 @@ class NodesUsageResponseDto(RootModel[List[NodeUsageResponseDto]]):
         return len(self.root)
 
 
-class GetNodesUsageByRangeResponseDto(RootModel[List[NodeUsageResponseDto]]):
-    """Deprecated: Use GetStatsNodesUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
 class NodeRealtimeUsageResponseDto(BaseModel):
     """Deprecated: Use NodeRealtimeUsageItem instead"""
 
@@ -71,48 +53,6 @@ class NodeRealtimeUsageResponseDto(BaseModel):
 
 class NodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseDto]]):
     """Deprecated: Use GetStatsNodesRealtimeUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class GetNodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseDto]]):
-    """Deprecated: Use GetStatsNodesRealtimeUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class UserUsageByRangeItem(BaseModel):
-    """Deprecated: endpoint removed from the API in 3.2.1"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    node_uuid: UUID = Field(alias="nodeUuid")
-    node_name: str = Field(alias="nodeName")
-    total: int
-    date: str
-
-
-class GetUserUsageByRangeResponseDto(RootModel[List[UserUsageByRangeItem]]):
-    """Deprecated: endpoint removed from the API in 3.2.1"""
 
     def __iter__(self):
         return iter(self.root)

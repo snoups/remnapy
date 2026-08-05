@@ -62,7 +62,7 @@ class SubscriptionsController(BaseController):
     )
     async def get_subscription_by_user_id(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> GetSubscriptionByUserIdResponseDto:
         """Get subscription by User ID"""
         ...
@@ -110,7 +110,7 @@ class SubscriptionsController(BaseController):
     )
     async def get_connection_keys_by_user_id(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> GetConnectionKeysByUuidResponseDto:
         """Get connection keys (base64 format) by user ID"""
         ...

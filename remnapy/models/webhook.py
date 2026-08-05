@@ -34,17 +34,6 @@ class WebhookMetaDto(BaseModel):
 # ---------------- USER ---------------- #
 
 
-class LastConnectedNodeDto(BaseModel):
-    """Last node a user connected to (kept for API compatibility; no longer
-    sent by any webhook payload as of 3.2.1)."""
-
-    node_name: str
-    country_code: str
-    connected_at: datetime
-
-    model_config = {"alias_generator": to_camel, "populate_by_name": True}
-
-
 class InternalSquadDto(BaseModel):
     """Internal squad reference (uuid + name) attached to a user"""
 

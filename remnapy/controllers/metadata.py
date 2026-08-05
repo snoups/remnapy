@@ -18,7 +18,7 @@ class MetadataController(BaseController):
     @get("/metadata/user/{userId}", response_class=GetUserMetadataResponseDto)
     async def get_user_metadata(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> GetUserMetadataResponseDto:
         """Get user metadata"""
         ...
@@ -26,7 +26,7 @@ class MetadataController(BaseController):
     @put("/metadata/user/{userId}", response_class=UpsertUserMetadataResponseDto)
     async def upsert_user_metadata(
         self,
-        userId: Annotated[int, Path(description="ID of the user")],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
         body: Annotated[UpsertUserMetadataRequestBodyDto, PydanticBody()],
     ) -> UpsertUserMetadataResponseDto:
         """Update or create User Metadata"""

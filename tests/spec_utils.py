@@ -33,6 +33,7 @@ class SdkEndpoint:
     body_model: str | None
     func: str
     file: str
+    query_params: frozenset[str] = frozenset()
 
 
 @lru_cache(maxsize=1)
@@ -92,11 +93,18 @@ def _parse_decorator(
             response_model = keyword.value.id
 
     body_model = None
+    query_params: set[str] = set()
     for arg in func.args.args:
-        if arg.arg == "body" and arg.annotation is not None:
-            match = re.search(r"Annotated\[\s*([A-Za-z_0-9]+)", ast.unparse(arg.annotation))
+        if arg.annotation is None:
+            continue
+        annotation_src = ast.unparse(arg.annotation)
+        if arg.arg == "body":
+            match = re.search(r"Annotated\[\s*([A-Za-z_0-9]+)", annotation_src)
             if match:
                 body_model = match.group(1)
+        if "Query(" in annotation_src:
+            alias_match = re.search(r"alias=['\"]([^'\"]+)['\"]", annotation_src)
+            query_params.add(alias_match.group(1) if alias_match else arg.arg)
 
     return SdkEndpoint(
         method=decorator.func.id.upper(),
@@ -105,6 +113,7 @@ def _parse_decorator(
         body_model=body_model,
         func=func.name,
         file=filename,
+        query_params=frozenset(query_params),
     )
 
 
@@ -275,3 +284,12 @@ def request_schema(operation: dict[str, Any]) -> dict[str, Any] | None:
 def spec_path_params(path: str) -> list[str]:
     """Имена path-параметров в порядке появления."""
     return re.findall(r"\{([^}]+)\}", path)
+
+
+def spec_query_params(operation: dict[str, Any]) -> set[str]:
+    """Имена query-параметров операции спеки."""
+    return {
+        param["name"]
+        for param in operation.get("parameters", [])
+        if param.get("in") == "query"
+    }

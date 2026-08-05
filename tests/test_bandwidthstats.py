@@ -68,7 +68,7 @@ async def test_stats_user_usage(remnawave):
     start, end = generate_date_range()
 
     user_usage = await remnawave.bandwidthstats.get_stats_user_usage(
-        userId=user_id, start=start, end=end, top_nodes_limit=5
+        user_id=user_id, start=start, end=end, top_nodes_limit=5
     )
     assert isinstance(user_usage, GetStatsUserUsageResponseDto)
     assert hasattr(user_usage, "response")

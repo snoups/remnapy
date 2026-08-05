@@ -49,7 +49,7 @@ class TestUsersCRUD:
         ) == expire_at.isoformat(timespec="seconds")
 
         # Clean up - delete the test user
-        await remnawave.users.delete_user(userId=create_user.id)
+        await remnawave.users.delete_user(user_id=create_user.id)
 
     @pytest.mark.asyncio
     async def test_update_user(self, remnawave):
@@ -80,7 +80,7 @@ class TestUsersCRUD:
         assert update_user.description == update_description
 
         # Clean up
-        await remnawave.users.delete_user(userId=create_user.id)
+        await remnawave.users.delete_user(user_id=create_user.id)
 
     @pytest.mark.asyncio
     async def test_delete_user(self, remnawave):
@@ -96,7 +96,7 @@ class TestUsersCRUD:
         )
 
         # Delete user
-        delete_user = await remnawave.users.delete_user(userId=create_user.id)
+        delete_user = await remnawave.users.delete_user(user_id=create_user.id)
         assert isinstance(delete_user, DeleteUserResponseDto)
         assert delete_user.is_deleted is True
 
@@ -111,7 +111,7 @@ class TestUsersFetch:
 
     @pytest.mark.asyncio
     async def test_get_user_by_id(self, remnawave, test_user):
-        user_by_id = await remnawave.users.get_user_by_id(userId=test_user.id)
+        user_by_id = await remnawave.users.get_user_by_id(user_id=test_user.id)
         assert isinstance(user_by_id, UserResponseDto)
         assert user_by_id.id == test_user.id
 
@@ -140,7 +140,7 @@ class TestUsersFetch:
     async def test_get_user_accessible_nodes(self, remnawave, test_user):
         try:
             user_accessible_nodes = await remnawave.users.get_user_accessible_nodes(
-                userId=test_user.id
+                user_id=test_user.id
             )
             assert isinstance(user_accessible_nodes, GetUserAccessibleNodesResponseDto)
             assert isinstance(user_accessible_nodes.nodes, list)
@@ -157,7 +157,7 @@ class TestUsersFetch:
         try:
             subscription_requests = (
                 await remnawave.users.get_user_subscription_request_history(
-                    userId=test_user.id
+                    user_id=test_user.id
                 )
             )
             assert isinstance(
@@ -177,7 +177,7 @@ class TestUserActions:
     @pytest.mark.asyncio
     async def test_reset_user_traffic(self, remnawave, test_user):
         user_reset_traffic = await remnawave.users.reset_user_traffic(
-            userId=test_user.id
+            user_id=test_user.id
         )
         assert isinstance(user_reset_traffic, UserResponseDto)
         assert user_reset_traffic.id == test_user.id
@@ -187,7 +187,7 @@ class TestUserActions:
     async def test_disable_enable_user(self, remnawave, test_user):
         # Disable user
         try:
-            disable_user = await remnawave.users.disable_user(userId=test_user.id)
+            disable_user = await remnawave.users.disable_user(user_id=test_user.id)
             assert isinstance(disable_user, UserResponseDto)
             assert disable_user.id == test_user.id
             assert disable_user.status == UserStatus.DISABLED
@@ -196,7 +196,7 @@ class TestUserActions:
 
         # Enable user
         try:
-            enable_user = await remnawave.users.enable_user(userId=test_user.id)
+            enable_user = await remnawave.users.enable_user(user_id=test_user.id)
             assert isinstance(enable_user, UserResponseDto)
             assert enable_user.id == test_user.id
             assert enable_user.status == UserStatus.ACTIVE
@@ -208,7 +208,7 @@ class TestUserActions:
         old_short_uuid = test_user.short_uuid
 
         revoke_user_subscription = await remnawave.users.revoke_user_subscription(
-            userId=test_user.id
+            user_id=test_user.id
         )
         assert isinstance(revoke_user_subscription, UserResponseDto)
         assert revoke_user_subscription.id == test_user.id
@@ -231,4 +231,4 @@ async def test_user(remnawave):
     yield user
 
     # Clean up
-    await remnawave.users.delete_user(userId=user.id)
+    await remnawave.users.delete_user(user_id=user.id)
