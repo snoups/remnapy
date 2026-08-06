@@ -61,6 +61,12 @@ xfail_strict = true
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
+[tool.ruff.lint]
+# Проект сознательно пишет Optional[X] и Union[X, Y], а не X | None и X | Y.
+# Формы эквивалентны, Optional/Union не устарели (в отличие от typing.List
+# и typing.Dict), а смена стиля дала бы ~600 правок без выигрыша.
+ignore = ["UP007", "UP045"]
+
 [tool.setuptools_scm]
 tag_regex = "^v(?P<version>.+)$"
 
