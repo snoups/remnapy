@@ -3,9 +3,9 @@
 > [!WARNING]
 > This repository is a fork of the official SDK [`remnawave/python-sdk`](https://github.com/remnawave/python-sdk).
 
-[![Stars](https://img.shields.io/github/stars/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/stargazers)
-[![Forks](https://img.shields.io/github/forks/snoups/remnapy.svg?style=social)](https://github.com/remnawave/remnapy/network/members)
-[![Issues](https://img.shields.io/github/issues/snoups/remnapy.svg)](https://github.com/snoups/remnapy/issues)
+[![Stars](https://img.shields.io/github/stars/remnashop/remnapy.svg?style=social)](https://github.com/remnashop/remnapy/stargazers)
+[![Forks](https://img.shields.io/github/forks/remnashop/remnapy.svg?style=social)](https://github.com/remnashop/remnapy/network/members)
+[![Issues](https://img.shields.io/github/issues/remnashop/remnapy.svg)](https://github.com/remnashop/remnapy/issues)
 [![Supported python versions](https://img.shields.io/pypi/pyversions/remnapy.svg)](https://pypi.python.org/pypi/remnapy)
 [![Downloads](https://img.shields.io/pypi/dm/remnapy.svg)](https://pypi.python.org/pypi/remnapy)
 [![PyPi Package Version](https://img.shields.io/pypi/v/remnapy)](https://pypi.python.org/pypi/remnapy)
@@ -16,35 +16,43 @@ This library simplifies working with the API by providing convenient controllers
 ## 📦 Installation
 
 ### Production Version
-Install the latest version from the new PyPI package:
+Install the latest release from PyPI:
 
 ```bash
 pip install remnapy
 ```
 
+Pin the version to the panel line you run:
+
+```toml
+# pyproject.toml
+dependencies = ["remnapy (>=3.2.1, <3.3.0)"]
+```
+
 ### Development Version
-If you need the development version:
+If you need the unreleased code from the `development` branch:
 
 ```bash
-pip install git+https://github.com/snoups/remnapy.git@development
+pip install git+https://github.com/remnashop/remnapy.git@development
 ```
 
 ---
 
 ## 🫥 Compatible versions
 
-| Contract Version | Remnawave Panel Version |
-| ---------------- | ----------------------- |
-| 3.2.1            | >=3.2.0                 |
-| 2.8.0            | >=2.8.0, <3.0.0         |
-| 2.7.0            | >=2.7.0, <2.8.0         |
-| 2.6.3            | >=2.6.3                 |
-| 2.3.0            | >=2.3.0, <2.4.0         |
+The package version mirrors the Remnawave panel version exactly — `remnapy` **3.2.1** targets Remnawave **3.2.1**.
+
+| Package Version | Remnawave Panel Version |
+| --------------- | ----------------------- |
+| 3.2.1           | >=3.2.1, <3.3.0         |
 
 ### Dependencies
-- `orjson` (>=3.10.15, <4.0.0)
 - `rapid-api-client` (==0.6.0)
+- `orjson` (>=3.10.15, <4.0.0)
 - `httpx` (>=0.27.2, <0.28.0)
+- `pydantic[email]` (>=2.9.2, <3.0.0)
+- `pydantic-core` (>=2.33.1, <2.34.0)
+- `cryptography` (>=46.0.3, <47.0.0)
 
 ## 🚀 Usage
 
@@ -54,8 +62,8 @@ Here’s a quick example to get you started:
 import os
 import asyncio
 
-from remnapy import RemnawaveSDK  # Updated import for new package
-from remnapy.models import (  # Updated import path
+from remnapy import RemnawaveSDK
+from remnapy.models import (
     UsersResponseDto, 
     UserResponseDto,
     GetAllConfigProfilesResponseDto,
