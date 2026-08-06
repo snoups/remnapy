@@ -190,3 +190,26 @@ def test_webhook_models_match():
             problems.append("\n".join(lines))
 
     assert not problems, "Модели вебхуков расходятся со спекой:\n" + "\n".join(problems)
+
+
+@pytest.mark.parametrize("nullable_as_null", [False, True], ids=["заполнено", "nullable=null"])
+def test_webhook_models_accept_spec_payloads(nullable_as_null):
+    """Модели вебхуков принимают payload, построенный по спеке.
+
+    Проверка имён полей (`test_webhook_models_match`) не видит ни типов, ни
+    обязательности. Вебхуки приходят с панели, а не запрашиваются, поэтому
+    иначе их разбор не проверить — отсюда построение payload'а из схемы.
+    """
+    from remnapy.models import webhook as webhook_models
+
+    spec = load_spec()
+    problems = []
+    for schema_name, model_name in WEBHOOK_SCHEMAS.items():
+        schema = spec["components"]["schemas"][schema_name]
+        payload = spec_utils.sample_payload(schema, spec, nullable_as_null=nullable_as_null)
+        try:
+            getattr(webhook_models, model_name).model_validate(payload)
+        except Exception as exc:  # noqa: BLE001
+            problems.append(f"  {model_name}: {str(exc).splitlines()[0]}")
+
+    assert not problems, "Модели вебхуков не разбирают payload из спеки:\n" + "\n".join(problems)

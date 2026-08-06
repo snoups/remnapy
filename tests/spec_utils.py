@@ -293,3 +293,78 @@ def spec_query_params(operation: dict[str, Any]) -> set[str]:
         for param in operation.get("parameters", [])
         if param.get("in") == "query"
     }
+
+
+def sample_payload(
+    schema: dict[str, Any] | None,
+    spec: dict[str, Any],
+    nullable_as_null: bool = False,
+    depth: int = 0,
+) -> Any:
+    """Построить значение, удовлетворяющее схеме.
+
+    Нужно, чтобы проверять модели на данных, а не только на именах полей:
+    сравнение имён не видит ни типов, ни обязательности, а именно там в этой
+    миграции пряталась часть дефектов.
+
+    ``nullable_as_null`` подставляет ``None`` во всё, что спека помечает
+    ``nullable`` — так проверяется, что модель переживёт пустые значения.
+    """
+    if depth > 12 or schema is None:
+        return None
+
+    if "$ref" in schema:
+        target = spec["components"]["schemas"].get(schema["$ref"].rsplit("/", 1)[-1], {})
+        return sample_payload(target, spec, nullable_as_null, depth + 1)
+
+    for combinator in ("allOf", "oneOf", "anyOf"):
+        if combinator in schema:
+            return sample_payload(schema[combinator][0], spec, nullable_as_null, depth + 1)
+
+    if schema.get("nullable") and nullable_as_null:
+        return None
+    if "enum" in schema:
+        return schema["enum"][0]
+
+    kind = schema.get("type")
+    if kind == "object" and "properties" not in schema:
+        return {}
+    if kind == "object" or "properties" in schema:
+        return {
+            name: sample_payload(sub, spec, nullable_as_null, depth + 1)
+            for name, sub in schema.get("properties", {}).items()
+        }
+    if kind == "array":
+        return [sample_payload(schema.get("items"), spec, nullable_as_null, depth + 1)]
+    if kind == "string":
+        return _sample_string(schema)
+    if kind in ("number", "integer"):
+        return 1
+    if kind == "boolean":
+        return True
+    return None
+
+
+def _sample_string(schema: dict[str, Any]) -> str:
+    fmt = schema.get("format")
+    if fmt == "date-time":
+        return "2026-01-01T00:00:00.000Z"
+    if fmt == "date":
+        return "2026-01-01"
+    if fmt == "uuid":
+        return "0199aa11-0000-4000-8000-000000000000"
+    if fmt == "email":
+        return "user@example.com"
+    if fmt in ("uri", "url"):
+        return "https://example.com/x"
+    if fmt == "ipv4":
+        return "127.0.0.1"
+    if fmt == "ipv6":
+        return "::1"
+
+    pattern = schema.get("pattern", "")
+    if pattern == "^[A-Z0-9_:]+$":
+        return "TAG"
+    if "0-9a-fA-F" in pattern:
+        return "0199aa11-0000-4000-8000-000000000000"
+    return "sample"
