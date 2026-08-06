@@ -1,16 +1,14 @@
 """Tests that all required endpoints exist in controllers."""
-import pytest
-import inspect
 
-from remnapy.controllers.users import UsersController
-from remnapy.controllers.system import SystemController
 from remnapy.controllers.connections import ConnectionsController
+from remnapy.controllers.system import SystemController
+from remnapy.controllers.users import UsersController
 
 
 class TestUsersControllerEndpoints:
     def test_has_resolve_user(self):
         assert hasattr(UsersController, "resolve_user")
-        assert callable(getattr(UsersController, "resolve_user"))
+        assert callable(UsersController.resolve_user)
 
     def test_has_revoke_user_subscription(self):
         assert hasattr(UsersController, "revoke_user_subscription")
@@ -61,7 +59,7 @@ class TestUsersControllerEndpoints:
 class TestSystemControllerEndpoints:
     def test_has_get_recap(self):
         assert hasattr(SystemController, "get_recap")
-        assert callable(getattr(SystemController, "get_recap"))
+        assert callable(SystemController.get_recap)
 
     def test_has_get_metadata(self):
         assert hasattr(SystemController, "get_metadata")

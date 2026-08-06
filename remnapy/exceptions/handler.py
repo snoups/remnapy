@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Dict, Type
 
 import httpx
 
@@ -20,7 +19,7 @@ from .general import (
     ValidationError,
 )
 
-ERRORS: Dict[str, Type[ApiError]] = {
+ERRORS: dict[str, type[ApiError]] = {
     ErrorCode.INTERNAL_SERVER_ERROR: ServerError,
     ErrorCode.LOGIN_ERROR: AuthenticationError,
     ErrorCode.UNAUTHORIZED: UnauthorizedError,
@@ -220,7 +219,7 @@ def handle_api_error(response: httpx.Response) -> None:
             )
 
 
-def _get_exception_by_status_code(status_code: int) -> Type[ApiError]:
+def _get_exception_by_status_code(status_code: int) -> type[ApiError]:
     """Get exception class based on HTTP status code"""
     if status_code == 400:
         return BadRequestError

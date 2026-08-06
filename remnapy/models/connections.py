@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, Field, model_validator
@@ -43,7 +43,7 @@ class ConnectionsByNodeUser(BaseModel):
     """Per-user IP list on a node"""
 
     user_id: int = Field(alias="userId")
-    ips: List[ConnectionIp]
+    ips: list[ConnectionIp]
 
 
 class ConnectionsByNodeResult(BaseModel):
@@ -51,7 +51,7 @@ class ConnectionsByNodeResult(BaseModel):
 
     success: bool
     node_uuid: UUID = Field(alias="nodeUuid")
-    users: List[ConnectionsByNodeUser]
+    users: list[ConnectionsByNodeUser]
 
 
 class ConnectionsByNodeResultResponseDto(BaseModel):
@@ -81,7 +81,7 @@ class ConnectionsByUserNode(BaseModel):
     node_uuid: UUID = Field(alias="nodeUuid")
     node_name: str = Field(alias="nodeName")
     country_code: str = Field(alias="countryCode")
-    ips: List[ConnectionIp]
+    ips: list[ConnectionIp]
 
 
 class ConnectionsByUserResult(BaseModel):
@@ -89,7 +89,7 @@ class ConnectionsByUserResult(BaseModel):
 
     success: bool
     user_id: int = Field(alias="userId")
-    nodes: List[ConnectionsByUserNode]
+    nodes: list[ConnectionsByUserNode]
 
 
 class ConnectionsByUserResultResponseDto(BaseModel):
@@ -110,7 +110,7 @@ class DropByUserIds(BaseModel):
     """Drop connections for specific user IDs"""
 
     by: Literal["userIds"] = "userIds"
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         ...,
         serialization_alias="userIds",
         min_length=1,
@@ -130,7 +130,7 @@ class DropByIpAddresses(BaseModel):
     """Drop connections from specific IP addresses"""
 
     by: Literal["ipAddresses"] = "ipAddresses"
-    ip_addresses: List[str] = Field(
+    ip_addresses: list[str] = Field(
         ...,
         serialization_alias="ipAddresses",
         min_length=1,
@@ -164,7 +164,7 @@ class TargetSpecificNodes(BaseModel):
     """Send the drop-connections event to specific nodes only"""
 
     target: Literal["specificNodes"] = "specificNodes"
-    node_uuids: List[UUID] = Field(
+    node_uuids: list[UUID] = Field(
         ...,
         serialization_alias="nodeUuids",
         min_length=1,
@@ -196,5 +196,3 @@ class DropConnectionsRequestDto(BaseModel):
         serialization_alias="targetNodes",
         description="Selector for which nodes to send the drop event to",
     )
-
-

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -121,7 +121,7 @@ class BaseUserDto(BaseModel):
 class UserDto(BaseUserDto):
     """Full user payload for webhooks: `BaseUserDto` plus active internal squads"""
 
-    active_internal_squads: List[WebhookInternalSquadDto]
+    active_internal_squads: list[WebhookInternalSquadDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -222,7 +222,7 @@ class ServiceApiTokenDto(BaseModel):
     name: str
     uuid: UUID
     expire_at: datetime
-    scopes: List[str]
+    scopes: list[str]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -297,7 +297,7 @@ class WebhookNodeConfigProfileDto(BaseModel):
     """Nested config profile for node webhook events"""
 
     active_config_profile_uuid: Optional[UUID]
-    active_inbounds: List[ConfigProfileInboundDto]
+    active_inbounds: list[ConfigProfileInboundDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -314,7 +314,7 @@ class NodeSystemInfoDto(BaseModel):
     release: str
     type: str
     version: str
-    network_interfaces: List[str]
+    network_interfaces: list[str]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -337,7 +337,7 @@ class NodeSystemStatsDto(BaseModel):
     memory_free: float
     memory_used: float
     uptime: float
-    load_avg: List[float]
+    load_avg: list[float]
     interface: Optional[NodeSystemInterfaceDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
@@ -387,7 +387,7 @@ class WebhookNodeDto(BaseModel):
     consumption_multiplier: float
     node_consumption_multiplier: float
 
-    tags: List[str]
+    tags: list[str]
 
     created_at: datetime
     updated_at: datetime
@@ -413,7 +413,7 @@ class WebhookNodeDto(BaseModel):
         return self.config_profile.active_config_profile_uuid
 
     @property
-    def active_inbounds(self) -> List[ConfigProfileInboundDto]:
+    def active_inbounds(self) -> list[ConfigProfileInboundDto]:
         return self.config_profile.active_inbounds
 
 

@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pytest
 
@@ -15,7 +15,6 @@ from remnapy.models import (
 )
 from tests.utils import generate_random_string
 
-
 REMNAWAVE_NODE_UUID = os.getenv("REMNAWAVE_NODE_UUID")
 
 
@@ -27,7 +26,7 @@ class TestUserMetadata:
         """Тест создания/обновления и получения метаданных пользователя"""
         # Create test user first
         username = generate_random_string(length=8)
-        expire_at = datetime.now(timezone.utc) + timedelta(days=7)
+        expire_at = datetime.now(UTC) + timedelta(days=7)
         create_user = await remnawave.users.create_user(
             CreateUserRequestDto(username=username, expire_at=expire_at)
         )
@@ -69,7 +68,7 @@ class TestUserMetadata:
         """Тест обновления существующих метаданных пользователя"""
         # Create test user
         username = generate_random_string(length=8)
-        expire_at = datetime.now(timezone.utc) + timedelta(days=7)
+        expire_at = datetime.now(UTC) + timedelta(days=7)
         create_user = await remnawave.users.create_user(
             CreateUserRequestDto(username=username, expire_at=expire_at)
         )
@@ -109,7 +108,7 @@ class TestUserMetadata:
         """Тест получения пустых метаданных пользователя"""
         # Create test user without metadata
         username = generate_random_string(length=8)
-        expire_at = datetime.now(timezone.utc) + timedelta(days=7)
+        expire_at = datetime.now(UTC) + timedelta(days=7)
         create_user = await remnawave.users.create_user(
             CreateUserRequestDto(username=username, expire_at=expire_at)
         )

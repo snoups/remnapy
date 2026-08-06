@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -20,7 +20,7 @@ class BulkDeleteUsersByStatusRequestDto(BaseModel):
 class BulkDeleteUsersRequestDto(BaseModel):
     """Request to delete users by IDs"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,
@@ -30,7 +30,7 @@ class BulkDeleteUsersRequestDto(BaseModel):
 class BulkRevokeUsersSubscriptionRequestDto(BaseModel):
     """Request to revoke users subscription"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,
@@ -40,7 +40,7 @@ class BulkRevokeUsersSubscriptionRequestDto(BaseModel):
 class BulkResetTrafficUsersRequestDto(BaseModel):
     """Request to reset traffic for users"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,
@@ -87,7 +87,7 @@ class UpdateUserFields(BaseModel):
 class BulkUpdateUsersRequestDto(BaseModel):
     """Request to bulk update users"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,
@@ -98,12 +98,12 @@ class BulkUpdateUsersRequestDto(BaseModel):
 class BulkUpdateUsersSquadsRequestDto(BaseModel):
     """Request to update users internal squads"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,
     )
-    active_internal_squads: List[UUID] = Field(
+    active_internal_squads: list[UUID] = Field(
         serialization_alias="activeInternalSquads"
     )
 
@@ -111,7 +111,7 @@ class BulkUpdateUsersSquadsRequestDto(BaseModel):
 class BulkExtendExpirationDateRequestDto(BaseModel):
     """Request to extend expiration date for selected users"""
 
-    user_ids: List[int] = Field(
+    user_ids: list[int] = Field(
         serialization_alias="userIds",
         min_length=1,
         max_length=500,

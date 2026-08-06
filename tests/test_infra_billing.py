@@ -3,8 +3,6 @@ from datetime import datetime, timedelta
 import pytest
 
 from remnapy.models import (
-    CreateInfraBillingHistoryRecordRequestDto,
-    CreateInfraBillingHistoryRecordResponseDto,
     CreateInfraBillingNodeRequestDto,
     CreateInfraBillingNodeResponseDto,
     CreateInfraProviderRequestDto,
@@ -13,8 +11,6 @@ from remnapy.models import (
     GetInfraBillingNodesResponseDto,
     GetInfraProviderByUuidResponseDto,
     GetInfraProvidersResponseDto,
-    UpdateInfraBillingNodeRequestDto,
-    UpdateInfraBillingNodeResponseDto,
     UpdateInfraProviderRequestDto,
     UpdateInfraProviderResponseDto,
 )

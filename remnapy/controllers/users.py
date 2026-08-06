@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional, Union
+from typing import Annotated, Optional, Union
 from uuid import UUID
 
 from rapid_api_client import Path, Query
@@ -18,8 +18,8 @@ from remnapy.models import (
     GetUserByIdResponseDto,
     GetUserByShortUuidResponseDto,
     GetUserByUsernameResponseDto,
-    GetUserSubscriptionRequestHistoryResponseDto,
     GetUsersStreamResponseDto,
+    GetUserSubscriptionRequestHistoryResponseDto,
     ResetUserTrafficResponseDto,
     ResolveUserRequestBodyDto,
     ResolveUserResponseDto,
@@ -60,19 +60,23 @@ class UsersController(BaseController):
             Optional[int], Query(default=None, description="Page size for pagination")
         ] = None,
         filters: Annotated[
-            Optional[List[TableFilter]],
+            Optional[list[TableFilter]],
             Query(default=None, description="Column filters"),
         ] = None,
         filter_modes: Annotated[
-            Optional[Dict[str, str]],
-            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+            Optional[dict[str, str]],
+            Query(
+                default=None, alias="filterModes", description="Per-column filter modes"
+            ),
         ] = None,
         global_filter_mode: Annotated[
             Optional[str],
-            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+            Query(
+                default=None, alias="globalFilterMode", description="Global filter mode"
+            ),
         ] = None,
         sorting: Annotated[
-            Optional[List[TableSort]],
+            Optional[list[TableSort]],
             Query(default=None, description="Sort order"),
         ] = None,
     ) -> GetAllUsersResponseDto:
@@ -107,7 +111,11 @@ class UsersController(BaseController):
         ] = None,
         telegram_id: Annotated[
             Optional[str],
-            Query(default=None, alias="telegramId", description="Telegram ID to filter users by"),
+            Query(
+                default=None,
+                alias="telegramId",
+                description="Telegram ID to filter users by",
+            ),
         ] = None,
         email: Annotated[
             Optional[str],
@@ -146,7 +154,8 @@ class UsersController(BaseController):
         ...
 
     @post(
-        "/users/{userId}/actions/revoke", response_class=RevokeUserSubscriptionResponseDto
+        "/users/{userId}/actions/revoke",
+        response_class=RevokeUserSubscriptionResponseDto,
     )
     async def revoke_user_subscription(
         self,

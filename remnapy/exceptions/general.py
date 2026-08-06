@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from pydantic import AliasChoices, BaseModel, Field
 
@@ -21,7 +21,7 @@ class ApiErrorResponse(BaseModel):
     )
     # Support for API v2 error format
     status_code: Optional[int] = Field(None, alias="statusCode")
-    errors: Optional[List[Any]] = Field(None, description="Детали ошибок валидации")
+    errors: Optional[list[Any]] = Field(None, description="Детали ошибок валидации")
 
 
 class ApiError(Exception):

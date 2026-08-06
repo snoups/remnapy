@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -7,14 +6,14 @@ from pydantic import BaseModel, Field
 class CreateApiTokenRequestDto(BaseModel):
     name: str
     expires_in_days: int = Field(serialization_alias="expiresInDays")
-    scopes: List[str] = Field(default_factory=lambda: ["*"])
+    scopes: list[str] = Field(default_factory=lambda: ["*"])
 
 
 class ApiTokenDto(BaseModel):
     uuid: str
     name: str
     expire_at: datetime = Field(..., alias="expireAt")
-    scopes: List[str]
+    scopes: list[str]
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")
 
@@ -24,7 +23,7 @@ class CreateApiTokenResponseDto(ApiTokenDto):
 
 
 class FindAllApiTokensResponseData(BaseModel):
-    tokens: List[ApiTokenDto]
+    tokens: list[ApiTokenDto]
 
 
 class FindAllApiTokensResponseDto(FindAllApiTokensResponseData):
@@ -41,13 +40,13 @@ class ApiTokenScopeEndpointDto(BaseModel):
 
 class ApiTokenScopeResourceDto(BaseModel):
     resource: str
-    resource_scopes: List[str] = Field(..., alias="resourceScopes")
-    endpoints: List[ApiTokenScopeEndpointDto]
+    resource_scopes: list[str] = Field(..., alias="resourceScopes")
+    endpoints: list[ApiTokenScopeEndpointDto]
 
 
 class GetApiTokenScopesResponseData(BaseModel):
     wildcard: str
-    resources: List[ApiTokenScopeResourceDto]
+    resources: list[ApiTokenScopeResourceDto]
 
 
 class GetApiTokenScopesResponseDto(GetApiTokenScopesResponseData):

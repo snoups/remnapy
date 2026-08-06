@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Literal, Optional
+from typing import Annotated, Literal, Optional
 from uuid import UUID
 
 from pydantic import (
@@ -81,7 +81,7 @@ class CreateUserRequestDto(BaseModel):
     hwid_device_limit: Optional[int] = Field(
         None, serialization_alias="hwidDeviceLimit", ge=0
     )
-    active_internal_squads: Optional[List[UUID]] = Field(
+    active_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="activeInternalSquads"
     )
     external_squad_uuid: Optional[UUID] = Field(
@@ -116,7 +116,7 @@ class UpdateUserRequestDto(BaseModel):
     traffic_limit_strategy: Optional[TrafficLimitStrategy] = Field(
         None, serialization_alias="trafficLimitStrategy"
     )
-    active_internal_squads: Optional[List[UUID]] = Field(
+    active_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="activeInternalSquads"
     )
     external_squad_uuid: Optional[UUID] = Field(
@@ -264,7 +264,7 @@ class SubscriptionRequestsResponseData(BaseModel):
     """Subscription requests response data"""
 
     total: int
-    records: List[SubscriptionRequestRecord]
+    records: list[SubscriptionRequestRecord]
 
 
 class CreateUserResponseDto(UserResponseDto):
@@ -381,7 +381,9 @@ class GetUserSubscriptionRequestHistoryResponseDto(SubscriptionRequestsResponseD
 class ExtendUserRequestDto(BaseModel):
     """Request DTO for extending user expiration date"""
 
-    days: int = Field(..., gt=0, description="Number of days to extend the expiration date by")
+    days: int = Field(
+        ..., gt=0, description="Number of days to extend the expiration date by"
+    )
 
 
 class ExtendUserResponseDto(UserResponseDto):

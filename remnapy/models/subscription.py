@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -60,7 +60,7 @@ class UserResponseDto(BaseModel):
     last_triggered_threshold: int = Field(default=0, alias="lastTriggeredThreshold")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    active_internal_squads: List[ActiveInternalSquadDto] = Field(
+    active_internal_squads: list[ActiveInternalSquadDto] = Field(
         alias="activeInternalSquads"
     )
     subscription_url: str = Field(alias="subscriptionUrl")
@@ -126,7 +126,7 @@ class RawHostProtocolOptions(BaseModel):
 
 
 class RawHostDbData(BaseModel):
-    raw_inbound: Optional[Dict[str, Any]] = Field(None, alias="rawInbound")
+    raw_inbound: Optional[dict[str, Any]] = Field(None, alias="rawInbound")
     inbound_tag: str = Field(alias="inboundTag")
     uuid: str
     config_profile_uuid: Optional[str] = Field(None, alias="configProfileUuid")
@@ -145,7 +145,7 @@ class RawSettings(BaseModel):
     """Raw settings for network configuration"""
 
     header_type: Optional[str] = Field(None, alias="headerType")
-    request: Optional[Dict[str, Any]] = None
+    request: Optional[dict[str, Any]] = None
 
 
 class RawHost(BaseModel):
@@ -168,11 +168,11 @@ class RawHost(BaseModel):
     additional_params: Optional[RawHostAdditionalParams] = Field(
         None, alias="additionalParams"
     )
-    x_http_extra_params: Optional[Dict[str, Any]] = Field(
+    x_http_extra_params: Optional[dict[str, Any]] = Field(
         None, alias="xHttpExtraParams"
     )
-    mux_params: Optional[Dict[str, Any]] = Field(None, alias="muxParams")
-    sockopt_params: Optional[Dict[str, Any]] = Field(None, alias="sockoptParams")
+    mux_params: Optional[dict[str, Any]] = Field(None, alias="muxParams")
+    sockopt_params: Optional[dict[str, Any]] = Field(None, alias="sockoptParams")
     server_description: Optional[str] = Field(None, alias="serverDescription")
     flow: Optional[str] = None
     allow_insecure: Optional[bool] = Field(None, alias="allowInsecure")
@@ -184,7 +184,7 @@ class RawHost(BaseModel):
         None, alias="protocolOptions"
     )
     db_data: Optional[RawHostDbData] = Field(None, alias="dbData")
-    xray_json_template: Optional[Dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
+    xray_json_template: Optional[dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
 
 
 class ResolvedProtocolOptions(BaseModel):
@@ -205,8 +205,8 @@ class ResolvedHttpHeaderRequest(BaseModel):
 
     version: Optional[str] = None
     method: Optional[str] = None
-    path: Optional[List[str]] = None
-    headers: Optional[Dict[str, Any]] = None
+    path: Optional[list[str]] = None
+    headers: Optional[dict[str, Any]] = None
 
 
 class ResolvedHttpHeaderResponse(BaseModel):
@@ -215,7 +215,7 @@ class ResolvedHttpHeaderResponse(BaseModel):
     version: Optional[str] = None
     status: Optional[str] = None
     reason: Optional[str] = None
-    headers: Optional[Dict[str, Any]] = None
+    headers: Optional[dict[str, Any]] = None
 
 
 class ResolvedTransportHeader(BaseModel):
@@ -233,8 +233,8 @@ class ResolvedTransportOptions(BaseModel):
     path: Optional[str] = None
     host: Optional[str] = None
     mode: Optional[str] = None
-    extra: Optional[Dict[str, Any]] = None
-    headers: Optional[Dict[str, Any]] = None
+    extra: Optional[dict[str, Any]] = None
+    headers: Optional[dict[str, Any]] = None
     heartbeat_period: Optional[float] = Field(None, alias="heartbeatPeriod")
     authority: Optional[str] = None
     service_name: Optional[str] = Field(None, alias="serviceName")
@@ -250,9 +250,7 @@ class ResolvedSecurityOptions(BaseModel):
     """Security-specific options, shape depends on `security` (tls/reality/none)"""
 
     pinned_peer_cert_sha256: Optional[str] = Field(None, alias="pinnedPeerCertSha256")
-    verify_peer_cert_by_name: Optional[str] = Field(
-        None, alias="verifyPeerCertByName"
-    )
+    verify_peer_cert_by_name: Optional[str] = Field(None, alias="verifyPeerCertByName")
     alpn: Optional[str] = None
     enable_session_resumption: Optional[bool] = Field(
         None, alias="enableSessionResumption"
@@ -289,8 +287,8 @@ class ResolvedProxyConfigMetadata(BaseModel):
     """Inbound/host metadata backing the resolved proxy config"""
 
     uuid: UUID
-    tags: List[str]
-    exclude_from_subscription_types: List[str] = Field(
+    tags: list[str]
+    exclude_from_subscription_types: list[str] = Field(
         alias="excludeFromSubscriptionTypes"
     )
     inbound_tag: str = Field(alias="inboundTag")
@@ -321,7 +319,7 @@ class ResolvedProxyConfig(BaseModel):
         None, alias="securityOptions"
     )
     stream_overrides: ResolvedStreamOverrides = Field(alias="streamOverrides")
-    mux: Optional[Dict[str, Any]]
+    mux: Optional[dict[str, Any]]
     client_overrides: ResolvedClientOverrides = Field(alias="clientOverrides")
     metadata: ResolvedProxyConfigMetadata
 
@@ -331,8 +329,8 @@ class RawSubscriptionResponse(BaseModel):
 
     user: UserResponseDto
     converted_user_info: ConvertedUserInfo = Field(alias="convertedUserInfo")
-    headers: Dict[str, str]
-    resolved_proxy_configs: List[ResolvedProxyConfig] = Field(
+    headers: dict[str, str]
+    resolved_proxy_configs: list[ResolvedProxyConfig] = Field(
         alias="resolvedProxyConfigs"
     )
 
@@ -361,8 +359,8 @@ class UserSubscription(BaseModel):
 class SubscriptionInfoData(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
     happ: HappCrypto
 
@@ -370,8 +368,8 @@ class SubscriptionInfoData(BaseModel):
 class GetSubscriptionInfoResponseDto(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
     @property
@@ -384,21 +382,21 @@ class GetSubscriptionInfoResponseDto(BaseModel):
 class SubscriptionWithoutHapp(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
 
 class GetAllSubscriptionsResponseDto(BaseModel):
-    subscriptions: List[SubscriptionWithoutHapp]
+    subscriptions: list[SubscriptionWithoutHapp]
     total: float
 
 
 class GetSubscriptionByUsernameResponseDto(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
 
@@ -413,12 +411,12 @@ class GetSubscriptionByUserIdResponseDto(GetSubscriptionByUsernameResponseDto):
 
 
 class GetConnectionKeysByUserIdResponseDto(BaseModel):
-    enabled_keys: List[str] = Field(alias="enabledKeys")
-    hidden_keys: List[str] = Field(alias="hiddenKeys")
-    disabled_keys: List[str] = Field(alias="disabledKeys")
+    enabled_keys: list[str] = Field(alias="enabledKeys")
+    hidden_keys: list[str] = Field(alias="hiddenKeys")
+    disabled_keys: list[str] = Field(alias="disabledKeys")
 
     @property
-    def connection_keys(self) -> List[str]:
+    def connection_keys(self) -> list[str]:
         """Backward compatibility: historically SDK exposed a flat list of keys."""
         return self.enabled_keys
 

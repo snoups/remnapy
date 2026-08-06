@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -15,7 +14,7 @@ class SubscriptionRequestHistoryRecord(BaseModel):
 
 
 class SubscriptionRequestHistoryData(BaseModel):
-    records: List[SubscriptionRequestHistoryRecord]
+    records: list[SubscriptionRequestHistoryRecord]
     total: int
 
 
@@ -34,8 +33,8 @@ class HourlyRequestStat(BaseModel):
 
 
 class SubscriptionRequestHistoryStatsData(BaseModel):
-    by_parsed_app: List[AppStatItem] = Field(alias="byParsedApp")
-    hourly_request_stats: List[HourlyRequestStat] = Field(alias="hourlyRequestStats")
+    by_parsed_app: list[AppStatItem] = Field(alias="byParsedApp")
+    hourly_request_stats: list[HourlyRequestStat] = Field(alias="hourlyRequestStats")
 
 
 class GetSubscriptionRequestHistoryStatsResponseDto(

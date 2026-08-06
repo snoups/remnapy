@@ -1,4 +1,3 @@
-import random
 import uuid
 
 import pytest
@@ -71,7 +70,7 @@ class TestHwidStatistics:
                 assert hasattr(app, "app")
                 assert hasattr(app, "count")
         except Exception as e:
-            pytest.skip(f"Пропуск теста статистики HWID: {str(e)}")
+            pytest.skip(f"Пропуск теста статистики HWID: {e!s}")
 
 
 class TestHwidCRUD:

@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel, StringConstraints
@@ -14,7 +14,7 @@ class ReorderHostItem(BaseModel):
 
 
 class ReorderHostRequestDto(BaseModel):
-    hosts: List[ReorderHostItem]
+    hosts: list[ReorderHostItem]
 
 
 class HostInboundData(BaseModel):
@@ -49,7 +49,7 @@ class UpdateHostRequestDto(BaseModel):
     server_description: Optional[str] = Field(
         None, serialization_alias="serverDescription", max_length=30
     )
-    tags: Optional[Annotated[List[HostTag], Field(max_length=10)]] = None
+    tags: Optional[Annotated[list[HostTag], Field(max_length=10)]] = None
     is_hidden: Optional[bool] = Field(None, serialization_alias="isHidden")
     override_sni_from_address: Optional[bool] = Field(
         None, serialization_alias="overrideSniFromAddress"
@@ -63,11 +63,11 @@ class UpdateHostRequestDto(BaseModel):
     mihomo_ip_version: Optional[MihomoIpVersion] = Field(
         None, serialization_alias="mihomoIpVersion"
     )
-    xhttp_extra_params: Optional[Dict[str, Any]] = Field(
+    xhttp_extra_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="xhttpExtraParams"
     )
-    mux_params: Optional[Dict[str, Any]] = Field(None, serialization_alias="muxParams")
-    sockopt_params: Optional[Dict[str, Any]] = Field(
+    mux_params: Optional[dict[str, Any]] = Field(None, serialization_alias="muxParams")
+    sockopt_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="sockoptParams"
     )
     final_mask: Optional[Any] = Field(None, serialization_alias="finalMask")
@@ -77,14 +77,14 @@ class UpdateHostRequestDto(BaseModel):
     verify_peer_cert_by_name: Optional[str] = Field(
         None, serialization_alias="verifyPeerCertByName"
     )
-    nodes: Optional[List[UUID]] = None
+    nodes: Optional[list[UUID]] = None
     xray_json_template_uuid: Optional[UUID] = Field(
         None, serialization_alias="xrayJsonTemplateUuid"
     )
-    excluded_internal_squads: Optional[List[UUID]] = Field(
+    excluded_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="excludedInternalSquads"
     )
-    exclude_from_subscription_types: Optional[List[SubscriptionType]] = Field(
+    exclude_from_subscription_types: Optional[list[SubscriptionType]] = Field(
         None,
         serialization_alias="excludeFromSubscriptionTypes",
         description="Subscription types from which this host will be excluded.",
@@ -106,30 +106,30 @@ class HostResponseDto(BaseModel):
     host: str | None = Field(alias="host")
     alpn: str | None = Field(alias="alpn")
     fingerprint: str | None = Field(alias="fingerprint")
-    xhttp_extra_params: Dict[str, Any] | None = Field(alias="xhttpExtraParams")
-    mux_params: Dict[str, Any] | None = Field(alias="muxParams")
-    sockopt_params: Dict[str, Any] | None = Field(alias="sockoptParams")
+    xhttp_extra_params: dict[str, Any] | None = Field(alias="xhttpExtraParams")
+    mux_params: dict[str, Any] | None = Field(alias="muxParams")
+    sockopt_params: dict[str, Any] | None = Field(alias="sockoptParams")
     final_mask: Any | None = Field(None, alias="finalMask")
     inbound: HostInboundData
     server_description: str | None = Field(alias="serverDescription")
-    tags: List[str] = Field(default_factory=list, alias="tags")
+    tags: list[str] = Field(default_factory=list, alias="tags")
     vless_route_id: int | None = Field(alias="vlessRouteId")
     pinned_peer_cert_sha256: str | None = Field(None, alias="pinnedPeerCertSha256")
     verify_peer_cert_by_name: str | None = Field(None, alias="verifyPeerCertByName")
     shuffle_host: bool = Field(alias="shuffleHost")
     mihomo_x25519: bool = Field(alias="mihomoX25519")
     mihomo_ip_version: MihomoIpVersion | None = Field(None, alias="mihomoIpVersion")
-    nodes: List[UUID]
+    nodes: list[UUID]
     is_disabled: bool = Field(False, alias="isDisabled")
     security_layer: SecurityLayer = Field(SecurityLayer.DEFAULT, alias="securityLayer")
     is_hidden: bool = Field(False, alias="isHidden")
     override_sni_from_address: bool = Field(False, alias="overrideSniFromAddress")
     keep_blank_sni: bool = Field(False, alias="keepSniBlank")
     xray_json_template_uuid: UUID | None = Field(alias="xrayJsonTemplateUuid")
-    excluded_internal_squads: List[UUID] = Field(
+    excluded_internal_squads: list[UUID] = Field(
         default_factory=list, alias="excludedInternalSquads"
     )
-    exclude_from_subscription_types: List[SubscriptionType] = Field(
+    exclude_from_subscription_types: list[SubscriptionType] = Field(
         default_factory=list,
         alias="excludeFromSubscriptionTypes",
         description="Subscription types from which this host is excluded.",
@@ -150,18 +150,18 @@ class CreateHostRequestDto(BaseModel):
     host: Optional[str] = None
     alpn: Optional[ALPN] = None
     fingerprint: Optional[str] = None
-    xhttp_extra_params: Optional[Dict[str, Any]] = Field(
+    xhttp_extra_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="xhttpExtraParams"
     )
-    mux_params: Optional[Dict[str, Any]] = Field(None, serialization_alias="muxParams")
-    sockopt_params: Optional[Dict[str, Any]] = Field(
+    mux_params: Optional[dict[str, Any]] = Field(None, serialization_alias="muxParams")
+    sockopt_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="sockoptParams"
     )
     final_mask: Optional[Any] = Field(None, serialization_alias="finalMask")
     server_description: Optional[str] = Field(
         None, serialization_alias="serverDescription", max_length=30
     )
-    tags: Annotated[List[HostTag], Field(max_length=10)] = Field(default_factory=list)
+    tags: Annotated[list[HostTag], Field(max_length=10)] = Field(default_factory=list)
     vless_route_id: Optional[int] = Field(
         None, serialization_alias="vlessRouteId", ge=0, le=65535
     )
@@ -176,7 +176,7 @@ class CreateHostRequestDto(BaseModel):
     mihomo_ip_version: Optional[MihomoIpVersion] = Field(
         None, serialization_alias="mihomoIpVersion"
     )
-    nodes: List[UUID] = Field(default_factory=list)
+    nodes: list[UUID] = Field(default_factory=list)
     is_disabled: bool = Field(False, serialization_alias="isDisabled")
     security_layer: SecurityLayer = Field(
         SecurityLayer.DEFAULT, serialization_alias="securityLayer"
@@ -189,10 +189,10 @@ class CreateHostRequestDto(BaseModel):
     xray_json_template_uuid: Optional[UUID] = Field(
         None, serialization_alias="xrayJsonTemplateUuid"
     )
-    excluded_internal_squads: List[UUID] = Field(
+    excluded_internal_squads: list[UUID] = Field(
         default_factory=list, serialization_alias="excludedInternalSquads"
     )
-    exclude_from_subscription_types: List[SubscriptionType] = Field(
+    exclude_from_subscription_types: list[SubscriptionType] = Field(
         default_factory=list,
         serialization_alias="excludeFromSubscriptionTypes",
         description="Subscription types from which this host will be excluded.",
@@ -222,7 +222,7 @@ class CreateHostRequestDto(BaseModel):
 
 
 class GetAllHostTagsResponseDto(BaseModel):
-    tags: List[str]
+    tags: list[str]
 
 
 # Response wrappers - обернуты в response
@@ -238,8 +238,8 @@ class UpdateHostResponseDto(CreateHostResponseDto):
     pass
 
 
-class GetAllHostsResponseDto(RootModel[List[HostResponseDto]]):
-    root: List[HostResponseDto]
+class GetAllHostsResponseDto(RootModel[list[HostResponseDto]]):
+    root: list[HostResponseDto]
 
     def __iter__(self):
         return iter(self.root)

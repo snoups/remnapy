@@ -1,4 +1,4 @@
-from typing import Annotated, Any, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
@@ -32,7 +32,7 @@ class GetTemplateResponseDto(TemplateResponseDto):
 
 class GetTemplatesData(BaseModel):
     total: float
-    templates: List[TemplateInfoDto]
+    templates: list[TemplateInfoDto]
 
 
 class GetTemplatesResponseDto(GetTemplatesData):
@@ -77,7 +77,7 @@ class ReorderTemplateItem(BaseModel):
 
 
 class ReorderSubscriptionTemplatesRequestDto(BaseModel):
-    items: List[ReorderTemplateItem]
+    items: list[ReorderTemplateItem]
 
 
 class ReorderSubscriptionTemplatesResponseDto(GetTemplatesData):

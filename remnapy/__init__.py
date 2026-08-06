@@ -152,8 +152,7 @@ class RemnawaveSDK:
         return headers
 
     def _prepare_url(self) -> str:
-        if self.base_url.endswith("/"):
-            self.base_url = self.base_url[:-1]
+        self.base_url = self.base_url.removesuffix("/")
 
         if not self.base_url.endswith("/api"):
             self.base_url += "/api"

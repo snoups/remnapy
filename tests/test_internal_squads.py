@@ -3,10 +3,8 @@ from uuid import UUID
 import pytest
 
 from remnapy.models import (
-    AddUsersToInternalSquadRequestDto,
     CreateInternalSquadRequestDto,
     CreateInternalSquadResponseDto,
-    DeleteUsersFromInternalSquadRequestDto,
     GetAllInternalSquadsResponseDto,
     GetInternalSquadByUuidResponseDto,
     ReorderInternalSquadItem,

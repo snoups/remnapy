@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import StrEnum
-from typing import Dict, List, Optional
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -58,17 +58,17 @@ class ExternalSquadDto(BaseModel):
     view_position: int = Field(alias="viewPosition")
     name: str
     info: ExternalSquadInfoDto
-    templates: List[ExternalSquadTemplateDto]
+    templates: list[ExternalSquadTemplateDto]
     subscription_settings: Optional[ExternalSquadSubscriptionSettingsDto] = Field(
         None, alias="subscriptionSettings"
     )
     host_overrides: Optional[ExternalSquadHostOverridesDto] = Field(
         None, alias="hostOverrides"
     )
-    response_headers_add: Optional[Dict[str, str]] = Field(
+    response_headers_add: Optional[dict[str, str]] = Field(
         None, alias="responseHeadersAdd"
     )
-    response_headers_remove: Optional[List[str]] = Field(
+    response_headers_remove: Optional[list[str]] = Field(
         None, alias="responseHeadersRemove"
     )
     hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
@@ -83,7 +83,7 @@ class GetExternalSquadsResponseDto(BaseModel):
     """Response with all external squads"""
 
     total: float = Field(alias="total")
-    external_squads: List[ExternalSquadDto] = Field(alias="externalSquads")
+    external_squads: list[ExternalSquadDto] = Field(alias="externalSquads")
 
 
 class GetExternalSquadByUuidResponseDto(ExternalSquadDto):
@@ -111,7 +111,7 @@ class UpdateExternalSquadRequestDto(BaseModel):
     name: Optional[str] = Field(
         None, min_length=2, max_length=30, pattern=r"^[A-Za-z0-9_\s-]+$"
     )
-    templates: Optional[List[ExternalSquadTemplateDto]] = None
+    templates: Optional[list[ExternalSquadTemplateDto]] = None
     subscription_settings: Optional[ExternalSquadSubscriptionSettingsDto] = Field(
         None, serialization_alias="subscriptionSettings"
     )
@@ -120,10 +120,10 @@ class UpdateExternalSquadRequestDto(BaseModel):
     )
     hwid_settings: Optional[HwidSettingsDto] = Field(None, alias="hwidSettings")
     custom_remarks: Optional[CustomRemarksDto] = Field(None, alias="customRemarks")
-    response_headers_add: Optional[Dict[str, str]] = Field(
+    response_headers_add: Optional[dict[str, str]] = Field(
         None, serialization_alias="responseHeadersAdd"
     )
-    response_headers_remove: Optional[List[str]] = Field(
+    response_headers_remove: Optional[list[str]] = Field(
         None, serialization_alias="responseHeadersRemove"
     )
     subpage_config_uuid: Optional[UUID] = Field(
@@ -143,13 +143,11 @@ class ReorderExternalSquadItem(BaseModel):
 
 
 class ReorderExternalSquadsRequestDto(BaseModel):
-    items: List[ReorderExternalSquadItem]
+    items: list[ReorderExternalSquadItem]
 
 
 class ReorderExternalSquadsResponseDto(BaseModel):
     """Response after reordering external squads"""
 
     total: float = Field(alias="total")
-    external_squads: List[ExternalSquadDto] = Field(alias="externalSquads")
-
-
+    external_squads: list[ExternalSquadDto] = Field(alias="externalSquads")

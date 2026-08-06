@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -43,7 +43,7 @@ class InfraProviderDto(BaseModel):
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
     billing_history: InfraBillingHistoryStatsDto = Field(alias="billingHistory")
-    billing_nodes: List[InfraBillingNodeSimpleDto] = Field(alias="billingNodes")
+    billing_nodes: list[InfraBillingNodeSimpleDto] = Field(alias="billingNodes")
 
 
 class NodeDto(BaseModel):
@@ -120,7 +120,7 @@ class UpdateInfraProviderResponseDto(InfraProviderDto):
 
 class AllInfraProvidersData(BaseModel):
     total: float = Field(alias="total")
-    providers: List[InfraProviderDto]
+    providers: list[InfraProviderDto]
 
 
 # Исправленные имена моделей согласно OpenAPI
@@ -142,7 +142,7 @@ class CreateInfraBillingHistoryRecordRequestDto(BaseModel):
 
 
 class InfraBillingHistoryData(BaseModel):
-    records: List[InfraBillingHistoryDto]
+    records: list[InfraBillingHistoryDto]
     total: float
 
 
@@ -167,8 +167,8 @@ class CreateInfraBillingNodeRequestDto(BaseModel):
 # ИСПРАВЛЕНО: API возвращает список всех billing nodes после создания, а не один созданный
 class CreateInfraBillingNodeResponseDto(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
-    billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+    billing_nodes: list[InfraBillingNodeDto] = Field(alias="billingNodes")
+    available_billing_nodes: list[AvailableBillingNodeDto] = Field(
         alias="availableBillingNodes"
     )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
@@ -176,14 +176,14 @@ class CreateInfraBillingNodeResponseDto(BaseModel):
 
 
 class UpdateInfraBillingNodeRequestDto(BaseModel):
-    uuids: List[UUID]
+    uuids: list[UUID]
     next_billing_at: datetime = Field(serialization_alias="nextBillingAt")
 
 
 class UpdateInfraBillingNodeResponseDto(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
-    billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+    billing_nodes: list[InfraBillingNodeDto] = Field(alias="billingNodes")
+    available_billing_nodes: list[AvailableBillingNodeDto] = Field(
         alias="availableBillingNodes"
     )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
@@ -192,8 +192,8 @@ class UpdateInfraBillingNodeResponseDto(BaseModel):
 
 class InfraBillingNodesData(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
-    billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
+    billing_nodes: list[InfraBillingNodeDto] = Field(alias="billingNodes")
+    available_billing_nodes: list[AvailableBillingNodeDto] = Field(
         alias="availableBillingNodes"
     )
     total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")

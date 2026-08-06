@@ -3,7 +3,6 @@ from uuid import UUID
 
 from rapid_api_client.annotations import Path, PydanticBody
 
-from remnapy.enums import TemplateType
 from remnapy.models import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,

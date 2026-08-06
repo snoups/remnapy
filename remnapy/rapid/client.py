@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import datetime
 from inspect import BoundArguments, Signature
-from typing import Any, Dict, Mapping, Self, Tuple, Type
+from typing import Any, Self
 
 import httpx
 import orjson
@@ -47,7 +48,7 @@ class BaseController(RapidApi):
         rapid_parameters: CustomRapidParameters,
         method: str,
         path: str,
-        args: Tuple[Any],
+        args: tuple[Any],
         kwargs: Mapping[str, Any],
         timeout: float | None,
     ) -> Request:
@@ -56,7 +57,7 @@ class BaseController(RapidApi):
 
         path = rapid_parameters.get_resolved_path(path, ba)
 
-        build_kwargs: Dict[str, Any] = {
+        build_kwargs: dict[str, Any] = {
             "headers": rapid_parameters.get_headers(ba),
             "params": rapid_parameters.get_query(ba),
         }
@@ -72,7 +73,7 @@ class BaseController(RapidApi):
     def _handle_response(
         self,
         response: Response,
-        response_class: Type[Response | str | bytes | BM] | TypeAdapter[T] | None = Response,
+        response_class: type[Response | str | bytes | BM] | TypeAdapter[T] | None = Response,
     ) -> Response | str | bytes | BM | T | None:
         if response_class is Response:
             return response
@@ -88,7 +89,7 @@ class BaseController(RapidApi):
                 ApiErrorResponse(
                     timestamp=now_time,
                     path="/api/users",
-                    message=f"Request error: {str(e)}",
+                    message=f"Request error: {e!s}",
                     code="NETWORK_ERROR",
                 ),
             )
@@ -209,7 +210,7 @@ class CustomRapidParameters(RapidParameters):
 
         return out
 
-    def get_query(self, ba: BoundArguments) -> Dict[str, Any]:
+    def get_query(self, ba: BoundArguments) -> dict[str, Any]:
         """
         Builds query parameters for the request.
 
@@ -246,7 +247,7 @@ class CustomRapidParameters(RapidParameters):
                 values[name] = orjson.dumps(value, default=_query_json_default).decode()
         return values
 
-    def get_body(self, ba: BoundArguments) -> Tuple[str | None, Any]:
+    def get_body(self, ba: BoundArguments) -> tuple[str | None, Any]:
         """
         Prepares the body of an HTTP request based on annotated parameters.
 

@@ -8,9 +8,7 @@ from remnapy.enums import ErrorCode, UserStatus
 from remnapy.exceptions import ApiError
 from remnapy.models import (
     CreateUserRequestDto,
-    GetSubscriptionRequestsResponseDto,
     GetUserAccessibleNodesResponseDto,
-    RevokeUserRequestDto,
     TagsResponseDto,
     UpdateUserRequestDto,
     UserResponseDto,

@@ -1,15 +1,14 @@
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
 
 from remnapy.enums import ALPN, MihomoIpVersion, SecurityLayer, SubscriptionType
-from remnapy.models import HostResponseDto
 from remnapy.models.hosts import CreateHostInboundData, HostTag
 
 
 class UpdateManyHostsRequestDto(BaseModel):
-    uuids: List[UUID]
+    uuids: list[UUID]
     inbound: Optional[CreateHostInboundData] = None
     remark: Annotated[Optional[str], StringConstraints(max_length=40)] = None
     address: Optional[str] = None
@@ -23,18 +22,18 @@ class UpdateManyHostsRequestDto(BaseModel):
     security_layer: Optional[SecurityLayer] = Field(
         None, serialization_alias="securityLayer"
     )
-    xhttp_extra_params: Optional[Dict[str, Any]] = Field(
+    xhttp_extra_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="xhttpExtraParams"
     )
-    mux_params: Optional[Dict[str, Any]] = Field(None, serialization_alias="muxParams")
-    sockopt_params: Optional[Dict[str, Any]] = Field(
+    mux_params: Optional[dict[str, Any]] = Field(None, serialization_alias="muxParams")
+    sockopt_params: Optional[dict[str, Any]] = Field(
         None, serialization_alias="sockoptParams"
     )
     final_mask: Optional[Any] = Field(None, serialization_alias="finalMask")
     server_description: Optional[str] = Field(
         None, serialization_alias="serverDescription", max_length=30
     )
-    tags: Optional[Annotated[List[HostTag], Field(max_length=10)]] = None
+    tags: Optional[Annotated[list[HostTag], Field(max_length=10)]] = None
     is_hidden: Optional[bool] = Field(None, serialization_alias="isHidden")
     override_sni_from_address: Optional[bool] = Field(
         None, serialization_alias="overrideSniFromAddress"
@@ -54,15 +53,13 @@ class UpdateManyHostsRequestDto(BaseModel):
     mihomo_ip_version: Optional[MihomoIpVersion] = Field(
         None, serialization_alias="mihomoIpVersion"
     )
-    nodes: Optional[List[UUID]] = None
+    nodes: Optional[list[UUID]] = None
     xray_json_template_uuid: Optional[UUID] = Field(
         None, serialization_alias="xrayJsonTemplateUuid"
     )
-    excluded_internal_squads: Optional[List[UUID]] = Field(
+    excluded_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="excludedInternalSquads"
     )
-    exclude_from_subscription_types: Optional[List[SubscriptionType]] = Field(
+    exclude_from_subscription_types: Optional[list[SubscriptionType]] = Field(
         None, serialization_alias="excludeFromSubscriptionTypes"
     )
-
-

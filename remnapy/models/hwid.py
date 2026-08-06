@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -33,22 +33,22 @@ class HwidDeviceDto(BaseModel):
 
 class HwidDevicesData(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class CreateUserHwidDeviceResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class DeleteUserHwidDeviceResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class GetUserHwidDevicesResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class AppStatItem(BaseModel):
@@ -59,7 +59,7 @@ class AppStatItem(BaseModel):
 class PlatformStatItem(BaseModel):
     platform: str
     count: float
-    by_app: List[AppStatItem] = Field(default_factory=list, alias="byApp")
+    by_app: list[AppStatItem] = Field(default_factory=list, alias="byApp")
 
 
 class HwidStats(BaseModel):
@@ -69,7 +69,7 @@ class HwidStats(BaseModel):
 
 
 class HwidStatisticsData(BaseModel):
-    by_platform: List[PlatformStatItem] = Field(alias="byPlatform")
+    by_platform: list[PlatformStatItem] = Field(alias="byPlatform")
     stats: HwidStats
 
 

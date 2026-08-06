@@ -1,11 +1,9 @@
 import pytest
 
-from remnapy.exceptions import ApiError, ForbiddenError
+from remnapy.exceptions import ApiError
 from remnapy.models import (
     LoginRequestDto,
     LoginResponseDto,
-    LoginTelegramRequestDto,
-    TelegramCallbackRequestDto,
 )
 from tests.conftest import REMNAWAVE_ADMIN_PASSWORD, REMNAWAVE_ADMIN_USERNAME
 

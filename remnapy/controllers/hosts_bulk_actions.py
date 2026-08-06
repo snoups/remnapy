@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated
 from uuid import UUID
 
 from rapid_api_client import PydanticBody
@@ -13,7 +13,7 @@ class HostsBulkActionsController(BaseController):
     @post("/hosts/bulk/delete", response_class=None)
     async def delete_hosts(
         self,
-        uuids: Annotated[List[UUID], AttributeBody()],
+        uuids: Annotated[list[UUID], AttributeBody()],
     ) -> None:
         """Delete many hosts"""
         ...
@@ -21,7 +21,7 @@ class HostsBulkActionsController(BaseController):
     @post("/hosts/bulk/disable", response_class=None)
     async def disable_hosts(
         self,
-        uuids: Annotated[List[UUID], AttributeBody()],
+        uuids: Annotated[list[UUID], AttributeBody()],
     ) -> None:
         """Disable many hosts"""
         ...
@@ -29,7 +29,7 @@ class HostsBulkActionsController(BaseController):
     @post("/hosts/bulk/enable", response_class=None)
     async def enable_hosts(
         self,
-        uuids: Annotated[List[UUID], AttributeBody()],
+        uuids: Annotated[list[UUID], AttributeBody()],
     ) -> None:
         """Enable many hosts"""
         ...

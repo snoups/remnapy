@@ -39,9 +39,9 @@ classifiers = [
 PanelPage = "https://remna.st/"
 CommunityChat = "https://t.me/+xQs17zMzwCY1NzYy"
 UpdateChannel = "https://t.me/remnawave"
-RemnashopPage = "http://www.github.com/snoups/remnashop"
+RemnashopPage = "http://www.github.com/remnashop"
 RemnashopChat = "https://t.me/remna_shop"
-Homepage = "https://github.com/snoups/remnapy"
+Homepage = "https://github.com/remnashop/remnapy"
 
 [tool.poetry.group.test.dependencies]
 ruff = "^0.4.4"
@@ -62,10 +62,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff.lint]
-# Проект сознательно пишет Optional[X] и Union[X, Y], а не X | None и X | Y.
-# Формы эквивалентны, Optional/Union не устарели (в отличие от typing.List
-# и typing.Dict), а смена стиля дала бы ~600 правок без выигрыша.
-ignore = ["UP007", "UP045"]
+ignore = ["UP007", "UP045", "PIE790"]
 
 [tool.setuptools_scm]
 tag_regex = "^v(?P<version>.+)$"

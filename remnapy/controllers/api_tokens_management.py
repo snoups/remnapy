@@ -1,7 +1,6 @@
 from typing import Annotated, Union
 from uuid import UUID
 
-from httpx import Response
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
 

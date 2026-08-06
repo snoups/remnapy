@@ -1,4 +1,4 @@
-from typing import Annotated, Dict, List, Optional
+from typing import Annotated, Optional
 
 from rapid_api_client import Path, PydanticBody, Query
 
@@ -23,26 +23,36 @@ class HWIDUserController(BaseController):
         self,
         size: Annotated[
             Optional[int],
-            Query(default=None, description="Number of results to return, no more than 1000"),
+            Query(
+                default=None,
+                description="Number of results to return, no more than 1000",
+            ),
         ] = None,
         start: Annotated[
             Optional[int],
-            Query(default=None, description="Start index (offset) of the results to return, default is 0"),
+            Query(
+                default=None,
+                description="Start index (offset) of the results to return, default is 0",
+            ),
         ] = None,
         filters: Annotated[
-            Optional[List[TableFilter]],
+            Optional[list[TableFilter]],
             Query(default=None, description="Column filters"),
         ] = None,
         filter_modes: Annotated[
-            Optional[Dict[str, str]],
-            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+            Optional[dict[str, str]],
+            Query(
+                default=None, alias="filterModes", description="Per-column filter modes"
+            ),
         ] = None,
         global_filter_mode: Annotated[
             Optional[str],
-            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+            Query(
+                default=None, alias="globalFilterMode", description="Global filter mode"
+            ),
         ] = None,
         sorting: Annotated[
-            Optional[List[TableSort]],
+            Optional[list[TableSort]],
             Query(default=None, description="Sort order"),
         ] = None,
     ) -> GetUserHwidDevicesResponseDto:

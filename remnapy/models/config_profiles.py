@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
@@ -26,9 +26,9 @@ class ConfigProfileDto(BaseModel):
     uuid: UUID
     name: str
     view_position: int = Field(alias="viewPosition")
-    config: Dict[str, Any]
-    inbounds: List[InboundDto]
-    nodes: List[NodesProfileDto] = []
+    config: dict[str, Any]
+    inbounds: list[InboundDto]
+    nodes: list[NodesProfileDto] = []
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
 
@@ -38,7 +38,7 @@ class CreateConfigProfileRequestDto(BaseModel):
         str,
         StringConstraints(min_length=2, max_length=30, pattern=r"^[A-Za-z0-9_\s-]+$"),
     ]
-    config: Dict[str, Any]
+    config: dict[str, Any]
 
 
 class CreateConfigProfileResponseDto(ConfigProfileDto):
@@ -55,7 +55,7 @@ class UpdateConfigProfileRequestDto(BaseModel):
             ),
         ]
     ] = None
-    config: Optional[Dict[str, Any]] = None
+    config: Optional[dict[str, Any]] = None
 
 
 class UpdateConfigProfileResponseDto(ConfigProfileDto):
@@ -64,7 +64,7 @@ class UpdateConfigProfileResponseDto(ConfigProfileDto):
 
 class GetAllConfigProfilesResponsePaginated(BaseModel):
     total: float
-    config_profiles: List[ConfigProfileDto] = Field(alias="configProfiles")
+    config_profiles: list[ConfigProfileDto] = Field(alias="configProfiles")
 
 
 class GetAllConfigProfilesResponseDto(GetAllConfigProfilesResponsePaginated):
@@ -75,11 +75,11 @@ class GetConfigProfileByUuidResponseDto(ConfigProfileDto):
     pass
 
 
-class GetAllInboundsResponseDto(List[InboundDto]):
+class GetAllInboundsResponseDto(list[InboundDto]):
     pass
 
 
-class GetInboundsByProfileUuidResponseDto(List[InboundDto]):
+class GetInboundsByProfileUuidResponseDto(list[InboundDto]):
     pass
 
 
@@ -89,7 +89,7 @@ class ReorderConfigProfileItem(BaseModel):
 
 
 class ReorderConfigProfilesRequestDto(BaseModel):
-    items: List[ReorderConfigProfileItem]
+    items: list[ReorderConfigProfileItem]
 
 
 class ReorderConfigProfilesResponseDto(GetAllConfigProfilesResponsePaginated):

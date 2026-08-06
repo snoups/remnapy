@@ -1,4 +1,4 @@
-from typing import Annotated, Any, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
@@ -19,7 +19,7 @@ class GetSubscriptionPageConfigsData(BaseModel):
     """Data for getting all subscription page configs"""
 
     total: float
-    configs: List[SubscriptionPageConfigDto]
+    configs: list[SubscriptionPageConfigDto]
 
 
 class GetSubscriptionPageConfigsResponseDto(GetSubscriptionPageConfigsData):
@@ -89,7 +89,7 @@ class ReorderSubscriptionPageConfigItem(BaseModel):
 class ReorderSubscriptionPageConfigsRequestDto(BaseModel):
     """Request to reorder subscription page configs"""
 
-    items: List[ReorderSubscriptionPageConfigItem]
+    items: list[ReorderSubscriptionPageConfigItem]
 
 
 class ReorderSubscriptionPageConfigsResponseDto(GetSubscriptionPageConfigsData):

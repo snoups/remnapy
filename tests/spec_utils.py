@@ -54,7 +54,7 @@ def spec_endpoints() -> dict[tuple[str, str], dict[str, Any]]:
     spec = load_spec()
     result: dict[tuple[str, str], dict[str, Any]] = {}
     for path, operations in spec["paths"].items():
-        sdk_path = path[len("/api") :] if path.startswith("/api") else path
+        sdk_path = path.removeprefix("/api")
         for method, operation in operations.items():
             if method in HTTP_METHODS:
                 result[(method.upper(), sdk_path)] = operation

@@ -1,41 +1,24 @@
 """Tests for model field validation and serialization."""
-import pytest
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import uuid4
 
+from remnapy.enums import ResponseRuleVersion
 from remnapy.models import (
+    ConnectionsByNodeResponseDto,
+    ConnectionsByNodeResultResponseDto,
+    CreateInfraBillingHistoryRecordRequestDto,
+    CreateInfraBillingNodeRequestDto,
+    GetRecapResponseDto,
+    # Webhook
+    NodeSystemDto,
+    NodeVersionsDto,
     # Users
     ResolveUserRequestBodyDto,
     ResolveUserResponseDto,
-    RevokeUserRequestDto,
-    # System
-    GetRecapResponseDto,
-    RecapThisMonth,
-    RecapTotal,
-    # Connections (replaces IP Control)
-    ConnectionsByNodeResponseDto,
-    ConnectionsByNodeResultResponseDto,
-    ConnectionIp,
-    ConnectionsByNodeUser,
-    ConnectionsByNodeResult,
-    DropConnectionsRequestDto,
-    DropByUserIds,
-    DropByIpAddresses,
-    TargetAllNodes,
-    TargetSpecificNodes,
-    # Infra Billing
-    CreateInfraBillingHistoryRecordRequestDto,
-    CreateInfraBillingNodeRequestDto,
     # Subscription Settings
     ResponseRules,
     ResponseRulesSettings,
-    # Webhook
-    NodeSystemDto,
-    NodeSystemInfoDto,
-    NodeSystemStatsDto,
-    NodeVersionsDto,
 )
-from remnapy.enums import ResponseRuleVersion
 
 
 class TestResolveUserRequestBodyDto:
@@ -139,7 +122,7 @@ class TestConnectionsByNodeModels:
 class TestCreateInfraBillingHistoryRecordRequestDto:
     def test_fields_match_spec(self):
         uid = uuid4()
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=UTC)
         dto = CreateInfraBillingHistoryRecordRequestDto(
             provider_uuid=uid,
             amount=29.99,
@@ -151,7 +134,7 @@ class TestCreateInfraBillingHistoryRecordRequestDto:
 
     def test_serialization(self):
         uid = uuid4()
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=UTC)
         dto = CreateInfraBillingHistoryRecordRequestDto(
             provider_uuid=uid,
             amount=10.0,
@@ -178,7 +161,7 @@ class TestCreateInfraBillingNodeRequestDto:
         assert dto.next_billing_at is None
 
     def test_next_billing_at_provided(self):
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(tz=UTC)
         dto = CreateInfraBillingNodeRequestDto(
             node_uuid=uuid4(),
             provider_uuid=uuid4(),

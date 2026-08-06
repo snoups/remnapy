@@ -1,5 +1,4 @@
-from typing import Annotated, Dict, List, Optional, Union
-from uuid import UUID
+from typing import Annotated, Optional
 
 from rapid_api_client import Query
 
@@ -26,19 +25,23 @@ class SubscriptionRequestHistoryController(BaseController):
             int, Query(default=0, ge=0, description="Offset for pagination")
         ] = 0,
         filters: Annotated[
-            Optional[List[TableFilter]],
+            Optional[list[TableFilter]],
             Query(default=None, description="Column filters"),
         ] = None,
         filter_modes: Annotated[
-            Optional[Dict[str, str]],
-            Query(default=None, alias="filterModes", description="Per-column filter modes"),
+            Optional[dict[str, str]],
+            Query(
+                default=None, alias="filterModes", description="Per-column filter modes"
+            ),
         ] = None,
         global_filter_mode: Annotated[
             Optional[str],
-            Query(default=None, alias="globalFilterMode", description="Global filter mode"),
+            Query(
+                default=None, alias="globalFilterMode", description="Global filter mode"
+            ),
         ] = None,
         sorting: Annotated[
-            Optional[List[TableSort]],
+            Optional[list[TableSort]],
             Query(default=None, description="Sort order"),
         ] = None,
     ) -> GetAllSubscriptionRequestHistoryResponseDto:

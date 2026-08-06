@@ -7,7 +7,7 @@ import re
 
 import pytest
 
-import remnapy.models as models
+from remnapy import models
 from remnapy.enums.error_code import ErrorCode
 from tests import spec_utils
 from tests.spec_utils import (

@@ -41,7 +41,7 @@ class TestHostsBasic:
             assert isinstance(tags, GetAllHostTagsResponseDto)
             assert hasattr(tags, "tags")
         except Exception as e:
-            pytest.skip(f"Пропуск теста получения тегов: {str(e)}")
+            pytest.skip(f"Пропуск теста получения тегов: {e!s}")
 
 
 class TestHostsCRUD:
@@ -208,7 +208,7 @@ class TestHostsOrdering:
 
         except ApiError as e:
             # В случае ошибки доступа пропускаем тест
-            pytest.skip(f"Could not reorder hosts: {str(e)}")
+            pytest.skip(f"Could not reorder hosts: {e!s}")
 
 
 class TestHostsAdvanced:

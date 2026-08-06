@@ -1,4 +1,4 @@
-from typing import Annotated, List, Union
+from typing import Annotated, Union
 from uuid import UUID
 
 from rapid_api_client import Path
@@ -15,7 +15,7 @@ from remnapy.models import (
     UpdateHostRequestDto,
     UpdateHostResponseDto,
 )
-from remnapy.rapid import AttributeBody, BaseController, delete, get, patch, post
+from remnapy.rapid import BaseController, delete, get, patch, post
 
 
 class HostsController(BaseController):

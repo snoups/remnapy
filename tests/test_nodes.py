@@ -7,7 +7,6 @@ from remnapy.models import (
     GetAllNodesResponseDto,
     NodeConfigProfileRequestDto,
     NodeResponseDto,
-    NodesResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
     UpdateNodeRequestDto,

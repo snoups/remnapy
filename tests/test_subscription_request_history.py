@@ -32,7 +32,7 @@ class TestSubscriptionRequestHistory:
                 assert hasattr(record, "request_ip")
                 assert hasattr(record, "user_agent")
         except ApiError as e:
-            pytest.skip(f"Пропуск теста истории запросов подписок: {str(e)}")
+            pytest.skip(f"Пропуск теста истории запросов подписок: {e!s}")
 
     @pytest.mark.asyncio
     async def test_get_subscription_request_history_stats(self, remnawave):
@@ -54,7 +54,7 @@ class TestSubscriptionRequestHistory:
                 assert hasattr(hourly_stat, "date_time")
                 assert hasattr(hourly_stat, "request_count")
         except Exception as e:
-            pytest.skip(f"Пропуск теста статистики истории запросов подписок: {str(e)}")
+            pytest.skip(f"Пропуск теста статистики истории запросов подписок: {e!s}")
 
     @pytest.mark.asyncio
     async def test_subscription_request_history_pagination(self, remnawave):
@@ -79,4 +79,4 @@ class TestSubscriptionRequestHistory:
                     # Проверяем, что нет пересечений между страницами
                     assert len(set(first_ids).intersection(set(second_ids))) == 0
         except Exception as e:
-            pytest.skip(f"Пропуск теста пагинации: {str(e)}")
+            pytest.skip(f"Пропуск теста пагинации: {e!s}")
