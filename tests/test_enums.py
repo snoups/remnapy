@@ -1,21 +1,17 @@
 """Tests for enum completeness against the OpenAPI spec."""
-import pytest
 
-from remnawave.enums import (
+from remnapy.enums import (
     ALPN,
     ClientType,
     Fingerprint,
     OAuth2Provider,
+    ResponseRuleConditionOperator,
+    ResponseRuleOperator,
+    ResponseType,
     SecurityLayer,
     TemplateType,
     TrafficLimitStrategy,
     UserStatus,
-    ResponseRuleConditionOperator,
-    ResponseRuleOperator,
-    ResponseRuleVersion,
-    ResponseType,
-    SubscriptionType,
-    TTorrentBlockerEvents,
 )
 
 

@@ -93,7 +93,15 @@ class ErrorCode(StrEnum):
     DELETE_USERS_BULK_ERROR = "A086"
     GET_USERS_BULK_ERROR = "A087"
     CREATE_TEMPLATE_ERROR = "A088"
-    TEMPLATE_NOT_FOUND = "A089"
+    # A089 is documented twice in the 3.2.1 spec with two unrelated messages:
+    #   - "Bulk update all users error"                       (500 Internal Server Error)
+    #   - "LIMITED and EXPIRED statuses are not allowed
+    #      to be set manually."                               (400 Bad Request)
+    # Neither is "template not found", which is what this member used to be
+    # called. A second member sharing the value "A089" would be a silent
+    # StrEnum alias rather than a distinct member, so both meanings are
+    # recorded here instead.
+    BULK_UPDATE_ALL_USERS_ERROR = "A089"
     UPDATE_TEMPLATE_ERROR = "A090"
     DELETE_TEMPLATE_ERROR = "A091"
     TEMPLATE_NAME_ALREADY_EXISTS = "A092"
@@ -184,14 +192,77 @@ class ErrorCode(StrEnum):
     CALCULATE_BILLING_ERROR = "A177"
     BILLING_PERIOD_ERROR = "A178"
 
-    # Добавляем новые коды из failed тестов
     CREATE_SUBSCRIPTION_TEMPLATE_ERROR = "A179"
     SUBSCRIPTION_TEMPLATE_NOT_FOUND = "A180"
     UPDATE_SUBSCRIPTION_TEMPLATE_ERROR = "A181"
     DELETE_SUBSCRIPTION_TEMPLATE_ERROR = "A182"
     GET_SUBSCRIPTION_TEMPLATE_ERROR = "A183"
 
-    # Валидационные ошибки
+    # Spec 3.2.1 codes (A184-A236). Some messages repeat names already taken
+    # in this class — the panel reused old wording under new codes — so those
+    # members carry a _2 suffix.
+    UPDATE_EXTERNAL_SQUAD_ERROR_2 = "A184"
+    DELETE_EXTERNAL_SQUAD_ERROR_2 = "A185"
+    ADD_USERS_TO_EXTERNAL_SQUAD_ERROR_2 = "A186"
+    REMOVE_USERS_FROM_EXTERNAL_SQUAD_ERROR_2 = "A187"
+    GET_EXTERNAL_SQUAD_BY_UUID_ERROR = "A188"
+    EXTERNAL_SQUAD_NAME_ALREADY_EXISTS_2 = "A189"
+    NAME_OR_TEMPLATES_ARE_REQUIRED = "A190"
+    PASSKEY_NOT_FOUND_2 = "A191"
+    GET_REMNAWAVE_SETTINGS_ERROR_2 = "A192"
+    UPDATE_REMNAWAVE_SETTINGS_ERROR_2 = "A193"
+    PASSKEYS_NOT_CONFIGURED = "A194"
+    PASSKEYS_NOT_ENABLED_PLEASE_ENABLE_IT_FIRST = "A195"
+    GENERATE_PASSKEY_REGISTRATION_OPTIONS_ERROR = "A196"
+    VERIFY_PASSKEY_REGISTRATION_ERROR = "A197"
+    GET_ACTIVE_PASSKEYS_ERROR = "A198"
+    DELETE_PASSKEY_ERROR_2 = "A199"
+    GET_COMPUTED_CONFIG_PROFILE_BY_UUID_ERROR = "A200"
+    RESET_NODE_TRAFFIC_ERROR = "A201"
+    UPDATE_PASSKEY_ERROR = "A202"
+    GENERIC_REORDER_ERROR = "A203"
+    HWID_DEVICE_NOT_FOUND = "A204"
+    BULK_EXTEND_EXPIRATION_DATE_ERROR = "A205"
+    SUBSCRIPTION_PAGE_CONFIG_NOT_FOUND = "A206"
+    GET_SUBSCRIPTION_PAGE_CONFIG_BY_UUID_ERROR = "A207"
+    GET_ALL_SUBSCRIPTION_PAGE_CONFIGS_ERROR = "A208"
+    RESERVED_CONFIG_NAME = "A209"
+    CONFIG_NAME_ALREADY_EXISTS = "A210"
+    UPDATE_SUBSCRIPTION_PAGE_CONFIG_ERROR = "A211"
+    RESERVED_SUBPAGE_CONFIG_CANNOT_BE_DELETED = "A212"
+    DELETE_SUBSCRIPTION_PAGE_CONFIG_ERROR = "A213"
+    CREATE_SUBSCRIPTION_PAGE_CONFIG_ERROR = "A214"
+    INVALID_SUBSCRIPTION_PAGE_CONFIG = "A215"
+    INVALID_REMNAWAVE_INJECTOR = "A216"
+    JOB_CREATION_FAILED = "A217"
+    JOB_RESULT_FETCH_FAILED_OR_JOB_NOT_FOUND = "A218"
+    # A219 is documented twice in the spec with two unrelated messages:
+    # RemnawaveInternalServerErrorDto -> "Get all node plugins error" (below)
+    # RemnawaveNotFoundErrorDto -> "Connected nodes not found"
+    # A second member can't be added for the second meaning: StrEnum treats
+    # any member assigned an already-used value as an alias of the first
+    # (same object, `.name` resolves back to GET_ALL_NODE_PLUGINS_ERROR,
+    # dropped from iteration) rather than a distinct, independently-named
+    # member - verified with a throwaway StrEnum before settling on this
+    # comment instead of a colliding member.
+    GET_ALL_NODE_PLUGINS_ERROR = "A219"
+    NODE_PLUGIN_NOT_FOUND = "A220"
+    GET_NODE_PLUGIN_BY_UUID_ERROR = "A221"
+    NODE_PLUGIN_NAME_ALREADY_EXISTS = "A223"
+    UPDATE_NODE_PLUGIN_ERROR = "A224"
+    CREATE_NODE_PLUGIN_ERROR = "A225"
+    METADATA_NOT_FOUND = "A226"
+    GET_TORRENT_BLOCKER_REPORTS_ERROR = "A227"
+    UPDATE_HOSTS_ERROR = "A228"
+    ONE_OR_MORE_PROVIDED_API_TOKEN_SCOPES_ARE_INVALID = "A229"
+    EITHER_NODEUUID_OR_NAME_MUST_BE_PROVIDED = "A230"
+    GET_INTERNAL_SQUAD_USAGE_ERROR = "A232"
+    ADD_MANY_USERS_TO_INTERNAL_SQUAD_ERROR = "A233"
+    REMOVE_MANY_USERS_FROM_INTERNAL_SQUAD_ERROR = "A234"
+    START_DATE_MUST_BE_BEFORE_OR_EQUAL_TO_END_DATE = "A235"
+    GET_STATS_DIGEST_ERROR = "A236"
+
+    # Validation errors
     VALIDATION_ERROR = "V001"
     INVALID_UUID_FORMAT = "V002"
     INVALID_EMAIL_FORMAT = "V003"
@@ -203,14 +274,14 @@ class ErrorCode(StrEnum):
     INVALID_REGEX_PATTERN = "V009"
     NUMERIC_VALIDATION_ERROR = "V010"
 
-    # Сетевые ошибки
+    # Network errors
     NETWORK_ERROR = "N003"
     TIMEOUT_ERROR = "N004"
     CONNECTION_ERROR = "N005"
     DNS_ERROR = "N006"
     SSL_ERROR = "N007"
 
-    # Ошибки аутентификации и авторизации
+    # Authentication and authorization errors
     INVALID_TOKEN = "AUTH001"
     TOKEN_EXPIRED = "AUTH002"
     INVALID_CREDENTIALS = "AUTH003"
@@ -218,7 +289,7 @@ class ErrorCode(StrEnum):
     ACCOUNT_LOCKED = "AUTH005"
     PASSWORD_COMPLEXITY_ERROR = "AUTH006"
 
-    # Ошибки бизнес-логики
+    # Business-logic errors
     TRAFFIC_LIMIT_EXCEEDED = "BL001"
     USER_LIMIT_EXCEEDED = "BL002"
     SUBSCRIPTION_EXPIRED = "BL003"
@@ -226,7 +297,7 @@ class ErrorCode(StrEnum):
     QUOTA_EXCEEDED = "BL005"
     RESOURCE_LOCKED = "BL006"
 
-    # Общие коды
+    # Generic codes
     UNKNOWN = "UNKNOWN"
     NOT_IMPLEMENTED = "NOT_IMPLEMENTED"
     MAINTENANCE_MODE = "MAINTENANCE"

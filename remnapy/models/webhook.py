@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from pydantic.alias_generators import to_camel
 
 from remnapy.enums import (
@@ -11,6 +11,7 @@ from remnapy.enums import (
     TNodeEvents,
     TResetPeriods,
     TServiceEvents,
+    TSubpageConfigAction,
     TTorrentBlockerEvents,
     TUserEvents,
     TUserHwidDevicesEvents,
@@ -18,68 +19,75 @@ from remnapy.enums import (
 )
 from remnapy.models.node_plugins import TorrentBlockerReportPayloadDto
 
-# ---------------- USER ---------------- #
+# ---------------- SHARED ---------------- #
 
 
-class LastConnectedNodeDto(BaseModel):
-    node_name: str
-    country_code: str
-    connected_at: datetime
+class WebhookMetaDto(BaseModel):
+    """Extra metadata for notification-style events (null for most events)."""
+
+    expiration: Optional[int] = None
+    not_connected_after_hours: Optional[int] = None
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class InternalSquadDto(BaseModel):
+# ---------------- USER ---------------- #
+
+
+class WebhookInternalSquadDto(BaseModel):
+    """Internal squad reference (uuid + name) attached to a user"""
+
     uuid: UUID
     name: str
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class UserTrafficDto(BaseModel):
+class WebhookUserTrafficDto(BaseModel):
     """User traffic information for webhooks"""
 
     used_traffic_bytes: int
     lifetime_used_traffic_bytes: int
-    online_at: Optional[datetime] = None
-    first_connected_at: Optional[datetime] = None
-    last_connected_node_uuid: Optional[UUID] = None
+    online_at: Optional[datetime]
+    first_connected_at: Optional[datetime]
+    last_connected_node_uuid: Optional[UUID]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class BaseUserDto(BaseModel):
-    uuid: UUID
+    """Core user fields shared by every webhook that carries a user record"""
+
     id: int
     short_uuid: str
     username: str
     status: TUsersStatus
-    user_traffic: UserTrafficDto
 
     traffic_limit_bytes: float
     traffic_limit_strategy: TResetPeriods
 
     expire_at: datetime
-    sub_revoked_at: Optional[datetime] = None
-    last_traffic_reset_at: Optional[datetime] = None
+    telegram_id: Optional[int]
+    email: Optional[str]
+    description: Optional[str]
+    tag: Optional[str]
+    hwid_device_limit: Optional[int]
+    external_squad_uuid: Optional[UUID]
 
     trojan_password: str
     vless_uuid: UUID
     ss_password: str
 
-    description: Optional[str] = None
-    tag: Optional[str] = None
-    telegram_id: Optional[int] = None
-    email: Optional[str] = None
-    external_squad_uuid: Optional[UUID] = None
-
-    hwid_device_limit: Optional[int] = None
     last_triggered_threshold: int
-
-    subscription_url: str
+    sub_revoked_at: Optional[datetime]
+    last_traffic_reset_at: Optional[datetime]
 
     created_at: datetime
     updated_at: datetime
+
+    subscription_url: str
+
+    user_traffic: WebhookUserTrafficDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -111,15 +119,21 @@ class BaseUserDto(BaseModel):
 
 
 class UserDto(BaseUserDto):
-    active_internal_squads: List[InternalSquadDto] = Field(default_factory=list)
-    last_connected_node: Optional[LastConnectedNodeDto] = None
+    """Full user payload for webhooks: `BaseUserDto` plus active internal squads"""
+
+    active_internal_squads: list[WebhookInternalSquadDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class UserEventDto(BaseModel):
-    event_name: TUserEvents
-    user: UserDto
+    """Envelope for `user.*` webhook events"""
+
+    scope: Literal["user"]
+    event: TUserEvents
+    timestamp: datetime
+    data: UserDto
+    meta: Optional[WebhookMetaDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -128,12 +142,15 @@ class UserEventDto(BaseModel):
 
 
 class HwidUserDeviceDto(BaseModel):
+    """HWID device fingerprint attached to a user"""
+
     hwid: str
-    user_uuid: UUID
-    platform: Optional[str] = None
-    os_version: Optional[str] = None
-    device_model: Optional[str] = None
-    user_agent: Optional[str] = None
+    user_id: int
+    platform: Optional[str]
+    os_version: Optional[str]
+    device_model: Optional[str]
+    user_agent: Optional[str]
+    request_ip: Optional[str]
 
     created_at: datetime
     updated_at: datetime
@@ -141,9 +158,22 @@ class HwidUserDeviceDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
+class UserHwidDeviceEventDataDto(BaseModel):
+    """Data payload for `user_hwid_devices.*` webhook events"""
+
+    user: UserDto
+    hwid_user_device: HwidUserDeviceDto
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
 class UserHwidDeviceEventDto(BaseModel):
-    data: dict
-    event_name: TUserHwidDevicesEvents
+    """Envelope for `user_hwid_devices.*` webhook events"""
+
+    scope: Literal["user_hwid_devices"]
+    event: TUserHwidDevicesEvents
+    timestamp: datetime
+    data: UserHwidDeviceEventDataDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -153,22 +183,30 @@ class UserHwidDeviceEventDto(BaseModel):
         user: UserDto,
         hwid_device: HwidUserDeviceDto,
         event: TUserHwidDevicesEvents,
-    ):
-        return cls(data={"user": user, "hwidUserDevice": hwid_device}, event_name=event)
+        timestamp: datetime,
+    ) -> "UserHwidDeviceEventDto":
+        return cls(
+            scope="user_hwid_devices",
+            event=event,
+            timestamp=timestamp,
+            data=UserHwidDeviceEventDataDto(user=user, hwid_user_device=hwid_device),
+        )
 
     @property
     def user(self) -> UserDto:
-        return self.data["user"]
+        return self.data.user
 
     @property
     def hwid_user_device(self) -> HwidUserDeviceDto:
-        return self.data["hwidUserDevice"]
+        return self.data.hwid_user_device
 
 
 # ---------------- SERVICE EVENTS ---------------- #
 
 
 class LoginAttemptDto(BaseModel):
+    """Failed/successful login attempt details for `service.login_attempt_*` events"""
+
     username: str
     ip: str
     user_agent: str
@@ -178,9 +216,45 @@ class LoginAttemptDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
+class ServiceApiTokenDto(BaseModel):
+    """API token summary for `service.api_token_*` webhook events"""
+
+    name: str
+    uuid: UUID
+    expire_at: datetime
+    scopes: list[str]
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
+class ServiceSubpageConfigDto(BaseModel):
+    """Subpage config change summary for `service.subpage_config_changed` events"""
+
+    action: TSubpageConfigAction
+    uuid: UUID
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
+class ServiceEventDataDto(BaseModel):
+    """Data payload for `service.*` webhook events; which field is populated
+    depends on `event`."""
+
+    login_attempt: Optional[LoginAttemptDto] = None
+    panel_version: Optional[str] = None
+    subpage_config: Optional[ServiceSubpageConfigDto] = None
+    api_token: Optional[ServiceApiTokenDto] = None
+
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
 class ServiceEventDto(BaseModel):
-    event_name: TServiceEvents
-    data: dict
+    """Envelope for `service.*` webhook events"""
+
+    scope: Literal["service"]
+    event: TServiceEvents
+    timestamp: datetime
+    data: ServiceEventDataDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -189,6 +263,8 @@ class ServiceEventDto(BaseModel):
 
 
 class ConfigProfileInboundDto(BaseModel):
+    """Inbound active on a node's config profile"""
+
     uuid: UUID
     profile_uuid: UUID
 
@@ -203,32 +279,16 @@ class ConfigProfileInboundDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class InfraBillingHistoryDto(BaseModel):
-    total_amount: int
-    total_bills: int
+class WebhookInfraProviderDto(BaseModel):
+    """Infra provider hosting a node, as sent in node.* webhook events"""
 
-    model_config = {"alias_generator": to_camel, "populate_by_name": True}
-
-
-class InfraBillingNodeDto(BaseModel):
-    node_uuid: UUID
-    name: str
-    country_code: str
-
-    model_config = {"alias_generator": to_camel, "populate_by_name": True}
-
-
-class InfraProviderDto(BaseModel):
-    name: str
     uuid: UUID
-    favicon_link: Optional[str] = None
-    login_url: Optional[str] = None
+    name: str
+    favicon_link: Optional[str]
+    login_url: Optional[str]
 
     created_at: datetime
     updated_at: datetime
-
-    billing_history: Optional[InfraBillingHistoryDto] = None
-    billing_nodes: Optional[List[InfraBillingNodeDto]] = None
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -236,13 +296,15 @@ class InfraProviderDto(BaseModel):
 class WebhookNodeConfigProfileDto(BaseModel):
     """Nested config profile for node webhook events"""
 
-    active_config_profile_uuid: Optional[UUID] = None
-    active_inbounds: List[ConfigProfileInboundDto] = Field(default_factory=list)
+    active_config_profile_uuid: Optional[UUID]
+    active_inbounds: list[ConfigProfileInboundDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class NodeSystemInfoDto(BaseModel):
+    """Static system info reported by a node"""
+
     arch: str
     cpus: int
     cpu_model: str
@@ -252,12 +314,14 @@ class NodeSystemInfoDto(BaseModel):
     release: str
     type: str
     version: str
-    network_interfaces: List[str]
+    network_interfaces: list[str]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class NodeSystemInterfaceDto(BaseModel):
+    """Per-interface network throughput counters"""
+
     interface: str
     rx_bytes_per_sec: float
     tx_bytes_per_sec: float
@@ -268,16 +332,20 @@ class NodeSystemInterfaceDto(BaseModel):
 
 
 class NodeSystemStatsDto(BaseModel):
+    """Live resource usage stats reported by a node"""
+
     memory_free: float
     memory_used: float
     uptime: float
-    load_avg: List[float]
-    interface: Optional[NodeSystemInterfaceDto] = None
+    load_avg: list[float]
+    interface: Optional[NodeSystemInterfaceDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class NodeSystemDto(BaseModel):
+    """System info + live stats reported by a node"""
+
     info: NodeSystemInfoDto
     stats: NodeSystemStatsDto
 
@@ -285,49 +353,57 @@ class NodeSystemDto(BaseModel):
 
 
 class NodeVersionsDto(BaseModel):
+    """Xray/node-agent versions running on a node"""
+
     xray: str
     node: str
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class NodeDto(BaseModel):
+class WebhookNodeDto(BaseModel):
+    """Node entity as sent in node.* and torrent_blocker.report webhook events"""
+
     uuid: UUID
+    id: int
     name: str
     address: str
-    port: Optional[int] = None
+    port: Optional[int]
+    proxy_url: Optional[str]
     is_connected: bool
-    is_connecting: bool
     is_disabled: bool
-    last_status_change: Optional[datetime] = None
-    last_status_message: Optional[str] = None
-
-    xray_uptime: float = 0
-    users_online: Optional[float] = None
+    is_connecting: bool
+    last_status_change: Optional[datetime]
+    last_status_message: Optional[str]
 
     is_traffic_tracking_active: bool
-    traffic_reset_day: Optional[int] = None
-    traffic_limit_bytes: Optional[float] = None
-    traffic_used_bytes: Optional[float] = None
-    notify_percent: Optional[int] = None
+    traffic_reset_day: Optional[int]
+    traffic_limit_bytes: Optional[float]
+    traffic_used_bytes: Optional[float]
+    notify_percent: Optional[int]
 
     view_position: int
     country_code: str
     consumption_multiplier: float
+    node_consumption_multiplier: float
 
-    tags: List[str] = Field(default_factory=list)
+    tags: list[str]
 
     created_at: datetime
     updated_at: datetime
 
     config_profile: WebhookNodeConfigProfileDto
 
-    provider_uuid: Optional[UUID] = None
-    provider: Optional[InfraProviderDto] = None
+    provider_uuid: Optional[UUID]
+    provider: Optional[WebhookInfraProviderDto]
 
-    active_plugin_uuid: Optional[UUID] = None
-    system: Optional[NodeSystemDto] = None
-    versions: Optional[NodeVersionsDto] = None
+    active_plugin_uuid: Optional[UUID]
+    system: Optional[NodeSystemDto]
+    versions: Optional[NodeVersionsDto]
+
+    xray_uptime: float
+    users_online: float
+    note: Optional[str]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -337,13 +413,17 @@ class NodeDto(BaseModel):
         return self.config_profile.active_config_profile_uuid
 
     @property
-    def active_inbounds(self) -> List[ConfigProfileInboundDto]:
+    def active_inbounds(self) -> list[ConfigProfileInboundDto]:
         return self.config_profile.active_inbounds
 
 
 class NodeEventDto(BaseModel):
-    event_name: TNodeEvents
-    data: NodeDto
+    """Envelope for `node.*` webhook events"""
+
+    scope: Literal["node"]
+    event: TNodeEvents
+    timestamp: datetime
+    data: WebhookNodeDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -355,13 +435,19 @@ class NodeEventDto(BaseModel):
 
 
 class ErrorDto(BaseModel):
+    """Error details payload for `errors.*` webhook events"""
+
     description: str
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
 class CustomErrorEventDto(BaseModel):
-    event_name: TErrorsEvents
+    """Envelope for `errors.*` webhook events"""
+
+    scope: Literal["errors"]
+    event: TErrorsEvents
+    timestamp: datetime
     data: ErrorDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
@@ -371,6 +457,8 @@ class CustomErrorEventDto(BaseModel):
 
 
 class BillingNodeDto(BaseModel):
+    """Infra-billing node payment reminder payload for `crm.*` webhook events"""
+
     provider_name: str
     node_name: str
     next_billing_at: datetime
@@ -380,7 +468,11 @@ class BillingNodeDto(BaseModel):
 
 
 class CrmEventDto(BaseModel):
-    event_name: TCRMEvents
+    """Envelope for `crm.*` webhook events"""
+
+    scope: Literal["crm"]
+    event: TCRMEvents
+    timestamp: datetime
     data: BillingNodeDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
@@ -390,7 +482,9 @@ class CrmEventDto(BaseModel):
 
 
 class TorrentBlockerReportDto(BaseModel):
-    node: NodeDto
+    """Torrent-blocker report bundle: node, user and blocker report payload"""
+
+    node: WebhookNodeDto
     user: UserDto
     report: TorrentBlockerReportPayloadDto
 
@@ -398,7 +492,11 @@ class TorrentBlockerReportDto(BaseModel):
 
 
 class TorrentBlockerEventDto(BaseModel):
-    event_name: TTorrentBlockerEvents
+    """Envelope for `torrent_blocker.*` webhook events"""
+
+    scope: Literal["torrent_blocker"]
+    event: TTorrentBlockerEvents
+    timestamp: datetime
     data: TorrentBlockerReportDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
@@ -407,22 +505,16 @@ class TorrentBlockerEventDto(BaseModel):
 # ---------------- WEBHOOK PAYLOAD ---------------- #
 
 
-class WebhookMetaDto(BaseModel):
-    """Extra metadata for notification-style events (null for most events)."""
-
-    expiration: Optional[int] = None
-    not_connected_after_hours: Optional[int] = None
-
-    model_config = {"alias_generator": to_camel, "populate_by_name": True}
-
-
 class WebhookPayloadDto(BaseModel):
+    """Convenience wrapper the SDK builds from any raw webhook body, exposing
+    a typed `data` regardless of which of the seven event scopes it is."""
+
     event: str
     timestamp: datetime
     meta: Optional[WebhookMetaDto] = None
     data: Union[
         UserDto,
-        NodeDto,
+        WebhookNodeDto,
         HwidUserDeviceDto,
         LoginAttemptDto,
         UserHwidDeviceEventDto,
@@ -438,6 +530,12 @@ class WebhookPayloadDto(BaseModel):
         event = payload.get("event", "")
         data_raw = payload.get("data", {})
 
+        timestamp_raw = payload.get("timestamp")
+        if isinstance(timestamp_raw, (int, float)):
+            timestamp = datetime.fromtimestamp(timestamp_raw)
+        else:
+            timestamp = timestamp_raw
+
         if event.startswith("user."):
             data = UserDto(**data_raw)
         elif event.startswith("user_hwid_devices."):
@@ -447,14 +545,15 @@ class WebhookPayloadDto(BaseModel):
                 user=user,
                 hwid_device=hwid_device,
                 event=event,
+                timestamp=timestamp,
             )
         elif event.startswith("node."):
-            data = NodeDto(**data_raw)
+            data = WebhookNodeDto(**data_raw)
         elif event.startswith("service."):
             if event.startswith("service.login_attempt"):
                 login_attempt_data = data_raw.get("loginAttempt", {})
                 data = LoginAttemptDto(**login_attempt_data)
-            else:  # service.panel_started - содержит пустой json
+            else:  # service.panel_started carries an empty json object
                 data = data_raw
         elif event.startswith("errors."):
             data = ErrorDto(**data_raw)
@@ -464,12 +563,6 @@ class WebhookPayloadDto(BaseModel):
             data = TorrentBlockerReportDto(**data_raw)
         else:
             data = data_raw
-
-        timestamp_raw = payload.get("timestamp")
-        if isinstance(timestamp_raw, (int, float)):
-            timestamp = datetime.fromtimestamp(timestamp_raw)
-        else:
-            timestamp = timestamp_raw
 
         meta_raw = payload.get("meta")
         meta = WebhookMetaDto(**meta_raw) if meta_raw else None

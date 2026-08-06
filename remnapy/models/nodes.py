@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel, StringConstraints
@@ -16,10 +16,6 @@ class ExcludedInbounds(BaseModel):
     security: Optional[str] = None
 
 
-class RestartEventResponse(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
 class DeleteResponse(BaseModel):
     is_deleted: bool = Field(alias="isDeleted")
 
@@ -32,7 +28,7 @@ class ReorderNodeItem(BaseModel):
 class GetAllNodesTagsResponseDto(BaseModel):
     """Response with all nodes tags"""
 
-    tags: List[str]
+    tags: list[str]
 
 
 class NodeProviderDto(BaseModel):
@@ -48,12 +44,12 @@ class NodeProviderDto(BaseModel):
 
 class NodeConfigProfileDto(BaseModel):
     active_config_profile_uuid: Optional[UUID] = Field(alias="activeConfigProfileUuid")
-    active_inbounds: List[InboundsDto] = Field(alias="activeInbounds")
+    active_inbounds: list[InboundsDto] = Field(alias="activeInbounds")
 
 
 class NodeConfigProfileRequestDto(BaseModel):
     active_config_profile_uuid: UUID = Field(alias="activeConfigProfileUuid")
-    active_inbounds: List[UUID] = Field(alias="activeInbounds")
+    active_inbounds: list[UUID] = Field(alias="activeInbounds")
 
 
 class CreateNodeRequestDto(BaseModel):
@@ -89,7 +85,7 @@ class CreateNodeRequestDto(BaseModel):
     provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
     note: Annotated[Optional[str], StringConstraints(max_length=255)] = None
     tags: Optional[
-        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+        list[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, serialization_alias="tags", max_length=10)
     active_plugin_uuid: Optional[UUID] = Field(
         None, serialization_alias="activePluginUuid"
@@ -102,7 +98,7 @@ class UpdateNodeRequestDto(BaseModel):
         None
     )
     address: Annotated[Optional[str], StringConstraints(min_length=2)] = None
-    port: Optional[float] = Field(None, ge=1, le=65535)  # ИСПРАВЛЕН тип на float
+    port: Optional[float] = Field(None, ge=1, le=65535)
     proxy_url: Optional[str] = Field(None, serialization_alias="proxyUrl")
     is_traffic_tracking_active: Optional[bool] = Field(
         None, serialization_alias="isTrafficTrackingActive"
@@ -131,7 +127,7 @@ class UpdateNodeRequestDto(BaseModel):
     provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
     note: Annotated[Optional[str], StringConstraints(max_length=255)] = None
     tags: Optional[
-        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+        list[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, serialization_alias="tags", max_length=10)
     active_plugin_uuid: Optional[UUID] = Field(
         None, serialization_alias="activePluginUuid"
@@ -139,11 +135,12 @@ class UpdateNodeRequestDto(BaseModel):
 
 
 class ReorderNodeRequestDto(BaseModel):
-    nodes: List[ReorderNodeItem]
+    nodes: list[ReorderNodeItem]
 
 
 class NodeResponseDto(BaseModel):
     uuid: UUID
+    id: int
     name: str
     address: str
     port: Optional[int] = None
@@ -174,7 +171,7 @@ class NodeResponseDto(BaseModel):
     config_profile: NodeConfigProfileDto = Field(alias="configProfile")
     provider_uuid: Optional[UUID] = Field(None, alias="providerUuid")
     provider: Optional[NodeProviderDto] = None
-    tags: List[str] = Field(default_factory=list, alias="tags")
+    tags: list[str] = Field(default_factory=list, alias="tags")
     active_plugin_uuid: Optional[UUID] = Field(None, alias="activePluginUuid")
 
 
@@ -190,8 +187,8 @@ class GetOneNodeResponseDto(NodeResponseDto):
     pass
 
 
-class GetAllNodesResponseDto(RootModel[List[NodeResponseDto]]):
-    root: List[NodeResponseDto]
+class GetAllNodesResponseDto(RootModel[list[NodeResponseDto]]):
+    root: list[NodeResponseDto]
 
     def __iter__(self):
         return iter(self.root)
@@ -216,20 +213,8 @@ class DisableNodeResponseDto(NodeResponseDto):
     pass
 
 
-class RestartNodeResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class RestartAllNodesResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class ResetNodeTrafficResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class ReorderNodeResponseDto(RootModel[List[NodeResponseDto]]):
-    root: List[NodeResponseDto]
+class ReorderNodeResponseDto(RootModel[list[NodeResponseDto]]):
+    root: list[NodeResponseDto]
 
     def __iter__(self):
         return iter(self.root)
@@ -246,13 +231,6 @@ class ReorderNodeResponseDto(RootModel[List[NodeResponseDto]]):
         return len(self.root)
 
 
-class DeleteNodeResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-    def __bool__(self):
-        return self.is_deleted
-
-
 class RestartNodeRequestBodyDto(BaseModel):
     force_restart: bool = Field(default=False, serialization_alias="forceRestart")
 
@@ -265,21 +243,17 @@ class ResetNodeTrafficRequestDto(BaseModel):
     uuid: Union[str, UUID] = Field(alias="uuid")
 
 
-class ResetNodeTrafficResponseDto(RestartEventResponse):
-    pass
-
-
 class ConfigProfileData(BaseModel):
     """Config profile data for modification"""
 
     active_config_profile_uuid: str = Field(alias="activeConfigProfileUuid")
-    active_inbounds: List[str] = Field(alias="activeInbounds", min_length=1)
+    active_inbounds: list[str] = Field(alias="activeInbounds", min_length=1)
 
 
 class ProfileModificationRequestDto(BaseModel):
     """Request to modify profiles for multiple nodes"""
 
-    uuids: List[str] = Field(min_length=1)
+    uuids: list[str] = Field(min_length=1)
     config_profile: ConfigProfileData = Field(alias="configProfile")
 
 
@@ -289,13 +263,7 @@ class ProfileModificationResponseData(BaseModel):
     event_sent: bool = Field(alias="eventSent")
 
 
-class ProfileModificationResponseDto(ProfileModificationResponseData):
-    """Profile modification response"""
-
-    pass
-
-
-# Для обратной совместимости
+# Legacy aliases
 RestartAllNodesRequestDto = RestartAllNodesRequestBodyDto
 NodesResponseDto = NodeResponseDto
 
@@ -306,14 +274,8 @@ NodeBulkActionType = Literal["ENABLE", "DISABLE", "RESTART", "RESET_TRAFFIC"]
 class NodesBulkActionsRequestDto(BaseModel):
     """Request for performing bulk actions on nodes"""
 
-    uuids: List[UUID] = Field(min_length=1)
+    uuids: list[UUID] = Field(min_length=1)
     action: NodeBulkActionType = Field(description="Action to perform on nodes")
-
-
-class NodesBulkActionsResponseDto(BaseModel):
-    """Response after performing bulk actions on nodes"""
-
-    event_sent: bool = Field(alias="eventSent")
 
 
 class NodesUpdateFieldsDto(BaseModel):
@@ -330,7 +292,7 @@ class NodesUpdateFieldsDto(BaseModel):
     )
     provider_uuid: Optional[UUID] = Field(None, serialization_alias="providerUuid")
     tags: Optional[
-        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+        list[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, serialization_alias="tags", max_length=10)
     active_plugin_uuid: Optional[UUID] = Field(
         None, serialization_alias="activePluginUuid"
@@ -341,11 +303,5 @@ class NodesUpdateFieldsDto(BaseModel):
 class BulkNodesUpdateRequestDto(BaseModel):
     """Request to update many nodes at once"""
 
-    uuids: List[UUID] = Field(min_length=1)
+    uuids: list[UUID] = Field(min_length=1)
     fields: NodesUpdateFieldsDto
-
-
-class BulkNodesUpdateResponseDto(NodesBulkActionsResponseDto):
-    """OpenAPI alias for bulk nodes update response"""
-
-    pass

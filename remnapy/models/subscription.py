@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -36,7 +36,6 @@ class UserTrafficDto(BaseModel):
 
 
 class UserResponseDto(BaseModel):
-    uuid: UUID
     id: Optional[int] = None
     short_uuid: str = Field(alias="shortUuid")
     username: str
@@ -61,7 +60,7 @@ class UserResponseDto(BaseModel):
     last_triggered_threshold: int = Field(default=0, alias="lastTriggeredThreshold")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    active_internal_squads: List[ActiveInternalSquadDto] = Field(
+    active_internal_squads: list[ActiveInternalSquadDto] = Field(
         alias="activeInternalSquads"
     )
     subscription_url: str = Field(alias="subscriptionUrl")
@@ -105,9 +104,6 @@ class ConvertedUserInfo(BaseModel):
     traffic_limit: str = Field(alias="trafficLimit")
     traffic_used: str = Field(alias="trafficUsed")
     lifetime_traffic_used: str = Field(alias="lifetimeTrafficUsed")
-    # 2.8.0: isHwidLimited (bool) заменён на объект hwidCheckup. Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    is_hwid_limited: Optional[bool] = Field(None, alias="isHwidLimited")
     hwid_checkup: Optional[HwidCheckupInfo] = Field(None, alias="hwidCheckup")
 
 
@@ -130,7 +126,7 @@ class RawHostProtocolOptions(BaseModel):
 
 
 class RawHostDbData(BaseModel):
-    raw_inbound: Optional[Dict[str, Any]] = Field(None, alias="rawInbound")
+    raw_inbound: Optional[dict[str, Any]] = Field(None, alias="rawInbound")
     inbound_tag: str = Field(alias="inboundTag")
     uuid: str
     config_profile_uuid: Optional[str] = Field(None, alias="configProfileUuid")
@@ -149,7 +145,7 @@ class RawSettings(BaseModel):
     """Raw settings for network configuration"""
 
     header_type: Optional[str] = Field(None, alias="headerType")
-    request: Optional[Dict[str, Any]] = None
+    request: Optional[dict[str, Any]] = None
 
 
 class RawHost(BaseModel):
@@ -172,11 +168,11 @@ class RawHost(BaseModel):
     additional_params: Optional[RawHostAdditionalParams] = Field(
         None, alias="additionalParams"
     )
-    x_http_extra_params: Optional[Dict[str, Any]] = Field(
+    x_http_extra_params: Optional[dict[str, Any]] = Field(
         None, alias="xHttpExtraParams"
     )
-    mux_params: Optional[Dict[str, Any]] = Field(None, alias="muxParams")
-    sockopt_params: Optional[Dict[str, Any]] = Field(None, alias="sockoptParams")
+    mux_params: Optional[dict[str, Any]] = Field(None, alias="muxParams")
+    sockopt_params: Optional[dict[str, Any]] = Field(None, alias="sockoptParams")
     server_description: Optional[str] = Field(None, alias="serverDescription")
     flow: Optional[str] = None
     allow_insecure: Optional[bool] = Field(None, alias="allowInsecure")
@@ -188,7 +184,124 @@ class RawHost(BaseModel):
         None, alias="protocolOptions"
     )
     db_data: Optional[RawHostDbData] = Field(None, alias="dbData")
-    xray_json_template: Optional[Dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
+    xray_json_template: Optional[dict[str, Any]] = Field(None, alias="xrayJsonTemplate")
+
+
+class ResolvedProtocolOptions(BaseModel):
+    """Protocol-specific options, shape depends on `protocol` (vless/trojan/shadowsocks/hysteria)"""
+
+    encryption: Optional[str] = None
+    id: Optional[str] = None
+    flow: Optional[str] = None
+    password: Optional[str] = None
+    method: Optional[str] = None
+    uot: Optional[bool] = None
+    uot_version: Optional[int] = Field(None, alias="uotVersion")
+    version: Optional[int] = None
+
+
+class ResolvedHttpHeaderRequest(BaseModel):
+    """HTTP request block for the `tcp` transport's `http` header camouflage"""
+
+    version: Optional[str] = None
+    method: Optional[str] = None
+    path: Optional[list[str]] = None
+    headers: Optional[dict[str, Any]] = None
+
+
+class ResolvedHttpHeaderResponse(BaseModel):
+    """HTTP response block for the `tcp` transport's `http` header camouflage"""
+
+    version: Optional[str] = None
+    status: Optional[str] = None
+    reason: Optional[str] = None
+    headers: Optional[dict[str, Any]] = None
+
+
+class ResolvedTransportHeader(BaseModel):
+    """`tcp` transport header config, either `none` or `http` camouflage"""
+
+    type: Optional[str] = None
+    request: Optional[ResolvedHttpHeaderRequest] = None
+    response: Optional[ResolvedHttpHeaderResponse] = None
+
+
+class ResolvedTransportOptions(BaseModel):
+    """Transport-specific options, shape depends on `transport` (tcp/xhttp/ws/httpupgrade/grpc/kcp/hysteria)"""
+
+    header: Optional[ResolvedTransportHeader] = None
+    path: Optional[str] = None
+    host: Optional[str] = None
+    mode: Optional[str] = None
+    extra: Optional[dict[str, Any]] = None
+    headers: Optional[dict[str, Any]] = None
+    heartbeat_period: Optional[float] = Field(None, alias="heartbeatPeriod")
+    authority: Optional[str] = None
+    service_name: Optional[str] = Field(None, alias="serviceName")
+    multi_mode: Optional[bool] = Field(None, alias="multiMode")
+    client_mtu: Optional[int] = Field(None, alias="clientMtu")
+    client_tti: Optional[int] = Field(None, alias="clientTti")
+    congestion: Optional[bool] = None
+    version: Optional[int] = None
+    auth: Optional[str] = None
+
+
+class ResolvedSecurityOptions(BaseModel):
+    """Security-specific options, shape depends on `security` (tls/reality/none)"""
+
+    pinned_peer_cert_sha256: Optional[str] = Field(None, alias="pinnedPeerCertSha256")
+    verify_peer_cert_by_name: Optional[str] = Field(None, alias="verifyPeerCertByName")
+    alpn: Optional[str] = None
+    enable_session_resumption: Optional[bool] = Field(
+        None, alias="enableSessionResumption"
+    )
+    fingerprint: Optional[str] = None
+    server_name: Optional[str] = Field(None, alias="serverName")
+    ech_config_list: Optional[str] = Field(None, alias="echConfigList")
+    ech_force_query: Optional[str] = Field(None, alias="echForceQuery")
+    ech_sockopt: Optional[Any] = Field(None, alias="echSockopt")
+    public_key: Optional[str] = Field(None, alias="publicKey")
+    short_id: Optional[str] = Field(None, alias="shortId")
+    spider_x: Optional[str] = Field(None, alias="spiderX")
+    mldsa65_verify: Optional[str] = Field(None, alias="mldsa65Verify")
+
+
+class ResolvedStreamOverrides(BaseModel):
+    """Low-level stream overrides (final packet mask, raw socket options)"""
+
+    final_mask: Optional[Any] = Field(alias="finalMask")
+    sockopt: Optional[Any]
+
+
+class ResolvedClientOverrides(BaseModel):
+    """Client-side rendering overrides applied to the resolved proxy config"""
+
+    shuffle_host: bool = Field(alias="shuffleHost")
+    mihomo_x25519: bool = Field(alias="mihomoX25519")
+    mihomo_ip_version: Optional[str] = Field(alias="mihomoIpVersion")
+    server_description: Optional[str] = Field(alias="serverDescription")
+    xray_json_template: Optional[Any] = Field(alias="xrayJsonTemplate")
+
+
+class ResolvedProxyConfigMetadata(BaseModel):
+    """Inbound/host metadata backing the resolved proxy config"""
+
+    uuid: UUID
+    tags: list[str]
+    exclude_from_subscription_types: list[str] = Field(
+        alias="excludeFromSubscriptionTypes"
+    )
+    inbound_tag: str = Field(alias="inboundTag")
+    config_profile_uuid: Optional[UUID] = Field(alias="configProfileUuid")
+    config_profile_inbound_uuid: Optional[UUID] = Field(
+        alias="configProfileInboundUuid"
+    )
+    is_disabled: bool = Field(alias="isDisabled")
+    is_hidden: bool = Field(alias="isHidden")
+    view_position: int = Field(alias="viewPosition")
+    remark: str
+    vless_route_id: Optional[int] = Field(alias="vlessRouteId")
+    raw_inbound: Optional[Any] = Field(alias="rawInbound")
 
 
 class ResolvedProxyConfig(BaseModel):
@@ -198,15 +311,17 @@ class ResolvedProxyConfig(BaseModel):
     address: str
     port: int
     protocol: str
-    protocol_options: Dict[str, Any] = Field(alias="protocolOptions")
+    protocol_options: ResolvedProtocolOptions = Field(alias="protocolOptions")
     transport: str
-    transport_options: Dict[str, Any] = Field(alias="transportOptions")
+    transport_options: ResolvedTransportOptions = Field(alias="transportOptions")
     security: str
-    security_options: Optional[Dict[str, Any]] = Field(None, alias="securityOptions")
-    stream_overrides: Dict[str, Any] = Field(alias="streamOverrides")
-    mux: Dict[str, Any]
-    client_overrides: Dict[str, Any] = Field(alias="clientOverrides")
-    metadata: Dict[str, Any]
+    security_options: Optional[ResolvedSecurityOptions] = Field(
+        None, alias="securityOptions"
+    )
+    stream_overrides: ResolvedStreamOverrides = Field(alias="streamOverrides")
+    mux: Optional[dict[str, Any]]
+    client_overrides: ResolvedClientOverrides = Field(alias="clientOverrides")
+    metadata: ResolvedProxyConfigMetadata
 
 
 class RawSubscriptionResponse(BaseModel):
@@ -214,8 +329,8 @@ class RawSubscriptionResponse(BaseModel):
 
     user: UserResponseDto
     converted_user_info: ConvertedUserInfo = Field(alias="convertedUserInfo")
-    headers: Dict[str, str]
-    resolved_proxy_configs: List[ResolvedProxyConfig] = Field(
+    headers: dict[str, str]
+    resolved_proxy_configs: list[ResolvedProxyConfig] = Field(
         alias="resolvedProxyConfigs"
     )
 
@@ -244,8 +359,8 @@ class UserSubscription(BaseModel):
 class SubscriptionInfoData(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
     happ: HappCrypto
 
@@ -253,8 +368,8 @@ class SubscriptionInfoData(BaseModel):
 class GetSubscriptionInfoResponseDto(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
     @property
@@ -267,21 +382,21 @@ class GetSubscriptionInfoResponseDto(BaseModel):
 class SubscriptionWithoutHapp(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
 
 class GetAllSubscriptionsResponseDto(BaseModel):
-    subscriptions: List[SubscriptionWithoutHapp]
+    subscriptions: list[SubscriptionWithoutHapp]
     total: float
 
 
 class GetSubscriptionByUsernameResponseDto(BaseModel):
     is_found: bool = Field(alias="isFound")
     user: UserSubscription
-    links: List[str]
-    ss_conf_links: Dict[str, str] = Field(alias="ssConfLinks")
+    links: list[str]
+    ss_conf_links: dict[str, str] = Field(alias="ssConfLinks")
     subscription_url: str = Field(alias="subscriptionUrl")
 
 
@@ -289,17 +404,19 @@ class GetSubscriptionByShortUUIDResponseDto(GetSubscriptionByUsernameResponseDto
     pass
 
 
-class GetSubscriptionByUUIDResponseDto(GetSubscriptionByUsernameResponseDto):
+class GetSubscriptionByUserIdResponseDto(GetSubscriptionByUsernameResponseDto):
+    """Response for GET /api/subscriptions/by-id/{userId}"""
+
     pass
 
 
-class GetConnectionKeysByUuidResponseDto(BaseModel):
-    enabled_keys: List[str] = Field(alias="enabledKeys")
-    hidden_keys: List[str] = Field(alias="hiddenKeys")
-    disabled_keys: List[str] = Field(alias="disabledKeys")
+class GetConnectionKeysByUserIdResponseDto(BaseModel):
+    enabled_keys: list[str] = Field(alias="enabledKeys")
+    hidden_keys: list[str] = Field(alias="hiddenKeys")
+    disabled_keys: list[str] = Field(alias="disabledKeys")
 
     @property
-    def connection_keys(self) -> List[str]:
+    def connection_keys(self) -> list[str]:
         """Backward compatibility: historically SDK exposed a flat list of keys."""
         return self.enabled_keys
 

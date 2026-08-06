@@ -4,7 +4,6 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     DeletePasskeyRequestDto,
-    DeletePasskeyResponseDto,
     GetAllPasskeysResponseDto,
     GetPasskeyRegistrationOptionsResponseDto,
     UpdatePasskeyRequestDto,
@@ -44,11 +43,11 @@ class PasskeysController(BaseController):
         """Get all passkeys"""
         ...
 
-    @delete("/passkeys", response_class=DeletePasskeyResponseDto)
+    @delete("/passkeys", response_class=None)
     async def delete_passkey(
         self,
         body: Annotated[DeletePasskeyRequestDto, PydanticBody()],
-    ) -> DeletePasskeyResponseDto:
+    ) -> None:
         """Delete a passkey by ID"""
         ...
 

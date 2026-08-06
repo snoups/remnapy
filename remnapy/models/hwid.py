@@ -1,13 +1,12 @@
 from datetime import datetime
-from typing import List, Optional
-from uuid import UUID
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
 
 class CreateUserHwidDeviceRequestDto(BaseModel):
     hwid: str
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
     platform: Optional[str] = None
     os_version: Optional[str] = Field(None, serialization_alias="osVersion")
     device_model: Optional[str] = Field(None, serialization_alias="deviceModel")
@@ -16,16 +15,13 @@ class CreateUserHwidDeviceRequestDto(BaseModel):
 
 
 class DeleteUserHwidDeviceRequestDto(BaseModel):
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
     hwid: str
 
 
 class HwidDeviceDto(BaseModel):
     hwid: str
-    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
-    user_id: Optional[int] = Field(None, alias="userId")
+    user_id: int = Field(alias="userId")
     platform: Optional[str] = None
     os_version: Optional[str] = Field(None, alias="osVersion")
     device_model: Optional[str] = Field(None, alias="deviceModel")
@@ -37,22 +33,22 @@ class HwidDeviceDto(BaseModel):
 
 class HwidDevicesData(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class CreateUserHwidDeviceResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class DeleteUserHwidDeviceResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class GetUserHwidDevicesResponseDto(BaseModel):
     total: float
-    devices: List[HwidDeviceDto]
+    devices: list[HwidDeviceDto]
 
 
 class AppStatItem(BaseModel):
@@ -63,7 +59,7 @@ class AppStatItem(BaseModel):
 class PlatformStatItem(BaseModel):
     platform: str
     count: float
-    by_app: List[AppStatItem] = Field(default_factory=list, alias="byApp")
+    by_app: list[AppStatItem] = Field(default_factory=list, alias="byApp")
 
 
 class HwidStats(BaseModel):
@@ -73,7 +69,7 @@ class HwidStats(BaseModel):
 
 
 class HwidStatisticsData(BaseModel):
-    by_platform: List[PlatformStatItem] = Field(alias="byPlatform")
+    by_platform: list[PlatformStatItem] = Field(alias="byPlatform")
     stats: HwidStats
 
 
@@ -82,13 +78,12 @@ class GetHwidStatisticsResponseDto(HwidStatisticsData):
 
 
 class DeleteUserAllHwidDeviceRequestDto(BaseModel):
-    user_uuid: UUID = Field(serialization_alias="userUuid")
+    user_id: int = Field(serialization_alias="userId")
 
 
 class TopUserByHwidDevicesDto(BaseModel):
     """Top user by HWID devices"""
 
-    user_uuid: UUID = Field(alias="userUuid")
     id: int
     username: str
     devices_count: float = Field(alias="devicesCount")

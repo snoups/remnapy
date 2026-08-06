@@ -1,11 +1,11 @@
-from remnapy.models import GetPubKeyResponseDto
+from remnapy.models import GetNodeSecretKeyResponseDto
 from remnapy.rapid import BaseController, get
 
 
 class KeygenController(BaseController):
-    @get("/keygen", response_class=GetPubKeyResponseDto)
+    @get("/keygen", response_class=GetNodeSecretKeyResponseDto)
     async def generate_key(
         self,
-    ) -> GetPubKeyResponseDto:
-        """Get Public Key"""
+    ) -> GetNodeSecretKeyResponseDto:
+        """Get SECRET_KEY for Remnawave Node"""
         ...

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Any, Dict, List
+from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, StringConstraints
 
@@ -17,15 +17,15 @@ class PasskeyDto(BaseModel):
 class GetPasskeyRegistrationOptionsResponseDto(BaseModel):
     """Response with passkey registration options"""
 
-    # WebAuthn registration options are complex objects
-    pass
+    # WebAuthn registration options are a free-form object per spec
+    response: dict[str, Any]
 
 
 class VerifyPasskeyRegistrationRequestDto(BaseModel):
     """Request to verify passkey registration"""
 
     # WebAuthn registration response is complex object
-    response: Dict[str, Any]
+    response: dict[str, Any]
 
 
 class VerifyPasskeyRegistrationResponseData(BaseModel):
@@ -43,13 +43,13 @@ class VerifyPasskeyRegistrationResponseDto(BaseModel):
 class GetAllPasskeysResponseData(BaseModel):
     """Response data with all user's passkeys"""
 
-    passkeys: List[PasskeyDto]
+    passkeys: list[PasskeyDto]
 
 
 class GetAllPasskeysResponseDto(BaseModel):
     """Response with all user's passkeys"""
 
-    passkeys: List[PasskeyDto]
+    passkeys: list[PasskeyDto]
 
 
 class DeletePasskeyRequestDto(BaseModel):
@@ -61,13 +61,7 @@ class DeletePasskeyRequestDto(BaseModel):
 class DeletePasskeyResponseData(BaseModel):
     """Response data with updated passkeys list after deletion"""
 
-    passkeys: List[PasskeyDto]
-
-
-class DeletePasskeyResponseDto(BaseModel):
-    """Response with updated passkeys list after deletion"""
-
-    passkeys: List[PasskeyDto]
+    passkeys: list[PasskeyDto]
 
 
 class UpdatePasskeyRequestDto(BaseModel):
@@ -83,10 +77,10 @@ class UpdatePasskeyRequestDto(BaseModel):
 class UpdatePasskeyResponseData(BaseModel):
     """Response data with updated passkeys list"""
 
-    passkeys: List[PasskeyDto]
+    passkeys: list[PasskeyDto]
 
 
 class UpdatePasskeyResponseDto(BaseModel):
     """Response with updated passkey information"""
 
-    passkeys: List[PasskeyDto]
+    passkeys: list[PasskeyDto]

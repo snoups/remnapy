@@ -6,26 +6,19 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     BulkNodesUpdateRequestDto,
-    BulkNodesUpdateResponseDto,
     CreateNodeRequestDto,
     CreateNodeResponseDto,
-    DeleteNodeResponseDto,
     DisableNodeResponseDto,
     EnableNodeResponseDto,
     GetAllNodesResponseDto,
     GetAllNodesTagsResponseDto,
     GetOneNodeResponseDto,
     NodesBulkActionsRequestDto,
-    NodesBulkActionsResponseDto,
     ProfileModificationRequestDto,
-    ProfileModificationResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
-    ResetNodeTrafficResponseDto,
     RestartAllNodesRequestBodyDto,
-    RestartAllNodesResponseDto,
     RestartNodeRequestBodyDto,
-    RestartNodeResponseDto,
     UpdateNodeRequestDto,
     UpdateNodeResponseDto,
 )
@@ -63,11 +56,11 @@ class NodesController(BaseController):
         """Get One Node"""
         ...
 
-    @delete("/nodes/{uuid}", response_class=DeleteNodeResponseDto)
+    @delete("/nodes/{uuid}", response_class=None)
     async def delete_node(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
-    ) -> DeleteNodeResponseDto:
+    ) -> None:
         """Delete Node"""
         ...
 
@@ -95,20 +88,20 @@ class NodesController(BaseController):
         """Disable Node"""
         ...
 
-    @post("/nodes/{uuid}/actions/restart", response_class=RestartNodeResponseDto)
+    @post("/nodes/{uuid}/actions/restart", response_class=None)
     async def restart_node(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="Node UUID")],
         body: Annotated[RestartNodeRequestBodyDto, PydanticBody()],
-    ) -> RestartNodeResponseDto:
+    ) -> None:
         """Restart Node"""
         ...
 
-    @post("/nodes/actions/restart-all", response_class=RestartAllNodesResponseDto)
+    @post("/nodes/actions/restart-all", response_class=None)
     async def restart_all_nodes(
         self,
         body: Annotated[RestartAllNodesRequestBodyDto, PydanticBody()],
-    ) -> RestartAllNodesResponseDto:
+    ) -> None:
         """Restart All Nodes"""
         ...
 
@@ -122,38 +115,38 @@ class NodesController(BaseController):
 
     @post(
         "/nodes/{uuid}/actions/reset-traffic",
-        response_class=ResetNodeTrafficResponseDto,
+        response_class=None,
     )
     async def reset_node_traffic(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="UUID of the node")],
-    ) -> ResetNodeTrafficResponseDto:
+    ) -> None:
         """Reset traffic for individual node"""
         ...
 
     @post(
         "/nodes/bulk-actions/profile-modification",
-        response_class=ProfileModificationResponseDto,
+        response_class=None,
     )
     async def profile_modification(
         self,
         body: Annotated[ProfileModificationRequestDto, PydanticBody()],
-    ) -> ProfileModificationResponseDto:
+    ) -> None:
         """Modify Inbounds & Profile for many nodes"""
         ...
 
-    @post("/nodes/bulk-actions", response_class=NodesBulkActionsResponseDto)
+    @post("/nodes/bulk-actions", response_class=None)
     async def nodes_bulk_actions(
         self,
         body: Annotated[NodesBulkActionsRequestDto, PydanticBody()],
-    ) -> NodesBulkActionsResponseDto:
+    ) -> None:
         """Perform actions for many nodes (ENABLE, DISABLE, RESTART, RESET_TRAFFIC)"""
         ...
 
-    @post("/nodes/bulk-actions/update", response_class=BulkNodesUpdateResponseDto)
+    @post("/nodes/bulk-actions/update", response_class=None)
     async def bulk_nodes_update(
         self,
         body: Annotated[BulkNodesUpdateRequestDto, PydanticBody()],
-    ) -> BulkNodesUpdateResponseDto:
+    ) -> None:
         """Update many nodes"""
         ...

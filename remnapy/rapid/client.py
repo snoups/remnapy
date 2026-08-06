@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import datetime
 from inspect import BoundArguments, Signature
-from typing import Any, Dict, Mapping, Self, Tuple, Type
+from typing import Any, Self
 
 import httpx
 import orjson
@@ -27,6 +28,19 @@ from remnapy.rapid import AttributeBody
 from remnapy.utils.serializer import orjson_default
 
 
+def _query_json_default(obj: Any) -> Any:
+    """`orjson` fallback for JSON-encoding structured query-parameter values.
+
+    Unlike `orjson_default`, this does not `exclude_none`: a structured
+    query value (e.g. a TanStack Table filter) may have a field whose spec
+    meaning is genuinely `null` (e.g. `TableFilter.value=None`), and
+    dropping it would silently change what gets sent.
+    """
+    if isinstance(obj, BaseModel):
+        return obj.model_dump(mode="json", by_alias=True)
+    raise TypeError(f"Cannot serialize {obj!r} for a query parameter")
+
+
 class BaseController(RapidApi):
     def _build_request(
         self,
@@ -34,7 +48,7 @@ class BaseController(RapidApi):
         rapid_parameters: CustomRapidParameters,
         method: str,
         path: str,
-        args: Tuple[Any],
+        args: tuple[Any],
         kwargs: Mapping[str, Any],
         timeout: float | None,
     ) -> Request:
@@ -43,7 +57,7 @@ class BaseController(RapidApi):
 
         path = rapid_parameters.get_resolved_path(path, ba)
 
-        build_kwargs: Dict[str, Any] = {
+        build_kwargs: dict[str, Any] = {
             "headers": rapid_parameters.get_headers(ba),
             "params": rapid_parameters.get_query(ba),
         }
@@ -59,8 +73,8 @@ class BaseController(RapidApi):
     def _handle_response(
         self,
         response: Response,
-        response_class: Type[Response | str | bytes | BM] | TypeAdapter[T] = Response,
-    ) -> Response | str | bytes | BM | T:
+        response_class: type[Response | str | bytes | BM] | TypeAdapter[T] | None = Response,
+    ) -> Response | str | bytes | BM | T | None:
         if response_class is Response:
             return response
 
@@ -75,15 +89,26 @@ class BaseController(RapidApi):
                 ApiErrorResponse(
                     timestamp=now_time,
                     path="/api/users",
-                    message=f"Request error: {str(e)}",
+                    message=f"Request error: {e!s}",
                     code="NETWORK_ERROR",
                 ),
             )
+
+        # Panel 3.2.1 answers a number of operations with 202/204 and no body at
+        # all (every delete, every bulk action). Those endpoints declare
+        # ``response_class=None``; parsing anything here would only fail.
+        if response_class is None:
+            return None
 
         if response_class is str:
             return response.text
         if response_class is bytes:
             return response.content
+
+        # Defensive: an endpoint documented as returning a body but answering
+        # empty must not blow up with a JSON decode error deep in pydantic.
+        if not response.content:
+            return None
         if isinstance(response_class, TypeAdapter):
             return response_class.validate_json(response.content)
         if pydantic_xml is not None and issubclass(
@@ -185,7 +210,44 @@ class CustomRapidParameters(RapidParameters):
 
         return out
 
-    def get_body(self, ba: BoundArguments) -> Tuple[str | None, Any]:
+    def get_query(self, ba: BoundArguments) -> dict[str, Any]:
+        """
+        Builds query parameters for the request.
+
+        Most scalar `Query` values (str, int, bool, enum, UUID, ...) are
+        passed through unchanged -- httpx serializes those correctly on its
+        own. Two kinds need help:
+
+        - `datetime` values: httpx renders them via `str()`, which uses a
+          space as the date/time separator (`2026-01-01 00:00:00+00:00`).
+          The panel's spec requires `format: date-time`, i.e. the space
+          rejected and a literal `T` required (`2026-01-01T00:00:00+00:00`).
+          `datetime.isoformat()` produces the `T`-separated form without
+          altering the value otherwise: naive datetimes stay naive (no
+          timezone is added), and a plain `date` (not a `datetime`) is
+          untouched by this branch and keeps going through the default path,
+          since `date`'s own `str()` is already `YYYY-MM-DD` with nothing to
+          fix.
+        - Some Remnawave endpoints (TanStack Table-style list filtering,
+          e.g. `GET /users`) have query parameters that validate to a `list`
+          or `dict` (structured filter/sort entries); httpx has no correct
+          way to serialize those as a query string (it falls back to
+          Python's `repr()`, which is not valid JSON and not understood by
+          the panel). The panel's own query schema JSON-decodes any
+          string-typed value for these parameters before validating it, so
+          such values are JSON-encoded into a single string here instead.
+        """
+        values = filter_none_values(
+            {p.get_name(): p.get_value(ba) for p in self.query_parameters}
+        )
+        for name, value in values.items():
+            if isinstance(value, datetime):
+                values[name] = value.isoformat()
+            elif isinstance(value, (list, dict)):
+                values[name] = orjson.dumps(value, default=_query_json_default).decode()
+        return values
+
+    def get_body(self, ba: BoundArguments) -> tuple[str | None, Any]:
         """
         Prepares the body of an HTTP request based on annotated parameters.
 

@@ -1,7 +1,7 @@
-from typing import Annotated, Union
+from typing import Annotated, Optional, Union
 from uuid import UUID
 
-from rapid_api_client import Path
+from rapid_api_client import Path, Query
 from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
@@ -11,9 +11,6 @@ from remnapy.models import (
     CreateInfraBillingNodeResponseDto,
     CreateInfraProviderRequestDto,
     CreateInfraProviderResponseDto,
-    DeleteInfraBillingHistoryRecordByUuidResponseDto,
-    DeleteInfraBillingNodeByUuidResponseDto,
-    DeleteInfraProviderByUuidResponseDto,
     GetInfraBillingHistoryRecordsResponseDto,
     GetInfraBillingNodesResponseDto,
     GetInfraProviderByUuidResponseDto,
@@ -63,14 +60,14 @@ class InfraBillingController(BaseController):
 
     @delete(
         "/infra-billing/providers/{uuid}",
-        response_class=DeleteInfraProviderByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_provider_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the infra provider")
         ],
-    ) -> DeleteInfraProviderByUuidResponseDto:
+    ) -> None:
         """Delete infra provider by uuid"""
         ...
 
@@ -91,20 +88,34 @@ class InfraBillingController(BaseController):
     )
     async def get_infra_billing_history_records(
         self,
+        start: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Start index (offset) of the billing history records to return, default is 0",
+            ),
+        ] = None,
+        size: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Number of billing records to return, no more than 500",
+            ),
+        ] = None,
     ) -> GetInfraBillingHistoryRecordsResponseDto:
         """Get infra billing history"""
         ...
 
     @delete(
         "/infra-billing/history/{uuid}",
-        response_class=DeleteInfraBillingHistoryRecordByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_billing_history_record_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the billing history record")
         ],
-    ) -> DeleteInfraBillingHistoryRecordByUuidResponseDto:
+    ) -> None:
         """Delete infra billing history"""
         ...
 
@@ -131,13 +142,13 @@ class InfraBillingController(BaseController):
 
     @delete(
         "/infra-billing/nodes/{uuid}",
-        response_class=DeleteInfraBillingNodeByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_billing_node_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the infra billing node")
         ],
-    ) -> DeleteInfraBillingNodeByUuidResponseDto:
+    ) -> None:
         """Delete infra billing node"""
         ...

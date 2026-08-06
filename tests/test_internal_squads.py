@@ -3,13 +3,8 @@ from uuid import UUID
 import pytest
 
 from remnapy.models import (
-    AddUsersToInternalSquadRequestDto,
-    AddUsersToInternalSquadResponseDto,
     CreateInternalSquadRequestDto,
     CreateInternalSquadResponseDto,
-    DeleteInternalSquadResponseDto,
-    DeleteUsersFromInternalSquadRequestDto,
-    DeleteUsersFromInternalSquadResponseDto,
     GetAllInternalSquadsResponseDto,
     GetInternalSquadByUuidResponseDto,
     ReorderInternalSquadItem,
@@ -67,14 +62,14 @@ async def test_internal_squads(remnawave) -> None:
         squad_uuid,
     )
 
-    assert isinstance(add_users, AddUsersToInternalSquadResponseDto)
+    assert add_users is None
 
     # Test remove users from internal squad
     remove_users = await remnawave.internal_squads.remove_users_from_internal_squad(
         squad_uuid,
     )
 
-    assert isinstance(remove_users, DeleteUsersFromInternalSquadResponseDto)
+    assert remove_users is None
 
     # Test reorder internal squads
     all_squads = await remnawave.internal_squads.get_internal_squads()
@@ -90,5 +85,5 @@ async def test_internal_squads(remnawave) -> None:
 
     # Test delete internal squad
     delete_squad = await remnawave.internal_squads.delete_internal_squad(squad_uuid)
-    assert isinstance(delete_squad, DeleteInternalSquadResponseDto)
-    assert delete_squad.is_deleted is True
+    assert delete_squad is None
+    assert delete_squad is None

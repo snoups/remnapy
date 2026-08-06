@@ -1,6 +1,7 @@
+from collections.abc import Callable, Coroutine
 from functools import partial, wraps
 from inspect import signature
-from typing import Any, Callable, Coroutine, Type
+from typing import Any
 
 from httpx import AsyncClient, Response
 from pydantic import TypeAdapter
@@ -12,9 +13,14 @@ from .client import BaseController, CustomRapidParameters
 def http(
     method: str,
     path: str,
-    response_class: Type[T] | TypeAdapter[T] = Response,
+    response_class: type[T] | TypeAdapter[T] | None = Response,
     timeout: float | None = None,
 ) -> Callable[[Callable[..., T]], Callable[..., Coroutine[T, Any, T]]]:
+    """Bind a coroutine to an HTTP endpoint.
+
+    Pass ``response_class=None`` for endpoints the panel answers with 202/204
+    and no body; the wrapped coroutine then returns ``None``.
+    """
     def decorator(func: Callable[..., T]) -> Callable[..., Coroutine[T, Any, T]]:
         sig = signature(func)
         rapid_parameters = CustomRapidParameters.from_sig(sig)

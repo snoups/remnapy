@@ -1,5 +1,4 @@
-from datetime import date, datetime
-from typing import List
+from datetime import date
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel
@@ -21,23 +20,7 @@ class NodeUsageResponseDto(BaseModel):
     date: date
 
 
-class NodesUsageResponseDto(RootModel[List[NodeUsageResponseDto]]):
-    """Deprecated: Use GetStatsNodesUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class GetNodesUsageByRangeResponseDto(RootModel[List[NodeUsageResponseDto]]):
+class NodesUsageResponseDto(RootModel[list[NodeUsageResponseDto]]):
     """Deprecated: Use GetStatsNodesUsageResponseDto instead"""
 
     def __iter__(self):
@@ -67,76 +50,8 @@ class NodeRealtimeUsageResponseDto(BaseModel):
     total_speed_bps: float = Field(alias="totalSpeedBps")
 
 
-class NodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseDto]]):
+class NodesRealtimeUsageResponseDto(RootModel[list[NodeRealtimeUsageResponseDto]]):
     """Deprecated: Use GetStatsNodesRealtimeUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class GetNodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageResponseDto]]):
-    """Deprecated: Use GetStatsNodesRealtimeUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class UserUsageByRangeItem(BaseModel):
-    """Deprecated: Use LegacyUserUsageItem instead"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    node_uuid: UUID = Field(alias="nodeUuid")
-    node_name: str = Field(alias="nodeName")
-    total: int
-    date: str
-
-
-class GetUserUsageByRangeResponseDto(RootModel[List[UserUsageByRangeItem]]):
-    """Deprecated: Use GetLegacyStatsUserUsageResponseDto instead"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        return bool(self.root)
-
-    def __len__(self):
-        return len(self.root)
-
-
-class NodeUserUsageItem(BaseModel):
-    """Deprecated: Use LegacyNodeUserUsageItem instead"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    username: str
-    node_uuid: UUID = Field(alias="nodeUuid")
-    total: int
-    date: str
-
-
-class GetNodeUserUsageByRangeResponseDto(RootModel[List[NodeUserUsageItem]]):
-    """Deprecated: Use GetLegacyStatsNodesUsersUsageResponseDto instead"""
 
     def __iter__(self):
         return iter(self.root)
@@ -152,60 +67,6 @@ class GetNodeUserUsageByRangeResponseDto(RootModel[List[NodeUserUsageItem]]):
 
 
 # ============ New Stats Models ============
-
-# Legacy Stats Models
-
-
-class LegacyUserUsageItem(BaseModel):
-    """Legacy user usage item"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    node_uuid: UUID = Field(alias="nodeUuid")
-    node_name: str = Field(alias="nodeName")
-    country_code: str = Field(alias="countryCode")
-    total: int
-    date: str
-
-
-class GetLegacyStatsUserUsageResponseDto(RootModel[List[LegacyUserUsageItem]]):
-    """Response for legacy user usage"""
-
-    @property
-    def response(self) -> List[LegacyUserUsageItem]:
-        return self.root
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-
-class LegacyNodeUserUsageItem(BaseModel):
-    """Legacy node user usage item"""
-
-    user_uuid: UUID = Field(alias="userUuid")
-    username: str
-    node_uuid: UUID = Field(alias="nodeUuid")
-    total: int
-    date: str
-
-
-class GetLegacyStatsNodesUsersUsageResponseDto(
-    RootModel[List[LegacyNodeUserUsageItem]]
-):
-    """Response for legacy nodes users usage"""
-
-    @property
-    def response(self) -> List[LegacyNodeUserUsageItem]:
-        return self.root
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
 
 # Realtime Stats
 
@@ -224,11 +85,11 @@ class NodeRealtimeUsageItem(BaseModel):
     total_speed_bps: float = Field(alias="totalSpeedBps")
 
 
-class GetStatsNodesRealtimeUsageResponseDto(RootModel[List[NodeRealtimeUsageItem]]):
+class GetStatsNodesRealtimeUsageResponseDto(RootModel[list[NodeRealtimeUsageItem]]):
     """Response for nodes realtime usage"""
 
     @property
-    def response(self) -> List[NodeRealtimeUsageItem]:
+    def response(self) -> list[NodeRealtimeUsageItem]:
         return self.root
 
     def __iter__(self):
@@ -259,16 +120,16 @@ class NodeSeriesItem(BaseModel):
     color: str
     country_code: str = Field(alias="countryCode")
     total: int
-    data: List[int]
+    data: list[int]
 
 
 class StatsNodesUsageData(BaseModel):
     """Stats nodes usage data"""
 
-    categories: List[str]
-    sparkline_data: List[int] = Field(alias="sparklineData")
-    top_nodes: List[TopNodeItem] = Field(alias="topNodes")
-    series: List[NodeSeriesItem]
+    categories: list[str]
+    sparkline_data: list[int] = Field(alias="sparklineData")
+    top_nodes: list[TopNodeItem] = Field(alias="topNodes")
+    series: list[NodeSeriesItem]
 
 
 class GetStatsNodesUsageResponseDto(RootModel[StatsNodesUsageData]):
@@ -293,9 +154,9 @@ class TopUserItem(BaseModel):
 class StatsNodeUsersUsageData(BaseModel):
     """Stats node users usage data"""
 
-    categories: List[str]
-    sparkline_data: List[int] = Field(alias="sparklineData")
-    top_users: List[TopUserItem] = Field(alias="topUsers")
+    categories: list[str]
+    sparkline_data: list[int] = Field(alias="sparklineData")
+    top_users: list[TopUserItem] = Field(alias="topUsers")
 
 
 class GetStatsNodeUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
@@ -309,7 +170,7 @@ class GetStatsNodeUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
 class GetStatsNodesUsersUsageRequestDto(BaseModel):
     """Request for stats users usage across multiple nodes"""
 
-    nodes_uuids: List[UUID] = Field(serialization_alias="nodesUuids", min_length=1)
+    nodes_uuids: list[UUID] = Field(serialization_alias="nodesUuids", min_length=1)
 
 
 class GetStatsNodesUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
@@ -326,10 +187,10 @@ class GetStatsNodesUsersUsageResponseDto(RootModel[StatsNodeUsersUsageData]):
 class StatsUserUsageData(BaseModel):
     """Stats user usage data"""
 
-    categories: List[str]
-    sparkline_data: List[int] = Field(alias="sparklineData")
-    top_nodes: List[TopNodeItem] = Field(alias="topNodes")
-    series: List[NodeSeriesItem]
+    categories: list[str]
+    sparkline_data: list[int] = Field(alias="sparklineData")
+    top_nodes: list[TopNodeItem] = Field(alias="topNodes")
+    series: list[NodeSeriesItem]
 
 
 class GetStatsUserUsageResponseDto(RootModel[StatsUserUsageData]):
@@ -338,3 +199,56 @@ class GetStatsUserUsageResponseDto(RootModel[StatsUserUsageData]):
     @property
     def response(self) -> StatsUserUsageData:
         return self.root
+
+
+# Squad and node usage (3.2.1)
+
+
+class SquadUserUsageNode(BaseModel):
+    """Per-node traffic for a day"""
+
+    uuid: UUID
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class SquadUserUsageDay(BaseModel):
+    """Daily traffic breakdown"""
+
+    date: str
+    nodes: list[SquadUserUsageNode]
+
+
+class GetInternalSquadUserUsageResponseDto(BaseModel):
+    """Response for GET /api/bandwidth-stats/internal-squads/{squadUuid}/users/{userId}/usage"""
+
+    days: list[SquadUserUsageDay]
+
+
+class GetNodesUsageRequestDto(BaseModel):
+    """Request body for POST /api/bandwidth-stats/nodes/usage"""
+
+    nodes_uuids: list[UUID] = Field(
+        ...,
+        serialization_alias="nodesUuids",
+        description="Node UUIDs to aggregate over",
+    )
+
+
+class NodeUsageUser(BaseModel):
+    """User traffic on a node"""
+
+    id: int
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class NodeUsageEntry(BaseModel):
+    """Per-node user traffic list"""
+
+    uuid: UUID
+    users: list[NodeUsageUser]
+
+
+class GetNodesUsageResponseDto(BaseModel):
+    """Response for POST /api/bandwidth-stats/nodes/usage"""
+
+    nodes: list[NodeUsageEntry]

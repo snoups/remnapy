@@ -1,14 +1,12 @@
 from typing import Annotated, Union
 from uuid import UUID
 
-from httpx import Response
 from rapid_api_client import Path
 from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     CreateApiTokenRequestDto,
     CreateApiTokenResponseDto,
-    DeleteApiTokenResponseDto,
     FindAllApiTokensResponseDto,
     GetApiTokenScopesResponseDto,
 )
@@ -24,11 +22,11 @@ class APITokensManagementController(BaseController):
         """Create new API token"""
         ...
 
-    @delete("/tokens/{uuid}", response_class=DeleteApiTokenResponseDto)
+    @delete("/tokens/{uuid}", response_class=None)
     async def delete(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="UUID of the API token")],
-    ) -> DeleteApiTokenResponseDto:
+    ) -> None:
         """Delete API token"""
         ...
 

@@ -6,10 +6,10 @@ from typing import Optional, Union
 from remnapy.models.webhook import (
     HwidUserDeviceDto,
     LoginAttemptDto,
-    NodeDto,
     TorrentBlockerReportDto,
     UserDto,
     UserHwidDeviceEventDto,
+    WebhookNodeDto,
     WebhookPayloadDto,
 )
 
@@ -159,7 +159,7 @@ class WebhookUtility:
         payload: WebhookPayloadDto,
     ) -> Union[
         UserDto,
-        NodeDto,
+        WebhookNodeDto,
         HwidUserDeviceDto,
         LoginAttemptDto,
         UserHwidDeviceEventDto,

@@ -1,5 +1,4 @@
 import datetime
-from typing import List
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -16,5 +15,5 @@ class UserUsageByRange(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class UserUsageByRangeResponseDto(List[UserUsageByRange]):
+class UserUsageByRangeResponseDto(list[UserUsageByRange]):
     pass

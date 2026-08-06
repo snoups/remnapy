@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -17,7 +17,7 @@ class GitHubOAuth2Settings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
-    allowed_emails: List[str] = Field(alias="allowedEmails")
+    allowed_emails: list[str] = Field(alias="allowedEmails")
 
 
 class PocketIdOAuth2Settings(BaseModel):
@@ -26,8 +26,9 @@ class PocketIdOAuth2Settings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
+    frontend_domain: str | None = Field(alias="frontendDomain")
     plain_domain: str | None = Field(alias="plainDomain")
-    allowed_emails: List[str] = Field(alias="allowedEmails")
+    allowed_emails: list[str] = Field(alias="allowedEmails")
 
 
 class YandexOAuth2Settings(BaseModel):
@@ -36,7 +37,7 @@ class YandexOAuth2Settings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
-    allowed_emails: List[str] = Field(alias="allowedEmails")
+    allowed_emails: list[str] = Field(alias="allowedEmails")
 
 
 class KeycloakOAuth2Settings(BaseModel):
@@ -48,7 +49,7 @@ class KeycloakOAuth2Settings(BaseModel):
     client_secret: str | None = Field(alias="clientSecret")
     frontend_domain: str | None = Field(alias="frontendDomain")
     keycloak_domain: str | None = Field(alias="keycloakDomain")
-    allowed_emails: List[str] = Field(alias="allowedEmails")
+    allowed_emails: list[str] = Field(alias="allowedEmails")
 
 
 class GenericOAuth2Settings(BaseModel):
@@ -61,7 +62,7 @@ class GenericOAuth2Settings(BaseModel):
     authorization_url: str | None = Field(alias="authorizationUrl")
     token_url: str | None = Field(alias="tokenUrl")
     frontend_domain: str | None = Field(alias="frontendDomain")
-    allowed_emails: List[str] = Field(alias="allowedEmails")
+    allowed_emails: list[str] = Field(alias="allowedEmails")
 
 
 class TelegramOAuth2Settings(BaseModel):
@@ -70,7 +71,7 @@ class TelegramOAuth2Settings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
-    allowed_ids: List[str] = Field(alias="allowedIds")
+    allowed_ids: list[str] = Field(alias="allowedIds")
     frontend_domain: str | None = Field(alias="frontendDomain")
 
 
@@ -91,7 +92,7 @@ class TelegramAuthSettings(BaseModel):
     enabled: bool
     client_id: str | None = Field(alias="clientId")
     client_secret: str | None = Field(alias="clientSecret")
-    allowed_ids: List[str] = Field(alias="allowedIds")
+    allowed_ids: list[str] = Field(alias="allowedIds")
     frontend_domain: str | None = Field(alias="frontendDomain")
 
 

@@ -1,12 +1,11 @@
 from datetime import datetime
-from typing import Annotated, List, Literal, Optional
+from typing import Annotated, Literal, Optional
 from uuid import UUID
 
 from pydantic import (
     BaseModel,
     EmailStr,
     Field,
-    RootModel,
     StringConstraints,
 )
 
@@ -82,12 +81,8 @@ class CreateUserRequestDto(BaseModel):
     hwid_device_limit: Optional[int] = Field(
         None, serialization_alias="hwidDeviceLimit", ge=0
     )
-    active_internal_squads: Optional[List[UUID]] = Field(
+    active_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="activeInternalSquads"
-    )
-    uuid: Optional[UUID] = Field(
-        None,
-        description="Optional. Pass UUID to create user with specific UUID, otherwise it will be generated automatically.",
     )
     external_squad_uuid: Optional[UUID] = Field(
         None, serialization_alias="externalSquadUuid"
@@ -97,10 +92,10 @@ class CreateUserRequestDto(BaseModel):
 class UpdateUserRequestDto(BaseModel):
     """Request DTO for updating a user"""
 
-    # Either username or uuid must be provided, uuid has priority
+    # Either username or id must be provided, id has priority
     username: Optional[str] = Field(None, description="Username of the user")
-    uuid: Optional[UUID] = Field(
-        None, description="UUID of the user. UUID has higher priority than username"
+    id: Optional[int] = Field(
+        None, description="ID of the user. ID has higher priority than username"
     )
 
     # Optional update fields
@@ -121,7 +116,7 @@ class UpdateUserRequestDto(BaseModel):
     traffic_limit_strategy: Optional[TrafficLimitStrategy] = Field(
         None, serialization_alias="trafficLimitStrategy"
     )
-    active_internal_squads: Optional[List[UUID]] = Field(
+    active_internal_squads: Optional[list[UUID]] = Field(
         None, serialization_alias="activeInternalSquads"
     )
     external_squad_uuid: Optional[UUID] = Field(
@@ -142,9 +137,8 @@ class UserTrafficDto(BaseModel):
 
 
 class UserResponseDto(BaseModel):
-    """User response DTO - обновленная структура с userTraffic"""
+    """User response DTO"""
 
-    uuid: UUID
     id: int
     short_uuid: str = Field(alias="shortUuid")
     username: str
@@ -241,7 +235,6 @@ class RevokeUserRequestDto(BaseModel):
 class ResolveUserRequestBodyDto(BaseModel):
     """Request DTO for resolving a user by any identifier"""
 
-    uuid: Optional[UUID] = None
     id: Optional[int] = None
     short_uuid: Optional[str] = Field(None, serialization_alias="shortUuid")
     username: Optional[str] = None
@@ -250,7 +243,6 @@ class ResolveUserRequestBodyDto(BaseModel):
 class ResolveUserResponseDto(BaseModel):
     """Response DTO for resolved user"""
 
-    uuid: UUID
     username: str
     id: int
     short_uuid: str = Field(alias="shortUuid")
@@ -260,11 +252,10 @@ class SubscriptionRequestRecord(BaseModel):
     """Subscription request history record"""
 
     id: int
-    # 2.8.0: панель переименовала userUuid → userId (BigInt). Оба поля
-    # опциональны для совместимости со старым и новым контрактом панели.
-    user_uuid: Optional[UUID] = Field(None, alias="userUuid")
-    user_id: Optional[int] = Field(None, alias="userId")
+    user_id: int = Field(alias="userId")
     request_at: datetime = Field(alias="requestAt")
+    srr_response_type: str = Field(alias="srrResponseType")
+    srr_rule_name: Optional[str] = Field(None, alias="srrRuleName")
     request_ip: Optional[str] = Field(None, alias="requestIp")
     user_agent: Optional[str] = Field(None, alias="userAgent")
 
@@ -273,7 +264,7 @@ class SubscriptionRequestsResponseData(BaseModel):
     """Subscription requests response data"""
 
     total: int
-    records: List[SubscriptionRequestRecord]
+    records: list[SubscriptionRequestRecord]
 
 
 class CreateUserResponseDto(UserResponseDto):
@@ -284,12 +275,6 @@ class CreateUserResponseDto(UserResponseDto):
 
 class UpdateUserResponseDto(UserResponseDto):
     """Response for update user"""
-
-    pass
-
-
-class GetUserByUuidResponseDto(UserResponseDto):
-    """Response for get user by UUID"""
 
     pass
 
@@ -393,61 +378,15 @@ class GetUserSubscriptionRequestHistoryResponseDto(SubscriptionRequestsResponseD
     pass
 
 
-class DeleteUserResponseDto(BaseModel):
-    """Response for delete user"""
+class ExtendUserRequestDto(BaseModel):
+    """Request DTO for extending user expiration date"""
 
-    is_deleted: bool = Field(alias="isDeleted")
-
-
-class EmailUserResponseDto(RootModel[list[UserResponseDto]]):
-    """Response for get users by email"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        """Return True if list is not empty"""
-        return bool(self.root)
-
-    def __len__(self):
-        """Return length of list"""
-        return len(self.root)
+    days: int = Field(
+        ..., gt=0, description="Number of days to extend the expiration date by"
+    )
 
 
-class TagUserResponseDto(RootModel[list[UserResponseDto]]):
-    """Response for get users by tag"""
+class ExtendUserResponseDto(UserResponseDto):
+    """Response for POST /api/users/{userId}/actions/extend"""
 
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        """Return True if list is not empty"""
-        return bool(self.root)
-
-    def __len__(self):
-        """Return length of list"""
-        return len(self.root)
-
-
-class TelegramUserResponseDto(RootModel[list[UserResponseDto]]):
-    """Response for get users by telegram ID"""
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        """Return True if list is not empty"""
-        return bool(self.root)
-
-    def __len__(self):
-        """Return length of list"""
-        return len(self.root)
+    pass

@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Any, Dict, List
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel
@@ -16,12 +15,12 @@ class NodeInfoDto(BaseModel):
     country_code: str = Field(alias="countryCode")
     config_profile_name: str = Field(alias="configProfileName")
     config_profile_uuid: UUID = Field(alias="configProfileUuid")
-    active_squads: List[NodeActiveSquadDto] = Field(alias="activeSquads")
+    active_squads: list[NodeActiveSquadDto] = Field(alias="activeSquads")
 
 
 class GetUserAccessibleNodesResponse(BaseModel):
-    user_uuid: UUID = Field(alias="userUuid")
-    active_nodes: List[NodeInfoDto] = Field(default_factory=list, alias="activeNodes")
+    user_id: int = Field(alias="userId")
+    active_nodes: list[NodeInfoDto] = Field(default_factory=list, alias="activeNodes")
 
 
 class GetUserAccessibleNodesResponseDto(GetUserAccessibleNodesResponse):
@@ -37,7 +36,7 @@ class NodeUsageDto(BaseModel):
     download: int = Field(0, alias="totalBytes")
 
 
-class GetNodesUsageByRangeResponseDto(RootModel[List[NodeUsageDto]]):
+class GetNodesUsageByRangeResponseDto(RootModel[list[NodeUsageDto]]):
     def __iter__(self):
         return iter(self.root)
 
@@ -61,19 +60,3 @@ class UserUsageDto(BaseModel):
     username: str
     total: int
     date: datetime
-
-
-class GetNodeUserUsageByRangeResponseDto(RootModel[List[UserUsageDto]]):
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-    def __bool__(self):
-        """Return True if list is not empty"""
-        return bool(self.root)
-
-    def __len__(self):
-        """Return length of list"""
-        return len(self.root)

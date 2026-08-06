@@ -4,7 +4,6 @@ from remnapy.enums import TemplateType
 from remnapy.models import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,
-    DeleteSubscriptionTemplateResponseDto,
     GetTemplateResponseDto,
     GetTemplatesResponseDto,
     ReorderSubscriptionTemplatesRequestDto,
@@ -24,14 +23,14 @@ def random_string(length=10):
 
 @pytest.mark.asyncio
 async def test_get_all_templates(remnawave):
-    """Проверка получения всех шаблонов"""
+    """Fetching all templates"""
     templates = await remnawave.subscriptions_template.get_all_templates()
     assert isinstance(templates, GetTemplatesResponseDto)
 
 
 @pytest.mark.asyncio
 async def test_create_template(remnawave):
-    """Проверка создания шаблона"""
+    """Creating a template"""
     rand_name = random_string()
     create_request = CreateSubscriptionTemplateRequestDto(
         name=rand_name,
@@ -44,13 +43,12 @@ async def test_create_template(remnawave):
     assert created_template.name == rand_name
     assert created_template.template_type == TemplateType.SINGBOX
 
-    # Удаляем после проверки
     await remnawave.subscriptions_template.delete_template(str(created_template.uuid))
 
 
 @pytest.fixture
 async def created_template(remnawave):
-    """Фикстура: создать временный шаблон и удалить после теста"""
+    """Create a temporary template and remove it after the test."""
     create_request = CreateSubscriptionTemplateRequestDto(
         name="Temp Template",
         template_type=TemplateType.SINGBOX,
@@ -62,7 +60,7 @@ async def created_template(remnawave):
 
 @pytest.mark.asyncio
 async def test_get_template_by_uuid(remnawave, created_template):
-    """Проверка получения шаблона по UUID"""
+    """Fetching a template by UUID"""
     template = await remnawave.subscriptions_template.get_template_by_uuid(
         str(created_template.uuid)
     )
@@ -72,7 +70,7 @@ async def test_get_template_by_uuid(remnawave, created_template):
 
 @pytest.mark.asyncio
 async def test_update_template(remnawave, created_template):
-    """Проверка обновления шаблона"""
+    """Updating a template"""
     update_request = UpdateTemplateRequestDto(
         uuid=created_template.uuid,
         name="Updated Template Name",
@@ -86,25 +84,23 @@ async def test_update_template(remnawave, created_template):
 
 @pytest.mark.asyncio
 async def test_delete_template(remnawave):
-    """Проверка удаления шаблона"""
-    # Сначала создаем
+    """Deleting a template"""
     create_request = CreateSubscriptionTemplateRequestDto(
         name="Temp Delete Template",
         template_type=TemplateType.SINGBOX,
     )
     created = await remnawave.subscriptions_template.create_template(create_request)
 
-    # Теперь удаляем
     delete_response = await remnawave.subscriptions_template.delete_template(
         str(created.uuid)
     )
-    assert isinstance(delete_response, DeleteSubscriptionTemplateResponseDto)
-    assert delete_response.is_deleted is True
+    assert delete_response is None
+    assert delete_response is None
 
 
 @pytest.mark.asyncio
 async def test_reorder_templates(remnawave):
-    """Проверка изменения порядка шаблонов"""
+    """Reordering templates"""
     templates = await remnawave.subscriptions_template.get_all_templates()
     assert isinstance(templates, GetTemplatesResponseDto)
 

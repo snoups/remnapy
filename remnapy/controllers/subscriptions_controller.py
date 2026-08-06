@@ -6,13 +6,13 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     GetAllSubscriptionsResponseDto,
-    GetConnectionKeysByUuidResponseDto,
+    GetConnectionKeysByUserIdResponseDto,
     GetRawSubscriptionByShortUuidResponseDto,
     GetSubpageConfigByShortUuidRequestBodyDto,
     GetSubpageConfigByShortUuidResponseDto,
     GetSubscriptionByShortUUIDResponseDto,
+    GetSubscriptionByUserIdResponseDto,
     GetSubscriptionByUsernameResponseDto,
-    GetSubscriptionByUUIDResponseDto,
 )
 from remnapy.rapid import BaseController, get
 
@@ -58,13 +58,13 @@ class SubscriptionsController(BaseController):
         ...
 
     @get(
-        "/subscriptions/by-uuid/{uuid}", response_class=GetSubscriptionByUUIDResponseDto
+        "/subscriptions/by-id/{userId}", response_class=GetSubscriptionByUserIdResponseDto
     )
-    async def get_subscription_by_uuid(
+    async def get_subscription_by_user_id(
         self,
-        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
-    ) -> GetSubscriptionByUUIDResponseDto:
-        """None"""
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
+    ) -> GetSubscriptionByUserIdResponseDto:
+        """Get subscription by User ID"""
         ...
 
     @get(
@@ -105,12 +105,12 @@ class SubscriptionsController(BaseController):
         ...
 
     @get(
-        "/subscriptions/connection-keys/{uuid}",
-        response_class=GetConnectionKeysByUuidResponseDto,
+        "/subscriptions/connection-keys/{userId}",
+        response_class=GetConnectionKeysByUserIdResponseDto,
     )
-    async def get_connection_keys_by_uuid(
+    async def get_connection_keys_by_user_id(
         self,
-        uuid: Annotated[Union[str, UUID], Path(description="UUID of the user")],
-    ) -> GetConnectionKeysByUuidResponseDto:
-        """Get connection keys (base64 format) by uuid"""
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
+    ) -> GetConnectionKeysByUserIdResponseDto:
+        """Get connection keys (base64 format) by user ID"""
         ...

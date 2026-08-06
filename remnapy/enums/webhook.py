@@ -34,6 +34,8 @@ TServiceEvents = Literal[
     "service.login_attempt_failed",
     "service.login_attempt_success",
     "service.subpage_config_changed",
+    "service.api_token_created",
+    "service.api_token_deleted",
 ]
 
 TErrorsEvents = Literal["errors.bandwidth_usage_threshold_reached_max_notifications",]
@@ -54,6 +56,8 @@ TUserHwidDevicesEvents = Literal[
 ]
 
 TTorrentBlockerEvents = Literal["torrent_blocker.report",]
+
+TSubpageConfigAction = Literal["CREATED", "UPDATED", "DELETED"]
 
 TResetPeriods = Literal["NO_RESET", "DAY", "WEEK", "MONTH", "MONTH_ROLLING"]
 TUsersStatus = Literal["DISABLED", "LIMITED", "EXPIRED", "ACTIVE"]

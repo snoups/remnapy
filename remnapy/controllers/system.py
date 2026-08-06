@@ -1,16 +1,20 @@
-from typing import Annotated
+from datetime import datetime
+from typing import Annotated, Optional
 
-from rapid_api_client import PydanticBody
+from rapid_api_client import PydanticBody, Query
 
 from remnapy.models import (
     DebugSrrMatcherRequestDto,
     DebugSrrMatcherResponseDto,
     GetBandwidthStatsResponseDto,
+    GetConfigurationResponseDto,
+    GetHttpStatsResponseDto,
     GetMetadataResponseDto,
     GetNodesMetricsResponseDto,
     GetNodesStatisticsResponseDto,
     GetRecapResponseDto,
     GetRemnawaveHealthResponseDto,
+    GetStatsDigestResponseDto,
     GetStatsResponseDto,
     GetX25519KeyPairResponseDto,
 )
@@ -35,6 +39,7 @@ class SystemController(BaseController):
     @get("/system/stats/bandwidth", response_class=GetBandwidthStatsResponseDto)
     async def get_bandwidth_stats(
         self,
+        tz: Annotated[Optional[str], Query(default=None)] = None,
     ) -> GetBandwidthStatsResponseDto:
         """Get System Bandwidth Statistics"""
         ...
@@ -80,4 +85,23 @@ class SystemController(BaseController):
         self,
     ) -> GetRecapResponseDto:
         """Get Recap"""
+        ...
+
+    @get("/system/configuration", response_class=GetConfigurationResponseDto)
+    async def get_configuration(self) -> GetConfigurationResponseDto:
+        """Get Remnawave Configuration"""
+        ...
+
+    @get("/system/stats/digest", response_class=GetStatsDigestResponseDto)
+    async def get_stats_digest(
+        self,
+        start: Annotated[datetime, Query(description="Period start")],
+        end: Annotated[datetime, Query(description="Period end")],
+    ) -> GetStatsDigestResponseDto:
+        """Get Stats Digest"""
+        ...
+
+    @get("/system/stats/http", response_class=GetHttpStatsResponseDto)
+    async def get_http_stats(self) -> GetHttpStatsResponseDto:
+        """Get HTTP Stats"""
         ...

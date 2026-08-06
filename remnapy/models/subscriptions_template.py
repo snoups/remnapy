@@ -1,4 +1,4 @@
-from typing import Annotated, Any, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
@@ -32,7 +32,7 @@ class GetTemplateResponseDto(TemplateResponseDto):
 
 class GetTemplatesData(BaseModel):
     total: float
-    templates: List[TemplateInfoDto]
+    templates: list[TemplateInfoDto]
 
 
 class GetTemplatesResponseDto(GetTemplatesData):
@@ -71,21 +71,13 @@ class UpdateTemplateResponseDto(TemplateResponseDto):
     pass
 
 
-class DeleteTemplateData(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-
-class DeleteSubscriptionTemplateResponseDto(DeleteTemplateData):
-    pass
-
-
 class ReorderTemplateItem(BaseModel):
     view_position: int = Field(serialization_alias="viewPosition")
     uuid: UUID
 
 
 class ReorderSubscriptionTemplatesRequestDto(BaseModel):
-    items: List[ReorderTemplateItem]
+    items: list[ReorderTemplateItem]
 
 
 class ReorderSubscriptionTemplatesResponseDto(GetTemplatesData):

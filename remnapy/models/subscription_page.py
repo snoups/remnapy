@@ -1,4 +1,4 @@
-from typing import Annotated, Any, List, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
@@ -19,7 +19,7 @@ class GetSubscriptionPageConfigsData(BaseModel):
     """Data for getting all subscription page configs"""
 
     total: float
-    configs: List[SubscriptionPageConfigDto]
+    configs: list[SubscriptionPageConfigDto]
 
 
 class GetSubscriptionPageConfigsResponseDto(GetSubscriptionPageConfigsData):
@@ -77,20 +77,6 @@ class UpdateSubscriptionPageConfigResponseDto(SubscriptionPageConfigDto):
     pass
 
 
-class DeleteSubscriptionPageConfigData(BaseModel):
-    """Data for delete response"""
-
-    model_config = ConfigDict(populate_by_name=True)
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
-class DeleteSubscriptionPageConfigResponseDto(DeleteSubscriptionPageConfigData):
-    """Response after deleting subscription page config"""
-
-    pass
-
-
 class ReorderSubscriptionPageConfigItem(BaseModel):
     """Item for reordering subscription page configs"""
 
@@ -103,7 +89,7 @@ class ReorderSubscriptionPageConfigItem(BaseModel):
 class ReorderSubscriptionPageConfigsRequestDto(BaseModel):
     """Request to reorder subscription page configs"""
 
-    items: List[ReorderSubscriptionPageConfigItem]
+    items: list[ReorderSubscriptionPageConfigItem]
 
 
 class ReorderSubscriptionPageConfigsResponseDto(GetSubscriptionPageConfigsData):

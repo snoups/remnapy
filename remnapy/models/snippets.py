@@ -1,6 +1,6 @@
-from typing import Annotated, Any, List
+from typing import Annotated, Any
 
-from pydantic import BaseModel, Field, RootModel, StringConstraints
+from pydantic import BaseModel, StringConstraints
 
 
 class SnippetItem(BaseModel):
@@ -14,10 +14,10 @@ class SnippetsData(BaseModel):
     """Snippets response data"""
 
     total: int
-    snippets: List[SnippetItem]
+    snippets: list[SnippetItem]
 
 
-# Изменяем структуру - API возвращает данные напрямую
+# The API returns the data directly, without a wrapper
 class GetSnippetsResponseDto(SnippetsData):
     """Get all snippets response - extends SnippetsData directly"""
 
@@ -36,12 +36,6 @@ class UpdateSnippetResponseDto(SnippetsData):
     pass
 
 
-class DeleteSnippetResponseDto(SnippetsData):
-    """Delete snippet response - extends SnippetsData directly"""
-
-    pass
-
-
 class CreateSnippetRequestDto(BaseModel):
     """Create snippet request"""
 
@@ -49,7 +43,7 @@ class CreateSnippetRequestDto(BaseModel):
         str,
         StringConstraints(min_length=2, max_length=255, pattern=r"^[A-Za-z0-9_\s-]+$"),
     ]
-    snippet: List[dict]  # Array of objects
+    snippet: list[dict]  # Array of objects
 
 
 class UpdateSnippetRequestDto(BaseModel):
@@ -59,7 +53,7 @@ class UpdateSnippetRequestDto(BaseModel):
         str,
         StringConstraints(min_length=2, max_length=255, pattern=r"^[A-Za-z0-9_\s-]+$"),
     ]
-    snippet: List[dict]  # Array of objects
+    snippet: list[dict]  # Array of objects
 
 
 class DeleteSnippetRequestDto(BaseModel):
@@ -69,7 +63,3 @@ class DeleteSnippetRequestDto(BaseModel):
         str,
         StringConstraints(min_length=2, max_length=255, pattern=r"^[A-Za-z0-9_\s-]+$"),
     ]
-
-
-class DeleteSnippetResponseDto(SnippetsData):
-    """Delete snippet response"""

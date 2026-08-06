@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field
@@ -18,21 +18,33 @@ class BulkDeleteUsersByStatusRequestDto(BaseModel):
 
 
 class BulkDeleteUsersRequestDto(BaseModel):
-    """Request to delete users by UUIDs"""
+    """Request to delete users by IDs"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
 
 
 class BulkRevokeUsersSubscriptionRequestDto(BaseModel):
     """Request to revoke users subscription"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
 
 
 class BulkResetTrafficUsersRequestDto(BaseModel):
     """Request to reset traffic for users"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
 
 
 class UpdateUserFields(BaseModel):
@@ -75,15 +87,23 @@ class UpdateUserFields(BaseModel):
 class BulkUpdateUsersRequestDto(BaseModel):
     """Request to bulk update users"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
     fields: UpdateUserFields
 
 
 class BulkUpdateUsersSquadsRequestDto(BaseModel):
     """Request to update users internal squads"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
-    active_internal_squads: List[UUID] = Field(
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
+    active_internal_squads: list[UUID] = Field(
         serialization_alias="activeInternalSquads"
     )
 
@@ -91,7 +111,11 @@ class BulkUpdateUsersSquadsRequestDto(BaseModel):
 class BulkExtendExpirationDateRequestDto(BaseModel):
     """Request to extend expiration date for selected users"""
 
-    uuids: List[UUID] = Field(min_length=1, max_length=500)
+    user_ids: list[int] = Field(
+        serialization_alias="userIds",
+        min_length=1,
+        max_length=500,
+    )
     extend_days: int = Field(serialization_alias="extendDays", ge=1, le=9999)
 
 
@@ -133,80 +157,10 @@ class BulkAllExtendExpirationDateRequestDto(BaseModel):
     extend_days: int = Field(serialization_alias="extendDays", ge=1)
 
 
-# Base Response DTOs (без обертки response)
-class BulkResponseData(BaseModel):
-    """Common bulk response with affected rows"""
-
-    affected_rows: float = Field(alias="affectedRows")
+# Base response DTOs (without the response envelope)
 
 
-class BulkEventResponseData(BaseModel):
-    """Common bulk response with event sent flag"""
-
-    event_sent: bool = Field(alias="eventSent")
-
-
-# Response DTOs - наследуются от базовых
-class BulkDeleteUsersByStatusResponseDto(BulkResponseData):
-    """Response for bulk delete by status"""
-
-    pass
-
-
-class BulkDeleteUsersResponseDto(BulkResponseData):
-    """Response for bulk delete users"""
-
-    pass
-
-
-class BulkRevokeUsersSubscriptionResponseDto(BulkResponseData):
-    """Response for bulk revoke subscription"""
-
-    pass
-
-
-class BulkResetTrafficUsersResponseDto(BulkResponseData):
-    """Response for bulk reset traffic"""
-
-    pass
-
-
-class BulkUpdateUsersResponseDto(BulkResponseData):
-    """Response for bulk update users"""
-
-    pass
-
-
-class BulkUpdateUsersSquadsResponseDto(BulkResponseData):
-    """Response for bulk update squads"""
-
-    pass
-
-
-class BulkExtendExpirationDateResponseDto(BulkResponseData):
-    """Response for bulk extend expiration date"""
-
-    pass
-
-
-class BulkAllUpdateUsersResponseDto(BulkEventResponseData):
-    """Response for bulk update all users"""
-
-    pass
-
-
-class BulkAllResetTrafficUsersResponseDto(BulkEventResponseData):
-    """Response for bulk reset all users traffic"""
-
-    pass
-
-
-class BulkAllExtendExpirationDateResponseDto(BulkEventResponseData):
-    """Response for bulk extend all users expiration date"""
-
-    pass
 
 
 # Legacy compatibility
-BulkResponseDto = BulkResponseData
 BulkUpdateUsersInternalSquadsRequestDto = BulkUpdateUsersSquadsRequestDto

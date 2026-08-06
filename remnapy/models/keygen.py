@@ -1,13 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class PubKeyData(BaseModel):
-    pub_key: str = Field(alias="pubKey")
+class GetNodeSecretKeyResponseDto(BaseModel):
+    """Response for GET /api/keygen: SECRET_KEY for a Remnawave node"""
 
-
-class GetPubKeyResponseDto(BaseModel):
-    pub_key: str = Field(alias="pubKey")
-
-
-# Legacy alias for backward compatibility
-PubKeyResponseDto = PubKeyData
+    secret_key: str = Field(alias="secretKey")

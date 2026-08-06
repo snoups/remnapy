@@ -12,7 +12,7 @@ REMNAWAVE_ADMIN_USERNAME = os.getenv("REMNAWAVE_ADMIN_USERNAME")
 REMNAWAVE_ADMIN_PASSWORD = os.getenv("REMNAWAVE_ADMIN_PASSWORD")
 REMNAWAVE_INBOUND_UUID = os.getenv("REMNAWAVE_INBOUND_UUID")
 REMNAWAVE_CONFIG_PROFILE_UUID = os.getenv("REMNAWAVE_CONFIG_PROFILE_UUID")
-REMNAWAVE_USER_UUID = os.getenv("REMNAWAVE_USER_UUID")
+REMNAWAVE_USER_ID = int(os.getenv("REMNAWAVE_USER_ID", "0"))
 REMNAWAVE_SHORT_UUID = os.getenv("REMNAWAVE_SHORT_UUID")
 REMNAWAVE_USER_USERNAME = os.getenv("REMNAWAVE_USER_USERNAME")
 REMNAWAVE_NODE_UUID = os.getenv("REMNAWAVE_NODE_UUID")
@@ -34,7 +34,6 @@ async def remnawave() -> RemnawaveSDK:
     assert sdk.hosts is not None
     assert sdk.hosts_bulk_actions is not None
     assert sdk.inbounds is not None
-    assert sdk.inbounds_bulk_actions is not None
     assert sdk.keygen is not None
     assert sdk.nodes is not None
     assert sdk.subscription is not None
@@ -44,8 +43,8 @@ async def remnawave() -> RemnawaveSDK:
     assert sdk.users is not None
     assert sdk.users_bulk_actions is not None
     assert sdk.subscription_page_config is not None
-    assert sdk.xray_config is not None
     assert sdk.hwid is not None
     assert sdk.node_plugins is not None
     assert sdk.metadata is not None
+    assert sdk.connections is not None
     return sdk

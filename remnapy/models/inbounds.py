@@ -1,4 +1,4 @@
-from typing import Any, List, Optional
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, RootModel
@@ -13,12 +13,12 @@ class InboundResponseDto(BaseModel):
     security: Optional[str] = None
     port: Optional[float] = None
     raw_inbound: Optional[Any] = Field(None, alias="rawInbound")
-    active_squads: List[UUID] = Field(default_factory=list, alias="activeSquads")
+    active_squads: list[UUID] = Field(default_factory=list, alias="activeSquads")
 
 
 class AllInboundsData(BaseModel):
     total: float
-    inbounds: List[InboundResponseDto]
+    inbounds: list[InboundResponseDto]
 
 
 class GetAllInboundsResponseDto(AllInboundsData):
@@ -27,7 +27,7 @@ class GetAllInboundsResponseDto(AllInboundsData):
 
 class InboundsByProfileData(BaseModel):
     total: float
-    inbounds: List[InboundResponseDto]
+    inbounds: list[InboundResponseDto]
 
 
 class GetInboundsByProfileUuidResponseDto(InboundsByProfileData):
@@ -35,7 +35,7 @@ class GetInboundsByProfileUuidResponseDto(InboundsByProfileData):
 
 
 # Legacy models for backward compatibility
-class GetInboundsResponseDto(RootModel[List[InboundResponseDto]]):
+class GetInboundsResponseDto(RootModel[list[InboundResponseDto]]):
     def __iter__(self):
         return iter(self.root)
 
@@ -68,7 +68,7 @@ class FullInboundResponseDto(BaseModel):
     nodes: FullInboundStatistic
 
 
-class GetFullInboundsResponseDto(RootModel[List[FullInboundResponseDto]]):
+class GetFullInboundsResponseDto(RootModel[list[FullInboundResponseDto]]):
     def __iter__(self):
         return iter(self.root)
 

@@ -10,11 +10,11 @@ from remnapy.models import (
 
 
 class TestSystemStatistics:
-    """Тесты для получения статистики системы"""
+    """System statistics"""
 
     @pytest.mark.asyncio
     async def test_get_stats(self, remnawave):
-        """Тест получения общей статистики"""
+        """Fetching overall statistics"""
         stats = await remnawave.system.get_stats()
         assert isinstance(stats, GetStatsResponseDto)
         assert hasattr(stats, "timestamp")
@@ -22,31 +22,31 @@ class TestSystemStatistics:
 
     @pytest.mark.asyncio
     async def test_get_bandwidth_stats(self, remnawave):
-        """Тест получения статистики по полосе пропускания"""
+        """Fetching bandwidth statistics"""
         bandwidth_stats = await remnawave.system.get_bandwidth_stats()
         assert isinstance(bandwidth_stats, GetBandwidthStatsResponseDto)
         assert hasattr(bandwidth_stats, "current_year")
 
     @pytest.mark.asyncio
     async def test_get_nodes_statistics(self, remnawave):
-        """Тест получения статистики по нодам"""
+        """Fetching per-node statistics"""
         nodes_statistics = await remnawave.system.get_nodes_statistics()
         assert isinstance(nodes_statistics, GetNodesStatisticsResponseDto)
         assert hasattr(nodes_statistics, "last_seven_days")
 
 
 class TestSystemMonitoring:
-    """Тесты для мониторинга системы"""
+    """System monitoring"""
 
     @pytest.mark.asyncio
     async def test_get_nodes_metrics(self, remnawave):
-        """Тест получения метрик нод"""
+        """Fetching node metrics"""
         nodes_metrics = await remnawave.system.get_nodes_metrics()
         assert isinstance(nodes_metrics, GetNodesMetricsResponseDto)
         assert hasattr(nodes_metrics, "nodes")
         assert isinstance(nodes_metrics.nodes, list)
 
-        if nodes_metrics.nodes:  # Если список не пустой
+        if nodes_metrics.nodes:
             node = nodes_metrics.nodes[0]
             assert hasattr(node, "uuid")
             assert hasattr(node, "name")
@@ -60,7 +60,7 @@ class TestSystemMonitoring:
 
     @pytest.mark.asyncio
     async def test_get_health(self, remnawave):
-        """Тест получения состояния здоровья системы"""
+        """Fetching system health"""
         health = await remnawave.system.get_health()
         assert isinstance(health, GetRemnawaveHealthResponseDto)
-        assert hasattr(health, "pm2_stats")
+        assert hasattr(health, "runtime_metrics")

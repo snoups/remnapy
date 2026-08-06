@@ -1,15 +1,18 @@
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
 
 from remnapy.enums import (
+    ResponseModificationEncryptionMethod,
     ResponseRuleConditionOperator,
     ResponseRuleOperator,
     ResponseRuleVersion,
     ResponseType,
-    SubscriptionType,
+    # Re-exported: remnapy.models.__init__ imports SubscriptionType from here,
+    # so removing this "unused" import breaks the package.
+    SubscriptionType,  # noqa: F401
 )
 
 
@@ -31,10 +34,17 @@ class ResponseModificationHeader(BaseModel):
     value: Annotated[str, StringConstraints(min_length=1)]
 
 
+class ResponseModificationEncryption(BaseModel):
+    """Encryption parameters applied to the response body when a rule matches"""
+
+    method: ResponseModificationEncryptionMethod
+    key: str
+
+
 class ResponseModifications(BaseModel):
     """Response modifications to apply when rule matches"""
 
-    headers: Optional[List[ResponseModificationHeader]] = None
+    headers: Optional[list[ResponseModificationHeader]] = None
     apply_headers_to_end: Optional[bool] = Field(
         None,
         alias="applyHeadersToEnd",
@@ -62,13 +72,13 @@ class ResponseModifications(BaseModel):
             "(treated as False)."
         ),
     )
-    additional_extended_clients_regex: Optional[List[str]] = Field(
+    additional_extended_clients_regex: Optional[list[str]] = Field(
         None, alias="additionalExtendedClientsRegex"
     )
     disable_hwid_check: Optional[bool] = Field(None, alias="disableHwidCheck")
-    encryption: Optional[Dict[str, Any]] = None
+    encryption: Optional[ResponseModificationEncryption] = None
     exclude_hosts_by_tags: Optional[
-        List[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
+        list[Annotated[str, StringConstraints(max_length=36, pattern=r"^[A-Z0-9_:]+$")]]
     ] = Field(None, alias="excludeHostsByTags")
 
 
@@ -81,7 +91,7 @@ class ResponseRule(BaseModel):
     ] = None
     enabled: bool
     operator: ResponseRuleOperator
-    conditions: List[ResponseRuleCondition]
+    conditions: list[ResponseRuleCondition]
     response_type: ResponseType = Field(alias="responseType")
     response_modifications: Optional[ResponseModifications] = Field(
         None, alias="responseModifications"
@@ -102,21 +112,21 @@ class ResponseRules(BaseModel):
     """Response rules configuration"""
 
     version: ResponseRuleVersion
-    rules: List[ResponseRule]
+    rules: list[ResponseRule]
     settings: Optional[ResponseRulesSettings] = None
 
 
 class CustomRemarksDto(BaseModel):
     """Custom remarks for different user states"""
 
-    expired_users: List[str] = Field(alias="expiredUsers", min_length=1)
-    limited_users: List[str] = Field(alias="limitedUsers", min_length=1)
-    disabled_users: List[str] = Field(alias="disabledUsers", min_length=1)
-    empty_hosts: List[str] = Field(alias="emptyHosts", min_length=1)
-    hwid_max_devices_exceeded: List[str] = Field(
+    expired_users: list[str] = Field(alias="expiredUsers", min_length=1)
+    limited_users: list[str] = Field(alias="limitedUsers", min_length=1)
+    disabled_users: list[str] = Field(alias="disabledUsers", min_length=1)
+    empty_hosts: list[str] = Field(alias="emptyHosts", min_length=1)
+    hwid_max_devices_exceeded: list[str] = Field(
         alias="HWIDMaxDevicesExceeded", min_length=1
     )
-    hwid_not_supported: List[str] = Field(alias="HWIDNotSupported", min_length=1)
+    hwid_not_supported: list[str] = Field(alias="HWIDNotSupported", min_length=1)
 
 
 class HwidSettingsDto(BaseModel):
@@ -133,18 +143,12 @@ class SubscriptionSettingsResponseDto(BaseModel):
     """Subscription settings response data"""
 
     uuid: UUID
-    profile_title: str = Field(alias="profileTitle")
-    support_link: str = Field(alias="supportLink")
-    profile_update_interval: int = Field(alias="profileUpdateInterval", ge=1)
-    is_profile_webpage_url_enabled: bool = Field(alias="isProfileWebpageUrlEnabled")
     serve_json_at_base_subscription: bool = Field(alias="serveJsonAtBaseSubscription")
     show_custom_remarks: bool = Field(alias="isShowCustomRemarks")
 
     custom_remarks: CustomRemarksDto = Field(alias="customRemarks")
 
-    happ_announce: Optional[str] = Field(None, alias="happAnnounce")
-    happ_routing: Optional[str] = Field(None, alias="happRouting")
-    custom_response_headers: Optional[Dict[str, str]] = Field(
+    custom_response_headers: Optional[dict[str, str]] = Field(
         None, alias="customResponseHeaders"
     )
     randomize_hosts: bool = Field(alias="randomizeHosts")
@@ -168,14 +172,6 @@ class UpdateSubscriptionSettingsRequestDto(BaseModel):
     """Update subscription settings request"""
 
     uuid: UUID
-    profile_title: Optional[str] = Field(None, serialization_alias="profileTitle")
-    support_link: Optional[str] = Field(None, serialization_alias="supportLink")
-    profile_update_interval: Optional[int] = Field(
-        None, serialization_alias="profileUpdateInterval"
-    )
-    is_profile_webpage_url_enabled: Optional[bool] = Field(
-        None, serialization_alias="isProfileWebpageUrlEnabled"
-    )
     serve_json_at_base_subscription: Optional[bool] = Field(
         None, serialization_alias="serveJsonAtBaseSubscription"
     )
@@ -187,11 +183,7 @@ class UpdateSubscriptionSettingsRequestDto(BaseModel):
         None, serialization_alias="customRemarks"
     )
 
-    happ_announce: Optional[Annotated[str, StringConstraints(max_length=200)]] = Field(
-        None, serialization_alias="happAnnounce"
-    )
-    happ_routing: Optional[str] = Field(None, serialization_alias="happRouting")
-    custom_response_headers: Optional[Dict[str, str]] = Field(
+    custom_response_headers: Optional[dict[str, str]] = Field(
         None, serialization_alias="customResponseHeaders"
     )
     randomize_hosts: Optional[bool] = Field(None, serialization_alias="randomizeHosts")

@@ -1,5 +1,4 @@
-from typing import Annotated, Union
-from uuid import UUID
+from typing import Annotated
 
 from rapid_api_client.annotations import PydanticBody
 

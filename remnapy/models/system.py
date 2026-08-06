@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,7 +14,7 @@ class NodeStatistic(BaseModel):
 
 
 class NodesStatisticResponseDto(BaseModel):
-    last_seven_days: List[NodeStatistic] = Field(alias="lastSevenDays")
+    last_seven_days: list[NodeStatistic] = Field(alias="lastSevenDays")
 
 
 class BandwidthStatistic(BaseModel):
@@ -33,19 +33,16 @@ class BandwidthStatisticResponseDto(BaseModel):
 
 class CPUStatistic(BaseModel):
     cores: float
-    physical_cores: Optional[float] = Field(None, alias="physicalCores")
 
 
 class MemoryStatistic(BaseModel):
     total: float
     free: float
     used: float
-    active: Optional[float] = None
-    available: Optional[float] = None
 
 
 class StatusCounts(BaseModel):
-    """Dynamic status counts - использует additionalProperties"""
+    """Dynamic status counts (additionalProperties in the spec)"""
 
     model_config = {"extra": "allow"}
 
@@ -94,7 +91,7 @@ class PM2Stat(BaseModel):
 
 
 class RemnawaveHealthData(BaseModel):
-    pm2_stats: List[PM2Stat] = Field(alias="pm2Stats")
+    pm2_stats: list[PM2Stat] = Field(alias="pm2Stats")
 
 
 class GetStatsResponseDto(StatisticResponseDto):
@@ -112,7 +109,7 @@ class GetBandwidthStatsResponseDto(BaseModel):
 
 
 class GetNodesStatisticsResponseDto(BaseModel):
-    last_seven_days: List[NodeStatistic] = Field(alias="lastSevenDays")
+    last_seven_days: list[NodeStatistic] = Field(alias="lastSevenDays")
 
 
 class RuntimeMetric(BaseModel):
@@ -136,7 +133,7 @@ class RuntimeMetric(BaseModel):
 
 
 class GetRemnawaveHealthResponseDto(BaseModel):
-    runtime_metrics: List[RuntimeMetric] = Field(
+    runtime_metrics: list[RuntimeMetric] = Field(
         default_factory=list, alias="runtimeMetrics"
     )
 
@@ -155,8 +152,8 @@ class NodeMetric(BaseModel):
     country_emoji: str = Field(alias="countryEmoji")
     provider_name: str = Field(alias="providerName")
     users_online: float = Field(alias="usersOnline")
-    inbounds_stats: List[TrafficStatDto] = Field(alias="inboundsStats")
-    outbounds_stats: List[TrafficStatDto] = Field(alias="outboundsStats")
+    inbounds_stats: list[TrafficStatDto] = Field(alias="inboundsStats")
+    outbounds_stats: list[TrafficStatDto] = Field(alias="outboundsStats")
 
     @property
     def uuid(self) -> str:
@@ -196,7 +193,7 @@ class NodeMetric(BaseModel):
 
 
 class GetNodesMetricsResponseDto(BaseModel):
-    nodes: List[NodeMetric]
+    nodes: list[NodeMetric]
 
 
 class X25519KeyPair(BaseModel):
@@ -205,7 +202,7 @@ class X25519KeyPair(BaseModel):
 
 
 class GetX25519KeyPairResponseDto(BaseModel):
-    key_pairs: List[X25519KeyPair] = Field(alias="keypairs")
+    key_pairs: list[X25519KeyPair] = Field(alias="keypairs")
 
 
 # OpenAPI v1.10 schema name
@@ -232,8 +229,8 @@ class DebugSrrMatcherData(BaseModel):
     matched: bool
     response_type: ResponseType = Field(alias="responseType")
     matched_rule: Optional[ResponseRule] = Field(alias="matchedRule")
-    input_headers: Dict[str, str] = Field(alias="inputHeaders")
-    output_headers: Dict[str, str] = Field(alias="outputHeaders")
+    input_headers: dict[str, str] = Field(alias="inputHeaders")
+    output_headers: dict[str, str] = Field(alias="outputHeaders")
 
 
 class DebugSrrMatcherResponseDto(DebugSrrMatcherData):
@@ -302,3 +299,82 @@ class GetMetadataResponseDto(MetadataResponse):
     """Get metadata response"""
 
     pass
+
+
+class ConfigurationNotifications(BaseModel):
+    """Webhook and notification thresholds"""
+
+    webhook: bool
+    bandwidth_usage: Optional[list[float]] = Field(alias="bandwidthUsage")
+    not_connected_after: Optional[list[float]] = Field(alias="notConnectedAfter")
+    expiration_notifications: Optional[list[float]] = Field(
+        alias="expirationNotifications"
+    )
+
+
+class ConfigurationService(BaseModel):
+    """Service-level toggles"""
+
+    clean_usage_history: bool = Field(alias="cleanUsageHistory")
+    disable_user_usage_records: bool = Field(alias="disableUserUsageRecords")
+    disable_srh_records: bool = Field(alias="disableSrhRecords")
+    export_to_redis_stream: bool = Field(alias="exportToRedisStream")
+
+
+class ConfigurationMisc(BaseModel):
+    """Miscellaneous panel configuration"""
+
+    short_uuid_length: int = Field(alias="shortUuidLength")
+    sub_public_domain: str = Field(alias="subPublicDomain")
+    user_usage_ignore_below_bytes: float = Field(alias="userUsageIgnoreBelowBytes")
+
+
+class GetConfigurationResponseDto(BaseModel):
+    """Response for GET /api/system/configuration"""
+
+    notifications: ConfigurationNotifications
+    service: ConfigurationService
+    misc: ConfigurationMisc
+
+
+class StatsDigestUsers(BaseModel):
+    """User counters for the digest period"""
+
+    created_count: float = Field(alias="createdCount")
+    expired_count: float = Field(alias="expiredCount")
+
+
+class StatsDigestTraffic(BaseModel):
+    """Traffic counters for the digest period"""
+
+    total_bytes: str = Field(alias="totalBytes")
+    by_users_created_in_range_bytes: str = Field(alias="byUsersCreatedInRangeBytes")
+
+
+class StatsDigestHwidDevices(BaseModel):
+    """HWID device counters for the digest period"""
+
+    created_count: float = Field(alias="createdCount")
+
+
+class GetStatsDigestResponseDto(BaseModel):
+    """Response for GET /api/system/stats/digest"""
+
+    users: StatsDigestUsers
+    traffic: StatsDigestTraffic
+    hwid_devices: StatsDigestHwidDevices = Field(alias="hwidDevices")
+
+
+class HttpStatsRoute(BaseModel):
+    """Request counter for a single route"""
+
+    method: str
+    route: str
+    count: int
+
+
+class GetHttpStatsResponseDto(BaseModel):
+    """Response for GET /api/system/stats/http"""
+
+    routes: list[HttpStatsRoute]
+    total: int

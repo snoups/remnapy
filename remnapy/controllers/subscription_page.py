@@ -8,7 +8,6 @@ from remnapy.models import (
     CloneSubscriptionPageConfigResponseDto,
     CreateSubscriptionPageConfigRequestDto,
     CreateSubscriptionPageConfigResponseDto,
-    DeleteSubscriptionPageConfigResponseDto,
     GetSubscriptionPageConfigResponseDto,
     GetSubscriptionPageConfigsResponseDto,
     ReorderSubscriptionPageConfigsRequestDto,
@@ -65,14 +64,14 @@ class SubscriptionPageConfigController(BaseController):
 
     @delete(
         "/subscription-page-configs/{uuid}",
-        response_class=DeleteSubscriptionPageConfigResponseDto,
+        response_class=None,
     )
     async def delete_config(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="Subscription page config UUID")
         ],
-    ) -> DeleteSubscriptionPageConfigResponseDto:
+    ) -> None:
         """Delete subscription page config"""
         ...
 

@@ -1,12 +1,11 @@
 from datetime import datetime
-from typing import Annotated, Any, List, Literal, Optional, Union
+from typing import Annotated, Any, Literal, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 
 class TorrentBlockerUserDto(BaseModel):
-    uuid: UUID
     username: str
 
 
@@ -58,7 +57,7 @@ class TorrentBlockerReportRecordDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: float
-    user_id: float = Field(alias="userId")
+    user_id: int = Field(alias="userId")
     node_id: float = Field(alias="nodeId")
     user: TorrentBlockerUserDto
     node: TorrentBlockerNodeDto
@@ -67,15 +66,11 @@ class TorrentBlockerReportRecordDto(BaseModel):
 
 
 class TorrentBlockerReportsData(BaseModel):
-    records: List[TorrentBlockerReportRecordDto]
+    records: list[TorrentBlockerReportRecordDto]
     total: float
 
 
 class GetTorrentBlockerReportsResponseDto(TorrentBlockerReportsData):
-    pass
-
-
-class TruncateTorrentBlockerReportsResponseDto(TorrentBlockerReportsData):
     pass
 
 
@@ -89,7 +84,9 @@ class TorrentBlockerStatsDto(BaseModel):
 
 
 class TorrentBlockerTopUserDto(BaseModel):
-    uuid: UUID
+    model_config = ConfigDict(populate_by_name=True)
+
+    user_id: int = Field(alias="userId")
     color: str
     username: str
     total: float
@@ -109,8 +106,8 @@ class GetTorrentBlockerReportsStatsResponseDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     stats: TorrentBlockerStatsDto
-    top_users: List[TorrentBlockerTopUserDto] = Field(alias="topUsers")
-    top_nodes: List[TorrentBlockerTopNodeDto] = Field(alias="topNodes")
+    top_users: list[TorrentBlockerTopUserDto] = Field(alias="topUsers")
+    top_nodes: list[TorrentBlockerTopNodeDto] = Field(alias="topNodes")
 
 
 class NodePluginDto(BaseModel):
@@ -126,7 +123,7 @@ class GetNodePluginsResponseDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     total: float
-    node_plugins: List[NodePluginDto] = Field(alias="nodePlugins")
+    node_plugins: list[NodePluginDto] = Field(alias="nodePlugins")
 
 
 class GetNodePluginResponseDto(NodePluginDto):
@@ -152,12 +149,6 @@ class UpdateNodePluginResponseDto(NodePluginDto):
     pass
 
 
-class DeleteNodePluginResponseDto(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class CreateNodePluginRequestDto(BaseModel):
     name: Annotated[
         str,
@@ -177,7 +168,7 @@ class ReorderNodePluginItem(BaseModel):
 
 
 class ReorderNodePluginsRequestDto(BaseModel):
-    items: List[ReorderNodePluginItem]
+    items: list[ReorderNodePluginItem]
 
 
 class ReorderNodePluginsResponseDto(GetNodePluginsResponseDto):
@@ -201,12 +192,12 @@ class BlockIpItemDto(BaseModel):
 
 class BlockIpsCommandDto(BaseModel):
     command: Literal["blockIps"]
-    ips: List[BlockIpItemDto]
+    ips: list[BlockIpItemDto]
 
 
 class UnblockIpsCommandDto(BaseModel):
     command: Literal["unblockIps"]
-    ips: List[str]
+    ips: list[str]
 
 
 class RecreateTablesCommandDto(BaseModel):
@@ -226,7 +217,7 @@ class TargetSpecificNodesDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     target: Literal["specificNodes"]
-    node_uuids: List[UUID] = Field(alias="nodeUuids")
+    node_uuids: list[UUID] = Field(alias="nodeUuids")
 
 
 PluginTargetNodesDto = Union[TargetAllNodesDto, TargetSpecificNodesDto]
@@ -237,9 +228,3 @@ class PluginExecutorRequestDto(BaseModel):
 
     command: PluginCommandDto
     target_nodes: PluginTargetNodesDto = Field(alias="targetNodes")
-
-
-class PluginExecutorResponseDto(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    event_sent: bool = Field(alias="eventSent")

@@ -2,6 +2,7 @@ from .api_tokens_management import APITokensManagementController
 from .auth import AuthController
 from .bandwidthstats import BandWidthStatsController
 from .config_profiles import ConfigProfilesController
+from .connections import ConnectionsController
 from .external_squads import ExternalSquadsController
 from .hosts import HostsController
 from .hosts_bulk_actions import HostsBulkActionsController
@@ -9,7 +10,6 @@ from .hwid import HWIDUserController
 from .inbounds import InboundsController
 from .infra_billing import InfraBillingController
 from .internal_squads import InternalSquadsController
-from .ip_control import IpControlController
 from .keygen import KeygenController
 from .metadata import MetadataController
 from .node_plugins import NodePluginsController
@@ -33,29 +33,29 @@ __all__ = [
     "AuthController",
     "BandWidthStatsController",
     "ConfigProfilesController",
-    "HostsController",
-    "HostsBulkActionsController",
+    "ConnectionsController",
+    "ExternalSquadsController",
     "HWIDUserController",
+    "HostsBulkActionsController",
+    "HostsController",
     "InboundsController",
     "InfraBillingController",
     "InternalSquadsController",
     "KeygenController",
+    "MetadataController",
+    "NodePluginsController",
     "NodesController",
+    "PasskeysController",
+    "RemnawaveSettingsController",
+    "SnippetsController",
     "SubscriptionController",
+    "SubscriptionPageConfigController",
+    "SubscriptionRequestHistoryController",
     "SubscriptionsController",
     "SubscriptionsSettingsController",
     "SubscriptionsTemplateController",
     "SystemController",
-    "UsersController",
     "UsersBulkActionsController",
+    "UsersController",
     "WebhookUtility",
-    "SubscriptionRequestHistoryController",
-    "PasskeysController",
-    "ExternalSquadsController",
-    "SnippetsController",
-    "RemnawaveSettingsController",
-    "SubscriptionPageConfigController",
-    "IpControlController",
-    "NodePluginsController",
-    "MetadataController",
 ]

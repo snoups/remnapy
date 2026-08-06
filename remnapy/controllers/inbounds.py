@@ -1,4 +1,4 @@
-from typing import Annotated, Optional, Union
+from typing import Annotated, Union
 from uuid import UUID
 
 from rapid_api_client import Path

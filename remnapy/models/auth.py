@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Dict, Optional
+from typing import Annotated, Any, Optional
 
 from pydantic import BaseModel, Field, StringConstraints, field_validator
 
@@ -22,7 +22,7 @@ class PasskeyAuthenticationSettings(BaseModel):
 
 
 class OAuth2ProvidersSettings(BaseModel):
-    providers: Dict[str, bool]
+    providers: dict[str, bool]
 
 
 class PasswordAuthenticationSettings(BaseModel):
@@ -116,15 +116,15 @@ class OAuth2CallbackResponseDto(BaseModel):
 class GetPasskeyAuthenticationOptionsResponseDto(BaseModel):
     """Response with passkey authentication options"""
 
-    # Passkey options are complex WebAuthn objects
-    pass
+    # Passkey options are a free-form WebAuthn object per spec
+    response: dict[str, Any]
 
 
 class VerifyPasskeyAuthenticationRequestDto(BaseModel):
     """Request to verify passkey authentication"""
 
     # Passkey authentication response is complex WebAuthn object
-    response: Dict[str, Any]
+    response: dict[str, Any]
 
 
 class VerifyPasskeyAuthenticationResponseDto(BaseModel):

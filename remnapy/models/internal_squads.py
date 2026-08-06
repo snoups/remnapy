@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List, Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Field, StringConstraints
@@ -26,7 +26,7 @@ class InternalSquadDto(BaseModel):
     view_position: int = Field(alias="viewPosition")
     name: str
     info: Optional[InfoDto] = Field(default=None)
-    inbounds: List[InboundsDto] = Field(default_factory=list)
+    inbounds: list[InboundsDto] = Field(default_factory=list)
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
 
@@ -36,7 +36,7 @@ class CreateInternalSquadRequestDto(BaseModel):
         str,
         StringConstraints(min_length=2, max_length=30, pattern=r"^[A-Za-z0-9_\s-]+$"),
     ]
-    inbounds: List[UUID] = Field(default_factory=list)
+    inbounds: list[UUID] = Field(default_factory=list)
 
 
 class CreateInternalSquadResponseDto(InternalSquadDto):
@@ -45,7 +45,7 @@ class CreateInternalSquadResponseDto(InternalSquadDto):
 
 class UpdateInternalSquadRequestDto(BaseModel):
     uuid: UUID
-    inbounds: List[UUID] = Field(default_factory=list)
+    inbounds: list[UUID] = Field(default_factory=list)
     name: Optional[
         Annotated[
             str,
@@ -62,7 +62,7 @@ class UpdateInternalSquadResponseDto(InternalSquadDto):
 
 class GetAllInternalSquadsResponse(BaseModel):
     total: float
-    internal_squads: List[InternalSquadDto] = Field(alias="internalSquads")
+    internal_squads: list[InternalSquadDto] = Field(alias="internalSquads")
 
 
 class GetAllInternalSquadsResponseDto(GetAllInternalSquadsResponse):
@@ -73,28 +73,12 @@ class GetInternalSquadByUuidResponseDto(InternalSquadDto):
     pass
 
 
-class DeleteInternalSquadResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class AddUsersToInternalSquadRequestDto(BaseModel):
-    user_uuids: List[UUID] = Field(alias="userUuids")
-
-
-class BulkActionsResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class AddUsersToInternalSquadResponseDto(BulkActionsResponseDto):
-    pass
+    user_uuids: list[UUID] = Field(alias="userUuids")
 
 
 class DeleteUsersFromInternalSquadRequestDto(BaseModel):
-    user_uuids: List[UUID] = Field(alias="userUuids")
-
-
-class DeleteUsersFromInternalSquadResponseDto(BulkActionsResponseDto):
-    pass
+    user_uuids: list[UUID] = Field(alias="userUuids")
 
 
 class AccessibleNodeDto(BaseModel):
@@ -103,14 +87,14 @@ class AccessibleNodeDto(BaseModel):
     country_code: Optional[str] = Field(default=None, alias="countryCode")
     config_profile_uuid: Optional[UUID] = Field(default=None, alias="configProfileUuid")
     config_profile_name: Optional[str] = Field(default=None, alias="configProfileName")
-    active_inbounds: List[Optional[UUID]] = Field(
+    active_inbounds: list[Optional[UUID]] = Field(
         default_factory=list, alias="activeInbounds"
     )
 
 
 class GetInternalSquadAccessibleNodesResponseDto(BaseModel):
     squad_uuid: UUID = Field(alias="squadUuid")
-    accessible_nodes: List[AccessibleNodeDto] = Field(alias="accessibleNodes")
+    accessible_nodes: list[AccessibleNodeDto] = Field(alias="accessibleNodes")
 
 
 class ReorderInternalSquadItem(BaseModel):
@@ -119,8 +103,40 @@ class ReorderInternalSquadItem(BaseModel):
 
 
 class ReorderInternalSquadsRequestDto(BaseModel):
-    items: List[ReorderInternalSquadItem]
+    items: list[ReorderInternalSquadItem]
 
 
 class ReorderInternalSquadsResponseDto(GetAllInternalSquadsResponse):
     pass
+
+
+class InternalSquadUsageUser(BaseModel):
+    """Traffic usage of a single user in the squad"""
+
+    id: int
+    total_bytes: float = Field(alias="totalBytes")
+
+
+class GetInternalSquadUsageResponseDto(BaseModel):
+    """Response for GET /api/internal-squads/{uuid}/usage"""
+
+    squad_uuid: UUID = Field(alias="squadUuid")
+    users: list[InternalSquadUsageUser]
+    next_cursor: Optional[str] = Field(None, alias="nextCursor")
+    has_more: bool = Field(alias="hasMore")
+
+
+class AddManyUsersToInternalSquadRequestDto(BaseModel):
+    """Request body for POST /api/internal-squads/{uuid}/bulk-actions/add-many-users"""
+
+    user_ids: list[int] = Field(
+        ..., serialization_alias="userIds", description="List of user IDs"
+    )
+
+
+class DeleteManyUsersFromInternalSquadRequestDto(BaseModel):
+    """Request body for DELETE /api/internal-squads/{uuid}/bulk-actions/remove-many-users"""
+
+    user_ids: list[int] = Field(
+        ..., serialization_alias="userIds", description="List of user IDs"
+    )

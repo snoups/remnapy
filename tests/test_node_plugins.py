@@ -1,37 +1,34 @@
 import pytest
 
-from remnawave.exceptions import NotFoundError
-from remnawave.models import (
+from remnapy.exceptions import NotFoundError
+from remnapy.models import (
+    BlockIpItemDto,
+    BlockIpsCommandDto,
     CloneNodePluginRequestDto,
     CloneNodePluginResponseDto,
     CreateNodePluginRequestDto,
     CreateNodePluginResponseDto,
-    DeleteNodePluginResponseDto,
     GetNodePluginResponseDto,
     GetNodePluginsResponseDto,
     GetTorrentBlockerReportsResponseDto,
     GetTorrentBlockerReportsStatsResponseDto,
     PluginExecutorRequestDto,
-    PluginExecutorResponseDto,
+    ReorderNodePluginItem,
     ReorderNodePluginsRequestDto,
     ReorderNodePluginsResponseDto,
-    TruncateTorrentBlockerReportsResponseDto,
+    TargetAllNodesDto,
     UpdateNodePluginRequestDto,
     UpdateNodePluginResponseDto,
-    BlockIpsCommandDto,
-    BlockIpItemDto,
-    ReorderNodePluginItem,
-    TargetAllNodesDto,
 )
 from tests.utils import generate_random_string
 
 
 class TestNodePlugins:
-    """Тесты для Node Plugins контроллера"""
+    """Node plugins controller"""
 
     @pytest.mark.asyncio
     async def test_get_all_node_plugins(self, remnawave):
-        """Тест получения списка всех Node Plugins"""
+        """Fetching all node plugins"""
         response = await remnawave.node_plugins.get_all_node_plugins()
         
         assert isinstance(response, GetNodePluginsResponseDto)
@@ -40,7 +37,7 @@ class TestNodePlugins:
 
     @pytest.mark.asyncio
     async def test_create_and_delete_node_plugin(self, remnawave):
-        """Тест создания и удаления Node Plugin"""
+        """Creating and deleting a node plugin"""
         plugin_name = f"test_plugin_{generate_random_string(length=8)}"
         
         # Create plugin
@@ -61,11 +58,11 @@ class TestNodePlugins:
         
         # Delete plugin
         delete_response = await remnawave.node_plugins.delete_node_plugin(uuid=plugin_uuid)
-        assert isinstance(delete_response, DeleteNodePluginResponseDto)
+        assert delete_response is None
 
     @pytest.mark.asyncio
     async def test_update_node_plugin(self, remnawave):
-        """Тест обновления Node Plugin"""
+        """Updating a node plugin"""
         plugin_name = f"test_plugin_{generate_random_string(length=8)}"
         
         # Create plugin first
@@ -99,7 +96,7 @@ class TestNodePlugins:
 
     @pytest.mark.asyncio
     async def test_reorder_node_plugins(self, remnawave):
-        """Тест изменения порядка Node Plugins"""
+        """Reordering node plugins"""
         # Create two plugins
         plugin1_name = f"test_plugin_1_{generate_random_string(length=6)}"
         plugin2_name = f"test_plugin_2_{generate_random_string(length=6)}"
@@ -138,7 +135,7 @@ class TestNodePlugins:
 
     @pytest.mark.asyncio
     async def test_clone_node_plugin(self, remnawave):
-        """Тест клонирования Node Plugin"""
+        """Cloning a node plugin"""
         plugin_name = f"test_plugin_{generate_random_string(length=8)}"
         
         # Create plugin
@@ -173,7 +170,7 @@ class TestNodePlugins:
 
     @pytest.mark.asyncio
     async def test_plugin_executor(self, remnawave):
-        """Тест выполнения команды на плагинах"""
+        """Running a command through the plugin executor"""
         # This test assumes there's at least one node plugin configured
         # Create a test plugin first
         plugin_name = f"test_plugin_{generate_random_string(length=8)}"
@@ -200,9 +197,9 @@ class TestNodePlugins:
                         target_nodes=TargetAllNodesDto(target="allNodes"),
                     )
                 )
-                assert isinstance(executor_response, PluginExecutorResponseDto)
+                assert executor_response is None
             except NotFoundError:
-                # В тестовых окружениях без подключенных нод API может вернуть 404
+                # In test environments with no connected nodes the API may answer 404
                 pytest.skip("Node plugins executor is unavailable in this environment (no connected nodes)")
             
         finally:
@@ -211,11 +208,11 @@ class TestNodePlugins:
 
 
 class TestTorrentBlocker:
-    """Тесты для Torrent Blocker функциональности"""
+    """Torrent-blocker functionality"""
 
     @pytest.mark.asyncio
     async def test_get_torrent_blocker_reports(self, remnawave):
-        """Тест получения отчетов Torrent Blocker"""
+        """Fetching torrent-blocker reports"""
         response = await remnawave.node_plugins.get_torrent_blocker_reports(
             size=10,
             start=0
@@ -228,7 +225,7 @@ class TestTorrentBlocker:
 
     @pytest.mark.asyncio
     async def test_get_torrent_blocker_reports_without_pagination(self, remnawave):
-        """Тест получения отчетов Torrent Blocker без пагинации"""
+        """Fetching torrent-blocker reports without pagination"""
         response = await remnawave.node_plugins.get_torrent_blocker_reports()
         
         assert isinstance(response, GetTorrentBlockerReportsResponseDto)
@@ -237,7 +234,7 @@ class TestTorrentBlocker:
 
     @pytest.mark.asyncio
     async def test_get_torrent_blocker_stats(self, remnawave):
-        """Тест получения статистики Torrent Blocker"""
+        """Fetching torrent-blocker statistics"""
         response = await remnawave.node_plugins.get_torrent_blocker_reports_stats()
         
         assert isinstance(response, GetTorrentBlockerReportsStatsResponseDto)
@@ -245,12 +242,12 @@ class TestTorrentBlocker:
 
     @pytest.mark.asyncio
     async def test_truncate_torrent_blocker_reports(self, remnawave):
-        """Тест очистки отчетов Torrent Blocker"""
+        """Truncating torrent-blocker reports"""
         # This is a destructive operation, so be careful
         # Only run in test environment
         response = await remnawave.node_plugins.truncate_torrent_blocker_reports()
         
-        assert isinstance(response, TruncateTorrentBlockerReportsResponseDto)
+        assert response is None
         
         # Verify truncation by checking reports are empty
         reports = await remnawave.node_plugins.get_torrent_blocker_reports()

@@ -1,5 +1,4 @@
-from typing import Annotated, Optional, Union
-from uuid import UUID
+from typing import Annotated, Optional
 
 from rapid_api_client import Path, PydanticBody, Query
 
@@ -12,16 +11,50 @@ from remnapy.models import (
     GetTopUsersByHwidDevicesResponseDto,
     GetUserHwidDevicesResponseDto,
     HWIDDeleteRequest,
+    TableFilter,
+    TableSort,
 )
-from remnapy.rapid import AttributeBody, BaseController, get, post
+from remnapy.rapid import BaseController, get, post
 
 
 class HWIDUserController(BaseController):
     @get("/hwid/devices", response_class=GetUserHwidDevicesResponseDto)
     async def get_hwid_users(
         self,
-        size: Annotated[int | None, AttributeBody()] = None,
-        start: Annotated[int | None, AttributeBody()] = None,
+        size: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Number of results to return, no more than 1000",
+            ),
+        ] = None,
+        start: Annotated[
+            Optional[int],
+            Query(
+                default=None,
+                description="Start index (offset) of the results to return, default is 0",
+            ),
+        ] = None,
+        filters: Annotated[
+            Optional[list[TableFilter]],
+            Query(default=None, description="Column filters"),
+        ] = None,
+        filter_modes: Annotated[
+            Optional[dict[str, str]],
+            Query(
+                default=None, alias="filterModes", description="Per-column filter modes"
+            ),
+        ] = None,
+        global_filter_mode: Annotated[
+            Optional[str],
+            Query(
+                default=None, alias="globalFilterMode", description="Global filter mode"
+            ),
+        ] = None,
+        sorting: Annotated[
+            Optional[list[TableSort]],
+            Query(default=None, description="Sort order"),
+        ] = None,
     ) -> GetUserHwidDevicesResponseDto:
         """Get all user HWID devices"""
         ...
@@ -57,12 +90,10 @@ class HWIDUserController(BaseController):
         """Delete all user HWID devices"""
         ...
 
-    @get("/hwid/devices/{userUuid}", response_class=GetUserHwidDevicesResponseDto)
+    @get("/hwid/devices/{userId}", response_class=GetUserHwidDevicesResponseDto)
     async def get_hwid_user(
         self,
-        uuid: Annotated[
-            Union[str, UUID], Path(description="UUID of the User", alias="userUuid")
-        ],
+        user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
     ) -> GetUserHwidDevicesResponseDto:
         """Get a user HWID device"""
         ...
