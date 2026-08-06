@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class InfraProviderSimpleDto(BaseModel):
-    """Упрощенная модель провайдера для billingNodes"""
+    """Trimmed provider model as it appears inside billingNodes"""
 
     uuid: UUID
     name: str
@@ -15,21 +15,21 @@ class InfraProviderSimpleDto(BaseModel):
 
 
 class InfraBillingHistoryStatsDto(BaseModel):
-    """Статистика истории биллинга для провайдера"""
+    """Billing history statistics for a provider"""
 
     total_amount: float = Field(alias="totalAmount")
     total_bills: float = Field(alias="totalBills")
 
 
 class InfraBillingNodeDetailsDto(BaseModel):
-    """Детали узла биллинга (2.8.0)"""
+    """Billing node details"""
 
     node_uuid: UUID = Field(alias="nodeUuid")
     country_code: str = Field(alias="countryCode")
 
 
 class InfraBillingNodeSimpleDto(BaseModel):
-    """Упрощенная модель узла биллинга для провайдера"""
+    """Trimmed billing node model as it appears inside a provider"""
 
     name: str
     details: Optional[InfraBillingNodeDetailsDto] = None
@@ -53,7 +53,7 @@ class NodeDto(BaseModel):
 
 
 class InfraBillingHistoryProviderDto(BaseModel):
-    """Провайдер внутри записи истории биллинга"""
+    """Provider as it appears inside a billing history record"""
 
     uuid: UUID
     name: str
@@ -81,7 +81,7 @@ class InfraBillingNodeDto(BaseModel):
 
 
 class AvailableBillingNodeDto(BaseModel):
-    """Модель для доступных узлов биллинга"""
+    """Available billing nodes"""
 
     uuid: UUID
     name: str
@@ -89,7 +89,7 @@ class AvailableBillingNodeDto(BaseModel):
 
 
 class BillingStatsDto(BaseModel):
-    """Статистика биллинга"""
+    """Billing statistics"""
 
     upcoming_nodes_count: float = Field(alias="upcomingNodesCount")
     current_month_payments: float = Field(alias="currentMonthPayments")
@@ -123,7 +123,6 @@ class AllInfraProvidersData(BaseModel):
     providers: list[InfraProviderDto]
 
 
-# Исправленные имена моделей согласно OpenAPI
 class GetInfraProvidersResponseDto(AllInfraProvidersData):
     pass
 
@@ -134,7 +133,7 @@ class GetInfraProviderByUuidResponseDto(InfraProviderDto):
 
 # Billing History models
 class CreateInfraBillingHistoryRecordRequestDto(BaseModel):
-    """Модель для создания записи истории биллинга"""
+    """Request to create a billing history record"""
 
     provider_uuid: UUID = Field(serialization_alias="providerUuid")
     amount: float = Field(ge=0)
@@ -164,7 +163,7 @@ class CreateInfraBillingNodeRequestDto(BaseModel):
     )
 
 
-# ИСПРАВЛЕНО: API возвращает список всех billing nodes после создания, а не один созданный
+# The API answers with the full billing-node list, not just the created one.
 class CreateInfraBillingNodeResponseDto(BaseModel):
     total_billing_nodes: float = Field(alias="totalBillingNodes")
     billing_nodes: list[InfraBillingNodeDto] = Field(alias="billingNodes")
@@ -204,7 +203,7 @@ class GetInfraBillingNodesResponseDto(InfraBillingNodesData):
     pass
 
 
-# Legacy aliases для обратной совместимости
+# Legacy aliases
 GetAllInfraProvidersResponseDto = GetInfraProvidersResponseDto
 GetAllInfraBillingHistoryResponseDto = GetInfraBillingHistoryRecordsResponseDto
 GetInfraBillingHistoryByUuidResponseDto = InfraBillingHistoryDto

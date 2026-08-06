@@ -129,7 +129,7 @@ ERRORS: dict[str, type[ApiError]] = {
     ErrorCode.SNIPPET_NAME_ALREADY_EXISTS: ConflictError,
     ErrorCode.GET_SNIPPET_ERROR: ServerError,
     ErrorCode.GET_ALL_SNIPPETS_ERROR: ServerError,
-    # Валидационные ошибки
+    # Validation errors
     ErrorCode.VALIDATION_ERROR: ValidationError,
     ErrorCode.INVALID_UUID_FORMAT: ValidationError,
     ErrorCode.INVALID_EMAIL_FORMAT: ValidationError,
@@ -140,34 +140,34 @@ ERRORS: dict[str, type[ApiError]] = {
     ErrorCode.INVALID_ENUM_VALUE: ValidationError,
     ErrorCode.INVALID_REGEX_PATTERN: ValidationError,
     ErrorCode.NUMERIC_VALIDATION_ERROR: ValidationError,
-    # Сетевые ошибки
+    # Network errors
     ErrorCode.NETWORK_ERROR: NetworkError,
     ErrorCode.TIMEOUT_ERROR: NetworkError,
     ErrorCode.CONNECTION_ERROR: NetworkError,
     ErrorCode.DNS_ERROR: NetworkError,
     ErrorCode.SSL_ERROR: NetworkError,
-    # Ошибки аутентификации
+    # Authentication errors
     ErrorCode.INVALID_TOKEN: AuthenticationError,
     ErrorCode.TOKEN_EXPIRED: AuthenticationError,
     ErrorCode.INVALID_CREDENTIALS: AuthenticationError,
     ErrorCode.TWO_FACTOR_REQUIRED: AuthenticationError,
     ErrorCode.ACCOUNT_LOCKED: AuthenticationError,
     ErrorCode.PASSWORD_COMPLEXITY_ERROR: ValidationError,
-    # Бизнес-логика
+    # Business logic
     ErrorCode.TRAFFIC_LIMIT_EXCEEDED: BusinessLogicError,
     ErrorCode.USER_LIMIT_EXCEEDED: BusinessLogicError,
     ErrorCode.SUBSCRIPTION_EXPIRED: BusinessLogicError,
     ErrorCode.FEATURE_NOT_AVAILABLE: BusinessLogicError,
     ErrorCode.QUOTA_EXCEEDED: BusinessLogicError,
     ErrorCode.RESOURCE_LOCKED: ConflictError,
-    # Системные ошибки
+    # System errors
     ErrorCode.SYSTEM_STATS_ERROR: ServerError,
     ErrorCode.SYSTEM_HEALTH_ERROR: ServerError,
     ErrorCode.NODES_METRICS_ERROR: ServerError,
     ErrorCode.X25519_KEYGEN_ERROR: ServerError,
     ErrorCode.HAPP_CRYPTO_ERROR: ServerError,
     ErrorCode.SRR_MATCHER_ERROR: ServerError,
-    # Настройки Remnawave
+    # Remnawave settings
     ErrorCode.GET_REMNAWAVE_SETTINGS_ERROR: ServerError,
     ErrorCode.UPDATE_REMNAWAVE_SETTINGS_ERROR: ServerError,
     ErrorCode.OAUTH_ERROR: AuthenticationError,

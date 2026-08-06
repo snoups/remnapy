@@ -126,7 +126,7 @@ async def test_infra_billing_nodes(remnawave) -> None:
         available_node = billing_nodes.available_billing_nodes[0]
         next_billing = datetime.now() + timedelta(days=30)
 
-        # Create billing node - API возвращает весь список узлов
+        # Create billing node — the API answers with the whole node list
         create_billing_node = await remnawave.infra_billing.create_infra_billing_node(
             CreateInfraBillingNodeRequestDto(
                 node_uuid=available_node.uuid,
@@ -152,7 +152,7 @@ async def test_infra_billing_nodes(remnawave) -> None:
         assert created_node is not None, "Created billing node not found in response"
         billing_node_uuid = str(created_node.uuid)
 
-        # Test delete billing node - API возвращает обновленный список
+        # Delete billing node — the API answers with the refreshed list
         delete_billing_node = (
             await remnawave.infra_billing.delete_infra_billing_node_by_uuid(
                 billing_node_uuid
@@ -223,7 +223,7 @@ async def test_infra_billing_complete_workflow(remnawave) -> None:
             assert created_node is not None
             billing_node_uuid = str(created_node.uuid)
 
-            # 4. Cleanup billing node - API возвращает обновленный список
+            # 4. Cleanup billing node — the API answers with the refreshed list
             delete_billing_node = (
                 await remnawave.infra_billing.delete_infra_billing_node_by_uuid(
                     billing_node_uuid

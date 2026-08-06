@@ -2,7 +2,7 @@ import pytest
 
 from remnapy import RemnawaveSDK
 
-# Пример корректных данных из вебхука
+# Sample of a valid webhook payload
 VALID_SIGNATURE = "8c630175963bae8f413e6e01a1fa42631cd5c499ea4c7128292aeb7fe74d23de"
 VALID_BODY = {
     "event": "user.modified",
@@ -61,21 +61,20 @@ VALID_BODY = {
         ],
     },
 }
-# Секрет для валидации вебхука
+# Secret used to validate the webhook signature
 WEBHOOK_SECRET = "0cfbd6e60f79f80eb5065ce715f2398a2bb342e62dfce3f6f66083b05abd9ef805ed88b7c6ed9564d50e32a42192d5eaa9971d4c072927bbffa52e364a067817"
 
 
 @pytest.mark.asyncio
 async def test_webhook_utility_valid(remnawave):
-    # Инициализируем SDK (base_url и token заданы для теста)
+    # base_url and token are dummies for this test
     sdk = RemnawaveSDK(base_url="your_base_url", token="your_api_key")
 
-    # Вызовем метод валидации с корректными данными
     is_valid = sdk.webhook_utility.validate_webhook(
         body=VALID_BODY, signature=VALID_SIGNATURE, webhook_secret=WEBHOOK_SECRET
     )
 
-    # Если валидация пройдена, метод должен вернуть True
+    # On success the method must return True
     assert is_valid is True, "Webhook validation failed with valid data"
 
 
@@ -83,11 +82,11 @@ async def test_webhook_utility_valid(remnawave):
 async def test_webhook_utility_invalid(remnawave):
     sdk = RemnawaveSDK(base_url="your_base_url", token="your_api_key")
 
-    # Используем невалидную подпись
+    # Use an invalid signature
     invalid_signature = "invalidsignature"
     is_valid = sdk.webhook_utility.validate_webhook(
         body=VALID_BODY, signature=invalid_signature, webhook_secret=WEBHOOK_SECRET
     )
 
-    # Ожидаем, что валидация не пройдется
+    # Expect validation to fail
     assert is_valid is False, "Webhook validation passed with invalid signature"

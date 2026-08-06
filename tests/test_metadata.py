@@ -19,11 +19,11 @@ REMNAWAVE_NODE_UUID = os.getenv("REMNAWAVE_NODE_UUID")
 
 
 class TestUserMetadata:
-    """Тесты для User Metadata контроллера"""
+    """User metadata controller"""
 
     @pytest.mark.asyncio
     async def test_upsert_and_get_user_metadata(self, remnawave):
-        """Тест создания/обновления и получения метаданных пользователя"""
+        """Upserting and fetching user metadata"""
         # Create test user first
         username = generate_random_string(length=8)
         expire_at = datetime.now(UTC) + timedelta(days=7)
@@ -65,7 +65,7 @@ class TestUserMetadata:
 
     @pytest.mark.asyncio
     async def test_update_existing_user_metadata(self, remnawave):
-        """Тест обновления существующих метаданных пользователя"""
+        """Updating existing user metadata"""
         # Create test user
         username = generate_random_string(length=8)
         expire_at = datetime.now(UTC) + timedelta(days=7)
@@ -105,7 +105,7 @@ class TestUserMetadata:
 
     @pytest.mark.asyncio
     async def test_get_user_metadata_empty(self, remnawave):
-        """Тест получения пустых метаданных пользователя"""
+        """Fetching empty user metadata"""
         # Create test user without metadata
         username = generate_random_string(length=8)
         expire_at = datetime.now(UTC) + timedelta(days=7)
@@ -115,13 +115,13 @@ class TestUserMetadata:
         user_id = create_user.id
 
         try:
-            # Get metadata (API может вернуть пустой объект или 404, если метаданные не созданы)
+            # Get metadata (the API may answer with an empty object or 404 when none exists)
             try:
                 get_response = await remnawave.metadata.get_user_metadata(user_id=user_id)
                 assert isinstance(get_response, GetUserMetadataResponseDto)
                 assert get_response.metadata is None or get_response.metadata == {}
             except NotFoundError:
-                # Ожидаемое поведение для пользователя без метаданных
+                # Expected for a user with no metadata
                 assert True
 
         finally:
@@ -130,11 +130,11 @@ class TestUserMetadata:
 
 
 class TestNodeMetadata:
-    """Тесты для Node Metadata контроллера"""
+    """Node metadata controller"""
 
     @pytest.mark.asyncio
     async def test_upsert_and_get_node_metadata(self, remnawave):
-        """Тест создания/обновления и получения метаданных ноды"""
+        """Upserting and fetching node metadata"""
         # Skip if no node UUID configured
         if not REMNAWAVE_NODE_UUID:
             pytest.skip("REMNAWAVE_NODE_UUID not set in environment")
@@ -171,7 +171,7 @@ class TestNodeMetadata:
 
     @pytest.mark.asyncio
     async def test_update_existing_node_metadata(self, remnawave):
-        """Тест обновления существующих метаданных ноды"""
+        """Updating existing node metadata"""
         if not REMNAWAVE_NODE_UUID:
             pytest.skip("REMNAWAVE_NODE_UUID not set in environment")
         
@@ -203,7 +203,7 @@ class TestNodeMetadata:
 
     @pytest.mark.asyncio
     async def test_get_node_metadata(self, remnawave):
-        """Тест получения метаданных ноды"""
+        """Fetching node metadata"""
         if not REMNAWAVE_NODE_UUID:
             pytest.skip("REMNAWAVE_NODE_UUID not set in environment")
         

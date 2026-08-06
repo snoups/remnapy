@@ -9,11 +9,11 @@ from tests.conftest import REMNAWAVE_ADMIN_PASSWORD, REMNAWAVE_ADMIN_USERNAME
 
 
 class TestAuthentication:
-    """Тесты для проверки функциональности аутентификации"""
+    """Authentication functionality"""
 
     @pytest.mark.asyncio
     async def test_login_with_credentials(self, remnawave):
-        """Тест базовой аутентификации по имени пользователя и паролю"""
+        """Basic username/password authentication"""
         login = await remnawave.auth.login(
             LoginRequestDto(
                 username=REMNAWAVE_ADMIN_USERNAME,
@@ -22,13 +22,13 @@ class TestAuthentication:
         )
         assert isinstance(login, LoginResponseDto)
         assert login.access_token is not None
-        # Проверяем наличие токена, но не обращаемся к полю user,
-        # так как в текущей версии API это поле не возвращается
-        assert login.access_token.startswith("eyJ")  # JWT token всегда начинается с eyJ
+        # Check the token is present without touching the user field,
+        # which this API version no longer returns
+        assert login.access_token.startswith("eyJ")  # JWT tokens always start with eyJ
 
     @pytest.mark.asyncio
     async def test_login_with_invalid_credentials(self, remnawave):
-        """Тест аутентификации с неверными учетными данными"""
+        """Authentication with invalid credentials"""
         try:
             await remnawave.auth.login(
                 LoginRequestDto(

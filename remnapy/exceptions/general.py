@@ -10,18 +10,18 @@ class ApiErrorResponse(BaseModel):
     """Standard API error response model"""
 
     timestamp: Optional[datetime] = Field(
-        None, description="Время возникновения ошибки"
+        None, description="When the error occurred"
     )
-    path: Optional[str] = Field(None, description="Путь запроса")
-    message: str = Field(..., description="Сообщение об ошибке")
+    path: Optional[str] = Field(None, description="Request path")
+    message: str = Field(..., description="Error message")
     code: Optional[ErrorCode | str] = Field(
         None,
         validation_alias=AliasChoices("errorCode", "code", "error_code"),
-        description="Код ошибки",
+        description="Error code",
     )
     # Support for API v2 error format
     status_code: Optional[int] = Field(None, alias="statusCode")
-    errors: Optional[list[Any]] = Field(None, description="Детали ошибок валидации")
+    errors: Optional[list[Any]] = Field(None, description="Validation error details")
 
 
 class ApiError(Exception):
@@ -56,85 +56,84 @@ class ApiError(Exception):
 
 
 class BadRequestError(ApiError):
-    """Ошибки клиента (400)"""
+    """Client error (400)"""
 
     pass
 
 
 class UnauthorizedError(ApiError):
-    """Ошибка авторизации (401)"""
+    """Authentication required (401)"""
 
     pass
 
 
 class ForbiddenError(ApiError):
-    """Доступ запрещен (403)"""
+    """Access forbidden (403)"""
 
     pass
 
 
 class NotFoundError(ApiError):
-    """Ресурс не найден (404)"""
+    """Resource not found (404)"""
 
     pass
 
 
 class ConflictError(ApiError):
-    """Конфликт (409)"""
+    """Conflict (409)"""
 
     pass
 
 
 class ValidationError(ApiError):
-    """Ошибка валидации данных (422)"""
+    """Validation error (422)"""
 
     pass
 
 
 class ServerError(ApiError):
-    """Серверная ошибка (500+)"""
+    """Server error (500+)"""
 
     pass
 
 
-# Новые специализированные исключения
 class NetworkError(ApiError):
-    """Сетевые ошибки"""
+    """Network-level failure"""
 
     pass
 
 
 class AuthenticationError(ApiError):
-    """Ошибки аутентификации"""
+    """Authentication failure"""
 
     pass
 
 
 class BusinessLogicError(ApiError):
-    """Ошибки бизнес-логики"""
+    """Business-logic failure"""
 
     pass
 
 
 class RateLimitError(BadRequestError):
-    """Превышен лимит запросов"""
+    """Request rate limit exceeded"""
 
     pass
 
 
 class MaintenanceError(ServerError):
-    """Режим обслуживания"""
+    """Panel is in maintenance mode"""
 
     pass
 
 
 class QuotaExceededError(BusinessLogicError):
-    """Превышена квота"""
+    """Quota exceeded"""
 
     pass
 
 
 class FeatureNotAvailableError(BusinessLogicError):
-    """Функция недоступна"""
+    """Feature not available"""
 
     pass

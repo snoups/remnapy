@@ -98,7 +98,7 @@ class UpdateNodeRequestDto(BaseModel):
         None
     )
     address: Annotated[Optional[str], StringConstraints(min_length=2)] = None
-    port: Optional[float] = Field(None, ge=1, le=65535)  # ИСПРАВЛЕН тип на float
+    port: Optional[float] = Field(None, ge=1, le=65535)
     proxy_url: Optional[str] = Field(None, serialization_alias="proxyUrl")
     is_traffic_tracking_active: Optional[bool] = Field(
         None, serialization_alias="isTrafficTrackingActive"
@@ -263,7 +263,7 @@ class ProfileModificationResponseData(BaseModel):
     event_sent: bool = Field(alias="eventSent")
 
 
-# Для обратной совместимости
+# Legacy aliases
 RestartAllNodesRequestDto = RestartAllNodesRequestBodyDto
 NodesResponseDto = NodeResponseDto
 

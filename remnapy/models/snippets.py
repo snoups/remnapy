@@ -17,7 +17,7 @@ class SnippetsData(BaseModel):
     snippets: list[SnippetItem]
 
 
-# Изменяем структуру - API возвращает данные напрямую
+# The API returns the data directly, without a wrapper
 class GetSnippetsResponseDto(SnippetsData):
     """Get all snippets response - extends SnippetsData directly"""
 

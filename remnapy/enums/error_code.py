@@ -192,16 +192,15 @@ class ErrorCode(StrEnum):
     CALCULATE_BILLING_ERROR = "A177"
     BILLING_PERIOD_ERROR = "A178"
 
-    # Добавляем новые коды из failed тестов
     CREATE_SUBSCRIPTION_TEMPLATE_ERROR = "A179"
     SUBSCRIPTION_TEMPLATE_NOT_FOUND = "A180"
     UPDATE_SUBSCRIPTION_TEMPLATE_ERROR = "A181"
     DELETE_SUBSCRIPTION_TEMPLATE_ERROR = "A182"
     GET_SUBSCRIPTION_TEMPLATE_ERROR = "A183"
 
-    # Коды спеки 3.2.1 (A184-A236). Некоторые сообщения повторяют уже
-    # занятые в этом классе имена (спека переиспользовала текст под новыми
-    # кодами) — такие члены получили суффикс _2.
+    # Spec 3.2.1 codes (A184-A236). Some messages repeat names already taken
+    # in this class — the panel reused old wording under new codes — so those
+    # members carry a _2 suffix.
     UPDATE_EXTERNAL_SQUAD_ERROR_2 = "A184"
     DELETE_EXTERNAL_SQUAD_ERROR_2 = "A185"
     ADD_USERS_TO_EXTERNAL_SQUAD_ERROR_2 = "A186"
@@ -263,7 +262,7 @@ class ErrorCode(StrEnum):
     START_DATE_MUST_BE_BEFORE_OR_EQUAL_TO_END_DATE = "A235"
     GET_STATS_DIGEST_ERROR = "A236"
 
-    # Валидационные ошибки
+    # Validation errors
     VALIDATION_ERROR = "V001"
     INVALID_UUID_FORMAT = "V002"
     INVALID_EMAIL_FORMAT = "V003"
@@ -275,14 +274,14 @@ class ErrorCode(StrEnum):
     INVALID_REGEX_PATTERN = "V009"
     NUMERIC_VALIDATION_ERROR = "V010"
 
-    # Сетевые ошибки
+    # Network errors
     NETWORK_ERROR = "N003"
     TIMEOUT_ERROR = "N004"
     CONNECTION_ERROR = "N005"
     DNS_ERROR = "N006"
     SSL_ERROR = "N007"
 
-    # Ошибки аутентификации и авторизации
+    # Authentication and authorization errors
     INVALID_TOKEN = "AUTH001"
     TOKEN_EXPIRED = "AUTH002"
     INVALID_CREDENTIALS = "AUTH003"
@@ -290,7 +289,7 @@ class ErrorCode(StrEnum):
     ACCOUNT_LOCKED = "AUTH005"
     PASSWORD_COMPLEXITY_ERROR = "AUTH006"
 
-    # Ошибки бизнес-логики
+    # Business-logic errors
     TRAFFIC_LIMIT_EXCEEDED = "BL001"
     USER_LIMIT_EXCEEDED = "BL002"
     SUBSCRIPTION_EXPIRED = "BL003"
@@ -298,7 +297,7 @@ class ErrorCode(StrEnum):
     QUOTA_EXCEEDED = "BL005"
     RESOURCE_LOCKED = "BL006"
 
-    # Общие коды
+    # Generic codes
     UNKNOWN = "UNKNOWN"
     NOT_IMPLEMENTED = "NOT_IMPLEMENTED"
     MAINTENANCE_MODE = "MAINTENANCE"

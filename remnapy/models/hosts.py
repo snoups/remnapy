@@ -225,7 +225,7 @@ class GetAllHostTagsResponseDto(BaseModel):
     tags: list[str]
 
 
-# Response wrappers - обернуты в response
+# Response wrappers
 class CreateHostResponseDto(HostResponseDto):
     """Create host response"""
 

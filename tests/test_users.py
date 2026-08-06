@@ -19,7 +19,7 @@ from tests.utils import generate_email, generate_random_string
 
 
 class TestUsersCRUD:
-    """Тесты базовых CRUD операций для пользователей"""
+    """User CRUD operations"""
 
     @pytest.mark.asyncio
     async def test_create_user(self, remnawave):
@@ -99,7 +99,7 @@ class TestUsersCRUD:
 
 
 class TestUsersFetch:
-    """Тесты получения информации о пользователях"""
+    """Fetching user information"""
 
     @pytest.mark.asyncio
     async def test_get_all_users(self, remnawave):
@@ -163,13 +163,12 @@ class TestUsersFetch:
             assert hasattr(subscription_requests, "total")
             assert hasattr(subscription_requests, "records")
         except ApiError as e:
-            # Этот блок должен срабатывать только если API вернуло ошибку
-            # (404, 403 и т.д.), но не когда просто нет записей
+            # (404, 403 etc.), but not when there simply are no records
             assert e.error.code in [ErrorCode.USER_NOT_FOUND]
 
 
 class TestUserActions:
-    """Тесты действий над пользователями"""
+    """User actions"""
 
     @pytest.mark.asyncio
     async def test_reset_user_traffic(self, remnawave, test_user):

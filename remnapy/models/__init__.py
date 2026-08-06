@@ -162,11 +162,11 @@ from .infra_billing import (
     GetAllInfraBillingNodesResponseDto,  # LEGACY
     GetAllInfraProvidersResponseDto,  # LEGACY
     GetInfraBillingHistoryByUuidResponseDto,
-    GetInfraBillingHistoryRecordsResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
+    GetInfraBillingHistoryRecordsResponseDto,
     GetInfraBillingNodeByUuidResponseDto,
-    GetInfraBillingNodesResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingNodesResponseDto)
+    GetInfraBillingNodesResponseDto,
     GetInfraProviderByUuidResponseDto,
-    GetInfraProvidersResponseDto,  # ПЕРЕИМЕНОВАНА (было GetAllInfraProvidersResponseDto)
+    GetInfraProvidersResponseDto,
     InfraBillingHistoryDto,
     InfraBillingNodeDto,
     InfraProviderDto,
@@ -785,9 +785,9 @@ __all__ = [
     "CreateInfraBillingNodeResponseDto",
     "CreateInfraProviderRequestDto",
     "CreateInfraProviderResponseDto",
-    "GetInfraBillingHistoryRecordsResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
-    "GetInfraBillingNodesResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingNodesResponseDto)
-    "GetInfraProvidersResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraProvidersResponseDto)
+    "GetInfraBillingHistoryRecordsResponseDto",
+    "GetInfraBillingNodesResponseDto",
+    "GetInfraProvidersResponseDto",
     "GetInfraBillingHistoryByUuidResponseDto",
     "GetInfraBillingNodeByUuidResponseDto",
     "GetInfraProviderByUuidResponseDto",

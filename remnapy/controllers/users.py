@@ -238,7 +238,6 @@ class UsersController(BaseController):
         """Get user subscription request history, recent 24 records"""
         ...
 
-    # ИСПРАВЛЕНО: убран alias, используется short_uuid
     @get(
         "/users/by-short-uuid/{shortUuid}", response_class=GetUserByShortUuidResponseDto
     )

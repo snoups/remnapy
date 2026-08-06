@@ -157,10 +157,9 @@ class BulkAllExtendExpirationDateRequestDto(BaseModel):
     extend_days: int = Field(serialization_alias="extendDays", ge=1)
 
 
-# Base Response DTOs (без обертки response)
+# Base response DTOs (without the response envelope)
 
 
-# Response DTOs - наследуются от базовых
 
 
 # Legacy compatibility

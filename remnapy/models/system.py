@@ -42,7 +42,7 @@ class MemoryStatistic(BaseModel):
 
 
 class StatusCounts(BaseModel):
-    """Dynamic status counts - использует additionalProperties"""
+    """Dynamic status counts (additionalProperties in the spec)"""
 
     model_config = {"extra": "allow"}
 

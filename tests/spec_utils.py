@@ -1,4 +1,4 @@
-"""Утилиты для сверки SDK со спекой OpenAPI Remnawave."""
+"""Helpers for checking the SDK against the Remnawave OpenAPI spec."""
 
 from __future__ import annotations
 
@@ -18,14 +18,14 @@ CONTROLLERS_DIR = Path(__file__).parent.parent / "remnapy" / "controllers"
 
 HTTP_METHODS = ("get", "post", "put", "patch", "delete")
 
-# Глубина разворачивания вложенных структур. Одинаковая для схем и моделей,
-# иначе на глубоких деревьях появятся ложные расхождения.
+# How deep nested structures are expanded. Must match between schemas and
+# models, otherwise deep trees produce phantom divergences.
 MAX_DEPTH = 16
 
 
 @dataclass(frozen=True)
 class SdkEndpoint:
-    """Endpoint, объявленный декоратором в контроллере SDK."""
+    """An endpoint declared by a decorator in an SDK controller."""
 
     method: str
     path: str
@@ -38,19 +38,19 @@ class SdkEndpoint:
 
 @lru_cache(maxsize=1)
 def load_spec() -> dict[str, Any]:
-    """Загрузить спеку OpenAPI."""
+    """Load the OpenAPI spec."""
     with SPEC_PATH.open(encoding="utf-8") as fh:
         return json.load(fh)
 
 
 def normalize_path(path: str) -> str:
-    """Заменить имена path-параметров на плейсхолдеры: /users/{userId} -> /users/{}."""
+    """Replace path-parameter names with placeholders: /users/{userId} -> /users/{}."""
     return re.sub(r"\{[^}]+\}", "{}", path)
 
 
 @lru_cache(maxsize=1)
 def spec_endpoints() -> dict[tuple[str, str], dict[str, Any]]:
-    """Endpoint'ы спеки. Ключ — (МЕТОД, путь без префикса /api)."""
+    """Endpoints from the spec, keyed by (METHOD, path without the /api prefix)."""
     spec = load_spec()
     result: dict[tuple[str, str], dict[str, Any]] = {}
     for path, operations in spec["paths"].items():
@@ -63,7 +63,7 @@ def spec_endpoints() -> dict[tuple[str, str], dict[str, Any]]:
 
 @lru_cache(maxsize=1)
 def sdk_endpoints() -> dict[tuple[str, str], SdkEndpoint]:
-    """Endpoint'ы, объявленные в контроллерах SDK."""
+    """Endpoints declared across the SDK controllers."""
     result: dict[tuple[str, str], SdkEndpoint] = {}
     for source in sorted(CONTROLLERS_DIR.glob("*.py")):
         tree = ast.parse(source.read_text(encoding="utf-8"))
@@ -120,19 +120,18 @@ def _parse_decorator(
 def schema_fields(
     schema: dict[str, Any] | None, spec: dict[str, Any], *, strip_response: bool = True
 ) -> set[str]:
-    """Развернуть JSON-схему в плоское множество путей полей.
+    """Flatten a JSON schema into a set of field paths.
 
-    Массивы обозначаются суффиксом `[]`, вложенность — точкой:
-    `users[]activeInternalSquads[]uuid`. Конверт `response` снимается, если
-    `strip_response=True` (по умолчанию; выключайте для схем тела запроса —
-    там поле `response`, если есть, настоящее, а не конверт).
+    Arrays are marked with a `[]` suffix and nesting with a dot:
+    `users[]activeInternalSquads[]uuid`. The `response` envelope is stripped
+    when `strip_response=True` (the default; turn it off for request-body
+    schemas, where a `response` field is a real field rather than an envelope).
 
-    Если снимать конверт не с чего (всё содержимое схемы/модели — это сам
-    конверт целиком, без единого вложенного свойства, напр.
-    `{"response": {}}`), поле остаётся под именем конверта (`response`
-    / `root`) вместо того, чтобы схлопнуться в пустую строку — иначе такой
-    endpoint пропадает из отчёта вместо того, чтобы быть в нём поимённо
-    (см. `_strip_envelope`).
+    When there is nothing to strip — the whole schema is the envelope itself
+    with no nested property, e.g. `{"response": {}}` — the field keeps the
+    envelope's name instead of collapsing to an empty string. An empty string
+    would drop the endpoint from the report rather than naming it
+    (see `_strip_envelope`).
     """
     fields = _walk_schema(schema, spec, seen=frozenset(), depth=0)
     return {_strip_envelope(field, strip_response=strip_response) for field in fields}
@@ -178,15 +177,14 @@ def _walk_schema(
 
 
 def model_fields(model: type, *, strip_response: bool = True) -> set[str]:
-    """Развернуть pydantic-модель в плоское множество путей полей.
+    """Flatten a pydantic model into a set of field paths.
 
-    Формат путей совпадает с `schema_fields`. Обёртка `RootModel` снимается.
-    `strip_response` управляет тем, снимается ли конверт `response` (см.
-    `_strip_envelope`) — для тел запросов его нужно отключать.
+    Paths use the same format as `schema_fields`. The `RootModel` wrapper is
+    always unwrapped; `strip_response` controls the `response` envelope (see
+    `_strip_envelope`) and must be off for request bodies.
 
-    Как и в `schema_fields`, поле, которое нечего снимать кроме самого
-    конверта, остаётся под именем конверта, а не схлопывается в пустую
-    строку.
+    As in `schema_fields`, a field with nothing to strip beyond the envelope
+    keeps the envelope's name rather than collapsing to an empty string.
     """
     fields = _walk_model(model, seen=frozenset(), depth=0)
     return {_strip_envelope(field, strip_response=strip_response) for field in fields}
@@ -211,7 +209,7 @@ def _walk_model(model: type, seen: frozenset[type], depth: int) -> set[str]:
 
 
 def _annotation_fields(annotation: Any, seen: frozenset[type], depth: int) -> set[str]:
-    """Поля вложенной модели внутри аннотации (Optional, Union, list и т. п.)."""
+    """Fields of a nested model inside an annotation (Optional, Union, list, ...)."""
     result: set[str] = set()
     for candidate in _unwrap_annotation(annotation):
         if isinstance(candidate, type) and issubclass(candidate, BaseModel):
@@ -227,7 +225,7 @@ def _annotation_fields(annotation: Any, seen: frozenset[type], depth: int) -> se
 
 
 def _unwrap_annotation(annotation: Any) -> list[Any]:
-    """Развернуть Optional/Union/Annotated в список кандидатов."""
+    """Unwrap Optional/Union/Annotated into a list of candidate types."""
     origin = typing.get_origin(annotation)
     if origin is typing.Union or getattr(origin, "__name__", None) == "UnionType":
         return [arg for arg in typing.get_args(annotation) if arg is not type(None)]
@@ -239,20 +237,20 @@ def _unwrap_annotation(annotation: Any) -> list[Any]:
 
 
 def _strip_envelope(field: str, *, strip_response: bool = True) -> str:
-    """Убрать внешний конверт `response.` (спека) или `root.` (RootModel).
+    """Strip the outer `response.` (spec) or `root.` (RootModel) envelope.
 
-    Конверт `response` существует только у схем ответа — панель никогда не
-    оборачивает в него тело запроса, поэтому у request-схем/моделей поле
-    `response`, если оно есть, настоящее и не должно вырезаться
-    (`strip_response=False`). Конверт `root` (разворачивание pydantic
-    `RootModel`) — отдельная механика и снимается всегда.
+    The `response` envelope exists only on response schemas — the panel never
+    wraps a request body in one — so on request schemas and models a `response`
+    field is genuine and must survive (`strip_response=False`). The `root`
+    envelope is pydantic's `RootModel` unwrapping, a separate mechanism, and is
+    always stripped.
 
-    Если поле — это конверт целиком и снимать нечего (напр. схема ответа
-    `{"response": {}}` без единого вложенного свойства, или модель без полей),
-    имя конверта не срезается до пустой строки: пустая строка — это не имя
-    поля, а исчезновение endpoint'а из отчёта. Вместо этого возвращается имя
-    самого конверта (`response`/`root`), чтобы такой endpoint остался в
-    выводе под читаемым именем.
+    When the field *is* the envelope and there is nothing beneath it (e.g. a
+    response schema of `{"response": {}}` with no nested property, or a model
+    with no fields), the name is not cut down to an empty string: an empty
+    string is not a field name, it is the endpoint vanishing from the report.
+    The envelope's own name (`response`/`root`) is returned instead, so the
+    endpoint stays visible under a readable name.
     """
     envelopes = ("response", "root") if strip_response else ("root",)
     for envelope in envelopes:
@@ -266,7 +264,7 @@ def _strip_envelope(field: str, *, strip_response: bool = True) -> str:
 
 
 def response_schema(operation: dict[str, Any]) -> dict[str, Any] | None:
-    """Схема успешного ответа операции (200 или 201)."""
+    """Schema of an operation's successful response (200 or 201)."""
     for code in ("200", "201"):
         response = operation.get("responses", {}).get(code)
         if response is None:
@@ -276,18 +274,18 @@ def response_schema(operation: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def request_schema(operation: dict[str, Any]) -> dict[str, Any] | None:
-    """Схема тела запроса операции."""
+    """Schema of an operation's request body."""
     body = operation.get("requestBody", {})
     return body.get("content", {}).get("application/json", {}).get("schema")
 
 
 def spec_path_params(path: str) -> list[str]:
-    """Имена path-параметров в порядке появления."""
+    """Path-parameter names, in order of appearance."""
     return re.findall(r"\{([^}]+)\}", path)
 
 
 def spec_query_params(operation: dict[str, Any]) -> set[str]:
-    """Имена query-параметров операции спеки."""
+    """Query-parameter names of a spec operation."""
     return {
         param["name"]
         for param in operation.get("parameters", [])
@@ -301,14 +299,14 @@ def sample_payload(
     nullable_as_null: bool = False,
     depth: int = 0,
 ) -> Any:
-    """Построить значение, удовлетворяющее схеме.
+    """Build a value that satisfies the schema.
 
-    Нужно, чтобы проверять модели на данных, а не только на именах полей:
-    сравнение имён не видит ни типов, ни обязательности, а именно там в этой
-    миграции пряталась часть дефектов.
+    Needed to check models against data rather than field names alone: name
+    comparison sees neither types nor optionality, and that is exactly where
+    part of this migration's defects hid.
 
-    ``nullable_as_null`` подставляет ``None`` во всё, что спека помечает
-    ``nullable`` — так проверяется, что модель переживёт пустые значения.
+    ``nullable_as_null`` substitutes ``None`` everywhere the spec marks a field
+    ``nullable``, which checks that the model survives empty values.
     """
     if depth > 12 or schema is None:
         return None

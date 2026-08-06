@@ -62,6 +62,9 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff.lint]
+# UP007/UP045: the codebase writes Optional[X] and Union[X, Y], not X | None.
+# PIE790: the `...` body on controller methods is required — the request is
+# built by the rapid-api-client decorator, not by the function body.
 ignore = ["UP007", "UP045", "PIE790"]
 
 [tool.setuptools_scm]
