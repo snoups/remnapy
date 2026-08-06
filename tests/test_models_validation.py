@@ -253,15 +253,15 @@ class TestWebhookNodeDto:
         assert versions.node == "0.5.0"
 
     def test_node_dto_has_new_fields(self):
-        from remnapy.models.webhook import NodeDto
+        from remnapy.models.webhook import WebhookNodeDto
 
-        fields = NodeDto.model_fields
+        fields = WebhookNodeDto.model_fields
         assert "active_plugin_uuid" in fields
         assert "system" in fields
         assert "versions" in fields
 
     def test_node_dto_xray_uptime_is_float(self):
-        from remnapy.models.webhook import NodeDto
+        from remnapy.models.webhook import WebhookNodeDto
 
-        field = NodeDto.model_fields["xray_uptime"]
+        field = WebhookNodeDto.model_fields["xray_uptime"]
         assert field.annotation == float or field.annotation is float

@@ -6,7 +6,7 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     GetAllSubscriptionsResponseDto,
-    GetConnectionKeysByUuidResponseDto,
+    GetConnectionKeysByUserIdResponseDto,
     GetRawSubscriptionByShortUuidResponseDto,
     GetSubpageConfigByShortUuidRequestBodyDto,
     GetSubpageConfigByShortUuidResponseDto,
@@ -106,11 +106,11 @@ class SubscriptionsController(BaseController):
 
     @get(
         "/subscriptions/connection-keys/{userId}",
-        response_class=GetConnectionKeysByUuidResponseDto,
+        response_class=GetConnectionKeysByUserIdResponseDto,
     )
     async def get_connection_keys_by_user_id(
         self,
         user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
-    ) -> GetConnectionKeysByUuidResponseDto:
+    ) -> GetConnectionKeysByUserIdResponseDto:
         """Get connection keys (base64 format) by user ID"""
         ...

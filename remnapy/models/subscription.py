@@ -412,7 +412,7 @@ class GetSubscriptionByUserIdResponseDto(GetSubscriptionByUsernameResponseDto):
     pass
 
 
-class GetConnectionKeysByUuidResponseDto(BaseModel):
+class GetConnectionKeysByUserIdResponseDto(BaseModel):
     enabled_keys: List[str] = Field(alias="enabledKeys")
     hidden_keys: List[str] = Field(alias="hiddenKeys")
     disabled_keys: List[str] = Field(alias="disabledKeys")

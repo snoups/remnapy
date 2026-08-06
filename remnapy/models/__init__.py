@@ -303,7 +303,7 @@ from .snippets import (
 )
 from .subscription import (
     GetAllSubscriptionsResponseDto,
-    GetConnectionKeysByUuidResponseDto,
+    GetConnectionKeysByUserIdResponseDto,
     GetRawSubscriptionByShortUuidResponseDto,
     GetSubscriptionByShortUUIDResponseDto,
     GetSubscriptionByUserIdResponseDto,
@@ -481,10 +481,10 @@ from .webhook import (
     CrmEventDto,
     CustomErrorEventDto,
     HwidUserDeviceDto,
-    InfraProviderDto,
-    InternalSquadDto,
+    WebhookInfraProviderDto,
+    WebhookInternalSquadDto,
     LoginAttemptDto,
-    NodeDto,
+    WebhookNodeDto,
     NodeEventDto,
     NodeSystemDto,
     NodeSystemInfoDto,
@@ -497,7 +497,7 @@ from .webhook import (
     UserDto,
     UserEventDto,
     UserHwidDeviceEventDto,
-    UserTrafficDto,
+    WebhookUserTrafficDto,
     WebhookNodeConfigProfileDto,
     WebhookPayloadDto,
 )
@@ -595,7 +595,7 @@ __all__ = [
     "ResolvedSecurityOptions",
     "ResolvedStreamOverrides",
     "ResolvedClientOverrides",
-    "GetConnectionKeysByUuidResponseDto",
+    "GetConnectionKeysByUserIdResponseDto",
     # Subscription settings models
     "GetSubscriptionSettingsResponseDto",
     "SubscriptionSettingsResponseDto",
@@ -814,7 +814,6 @@ __all__ = [
     "ReorderInternalSquadsResponseDto",
     "UpdateInternalSquadRequestDto",
     "UpdateInternalSquadResponseDto",
-    "GetInternalSquadAccessibleNodesResponseDto",
     "GetInternalSquadUsageResponseDto",
     "InternalSquadUsageUser",
     "AddManyUsersToInternalSquadRequestDto",
@@ -835,11 +834,11 @@ __all__ = [
     "SubscriptionRequestHistoryStatsData",
     # Webhook models
     # USER
-    "InternalSquadDto",
+    "WebhookInternalSquadDto",
     "BaseUserDto",
     "UserDto",
     "UserEventDto",
-    "UserTrafficDto",
+    "WebhookUserTrafficDto",
     # HWID DEVICES
     "HwidUserDeviceDto",
     "UserHwidDeviceEventDto",
@@ -848,8 +847,8 @@ __all__ = [
     "ServiceEventDto",
     # NODE ENTITIES
     "ConfigProfileInboundDto",
-    "InfraProviderDto",
-    "NodeDto",
+    "WebhookInfraProviderDto",
+    "WebhookNodeDto",
     "WebhookNodeConfigProfileDto",
     "NodeEventDto",
     # ERROR EVENTS
@@ -901,7 +900,6 @@ __all__ = [
     "UpdateSnippetRequestDto",
     "UpdateSnippetResponseDto",
     # Remnawave settings models
-    "BrandingSettings",
     "GetRemnawaveSettingsResponseDto",
     "GenericOAuth2Settings",
     "GitHubOAuth2Settings",

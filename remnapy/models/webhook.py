@@ -34,7 +34,7 @@ class WebhookMetaDto(BaseModel):
 # ---------------- USER ---------------- #
 
 
-class InternalSquadDto(BaseModel):
+class WebhookInternalSquadDto(BaseModel):
     """Internal squad reference (uuid + name) attached to a user"""
 
     uuid: UUID
@@ -43,7 +43,7 @@ class InternalSquadDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class UserTrafficDto(BaseModel):
+class WebhookUserTrafficDto(BaseModel):
     """User traffic information for webhooks"""
 
     used_traffic_bytes: int
@@ -87,7 +87,7 @@ class BaseUserDto(BaseModel):
 
     subscription_url: str
 
-    user_traffic: UserTrafficDto
+    user_traffic: WebhookUserTrafficDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -121,7 +121,7 @@ class BaseUserDto(BaseModel):
 class UserDto(BaseUserDto):
     """Full user payload for webhooks: `BaseUserDto` plus active internal squads"""
 
-    active_internal_squads: List[InternalSquadDto]
+    active_internal_squads: List[WebhookInternalSquadDto]
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -279,7 +279,7 @@ class ConfigProfileInboundDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class InfraProviderDto(BaseModel):
+class WebhookInfraProviderDto(BaseModel):
     """Infra provider hosting a node, as sent in node.* webhook events"""
 
     uuid: UUID
@@ -361,7 +361,7 @@ class NodeVersionsDto(BaseModel):
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
 
-class NodeDto(BaseModel):
+class WebhookNodeDto(BaseModel):
     """Node entity as sent in node.* and torrent_blocker.report webhook events"""
 
     uuid: UUID
@@ -395,7 +395,7 @@ class NodeDto(BaseModel):
     config_profile: WebhookNodeConfigProfileDto
 
     provider_uuid: Optional[UUID]
-    provider: Optional[InfraProviderDto]
+    provider: Optional[WebhookInfraProviderDto]
 
     active_plugin_uuid: Optional[UUID]
     system: Optional[NodeSystemDto]
@@ -423,7 +423,7 @@ class NodeEventDto(BaseModel):
     scope: Literal["node"]
     event: TNodeEvents
     timestamp: datetime
-    data: NodeDto
+    data: WebhookNodeDto
 
     model_config = {"alias_generator": to_camel, "populate_by_name": True}
 
@@ -484,7 +484,7 @@ class CrmEventDto(BaseModel):
 class TorrentBlockerReportDto(BaseModel):
     """Torrent-blocker report bundle: node, user and blocker report payload"""
 
-    node: NodeDto
+    node: WebhookNodeDto
     user: UserDto
     report: TorrentBlockerReportPayloadDto
 
@@ -514,7 +514,7 @@ class WebhookPayloadDto(BaseModel):
     meta: Optional[WebhookMetaDto] = None
     data: Union[
         UserDto,
-        NodeDto,
+        WebhookNodeDto,
         HwidUserDeviceDto,
         LoginAttemptDto,
         UserHwidDeviceEventDto,
@@ -548,7 +548,7 @@ class WebhookPayloadDto(BaseModel):
                 timestamp=timestamp,
             )
         elif event.startswith("node."):
-            data = NodeDto(**data_raw)
+            data = WebhookNodeDto(**data_raw)
         elif event.startswith("service."):
             if event.startswith("service.login_attempt"):
                 login_attempt_data = data_raw.get("loginAttempt", {})

@@ -18,7 +18,7 @@ class BulkDeleteUsersByStatusRequestDto(BaseModel):
 
 
 class BulkDeleteUsersRequestDto(BaseModel):
-    """Request to delete users by UUIDs"""
+    """Request to delete users by IDs"""
 
     user_ids: List[int] = Field(
         serialization_alias="userIds",

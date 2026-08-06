@@ -93,7 +93,15 @@ class ErrorCode(StrEnum):
     DELETE_USERS_BULK_ERROR = "A086"
     GET_USERS_BULK_ERROR = "A087"
     CREATE_TEMPLATE_ERROR = "A088"
-    TEMPLATE_NOT_FOUND = "A089"
+    # A089 is documented twice in the 3.2.1 spec with two unrelated messages:
+    #   - "Bulk update all users error"                       (500 Internal Server Error)
+    #   - "LIMITED and EXPIRED statuses are not allowed
+    #      to be set manually."                               (400 Bad Request)
+    # Neither is "template not found", which is what this member used to be
+    # called. A second member sharing the value "A089" would be a silent
+    # StrEnum alias rather than a distinct member, so both meanings are
+    # recorded here instead.
+    BULK_UPDATE_ALL_USERS_ERROR = "A089"
     UPDATE_TEMPLATE_ERROR = "A090"
     DELETE_TEMPLATE_ERROR = "A091"
     TEMPLATE_NAME_ALREADY_EXISTS = "A092"
