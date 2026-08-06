@@ -16,10 +16,6 @@ class ExcludedInbounds(BaseModel):
     security: Optional[str] = None
 
 
-class RestartEventResponse(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
 class DeleteResponse(BaseModel):
     is_deleted: bool = Field(alias="isDeleted")
 

@@ -158,21 +158,10 @@ class BulkAllExtendExpirationDateRequestDto(BaseModel):
 
 
 # Base Response DTOs (без обертки response)
-class BulkResponseData(BaseModel):
-    """Common bulk response with affected rows"""
-
-    affected_rows: float = Field(alias="affectedRows")
-
-
-class BulkEventResponseData(BaseModel):
-    """Common bulk response with event sent flag"""
-
-    event_sent: bool = Field(alias="eventSent")
 
 
 # Response DTOs - наследуются от базовых
 
 
 # Legacy compatibility
-BulkResponseDto = BulkResponseData
 BulkUpdateUsersInternalSquadsRequestDto = BulkUpdateUsersSquadsRequestDto

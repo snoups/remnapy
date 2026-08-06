@@ -77,14 +77,6 @@ class UpdateSubscriptionPageConfigResponseDto(SubscriptionPageConfigDto):
     pass
 
 
-class DeleteSubscriptionPageConfigData(BaseModel):
-    """Data for delete response"""
-
-    model_config = ConfigDict(populate_by_name=True)
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class ReorderSubscriptionPageConfigItem(BaseModel):
     """Item for reordering subscription page configs"""
 

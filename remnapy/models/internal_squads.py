@@ -77,10 +77,6 @@ class AddUsersToInternalSquadRequestDto(BaseModel):
     user_uuids: List[UUID] = Field(alias="userUuids")
 
 
-class BulkActionsResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
 class DeleteUsersFromInternalSquadRequestDto(BaseModel):
     user_uuids: List[UUID] = Field(alias="userUuids")
 
