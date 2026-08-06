@@ -202,22 +202,36 @@ class CustomRapidParameters(RapidParameters):
         """
         Builds query parameters for the request.
 
-        Scalar `Query` values (str, int, bool, enum, UUID, datetime, ...)
-        are passed through unchanged -- httpx serializes those correctly on
-        its own. Some Remnawave endpoints (TanStack Table-style list
-        filtering, e.g. `GET /users`) have query parameters that validate to
-        a `list` or `dict` (structured filter/sort entries); httpx has no
-        correct way to serialize those as a query string (it falls back to
-        Python's `repr()`, which is not valid JSON and not understood by the
-        panel). The panel's own query schema JSON-decodes any string-typed
-        value for these parameters before validating it, so such values are
-        JSON-encoded into a single string here instead.
+        Most scalar `Query` values (str, int, bool, enum, UUID, ...) are
+        passed through unchanged -- httpx serializes those correctly on its
+        own. Two kinds need help:
+
+        - `datetime` values: httpx renders them via `str()`, which uses a
+          space as the date/time separator (`2026-01-01 00:00:00+00:00`).
+          The panel's spec requires `format: date-time`, i.e. the space
+          rejected and a literal `T` required (`2026-01-01T00:00:00+00:00`).
+          `datetime.isoformat()` produces the `T`-separated form without
+          altering the value otherwise: naive datetimes stay naive (no
+          timezone is added), and a plain `date` (not a `datetime`) is
+          untouched by this branch and keeps going through the default path,
+          since `date`'s own `str()` is already `YYYY-MM-DD` with nothing to
+          fix.
+        - Some Remnawave endpoints (TanStack Table-style list filtering,
+          e.g. `GET /users`) have query parameters that validate to a `list`
+          or `dict` (structured filter/sort entries); httpx has no correct
+          way to serialize those as a query string (it falls back to
+          Python's `repr()`, which is not valid JSON and not understood by
+          the panel). The panel's own query schema JSON-decodes any
+          string-typed value for these parameters before validating it, so
+          such values are JSON-encoded into a single string here instead.
         """
         values = filter_none_values(
             {p.get_name(): p.get_value(ba) for p in self.query_parameters}
         )
         for name, value in values.items():
-            if isinstance(value, (list, dict)):
+            if isinstance(value, datetime):
+                values[name] = value.isoformat()
+            elif isinstance(value, (list, dict)):
                 values[name] = orjson.dumps(value, default=_query_json_default).decode()
         return values
 
