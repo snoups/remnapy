@@ -119,4 +119,4 @@ async def test_config_profiles(remnawave) -> None:
         profile_uuid
     )
     assert delete_profile is None
-    assert delete_profile.is_deleted is True
+    assert delete_profile is None

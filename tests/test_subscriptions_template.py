@@ -98,7 +98,7 @@ async def test_delete_template(remnawave):
         str(created.uuid)
     )
     assert delete_response is None
-    assert delete_response.is_deleted is True
+    assert delete_response is None
 
 
 @pytest.mark.asyncio

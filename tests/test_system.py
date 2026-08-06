@@ -63,4 +63,4 @@ class TestSystemMonitoring:
         """Тест получения состояния здоровья системы"""
         health = await remnawave.system.get_health()
         assert isinstance(health, GetRemnawaveHealthResponseDto)
-        assert hasattr(health, "pm2_stats")
+        assert hasattr(health, "runtime_metrics")

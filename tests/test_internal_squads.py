@@ -88,4 +88,4 @@ async def test_internal_squads(remnawave) -> None:
     # Test delete internal squad
     delete_squad = await remnawave.internal_squads.delete_internal_squad(squad_uuid)
     assert delete_squad is None
-    assert delete_squad.is_deleted is True
+    assert delete_squad is None

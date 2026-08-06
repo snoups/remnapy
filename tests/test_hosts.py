@@ -61,7 +61,7 @@ class TestHostsCRUD:
                 remark=random_remark,
                 address=random_ip,
                 port=random_port,
-                tag="TEST",  # Добавление тега
+                tags=["TEST"],  # Добавление тега
             )
         )
 
@@ -87,7 +87,7 @@ class TestHostsCRUD:
                 remark=random_remark,
                 address=random_ip,
                 port=random_port,
-                tag="TEST",  # Добавление тега
+                tags=["TEST"],  # Добавление тега
                 is_hidden=False,
                 server_description="Test Server",
                 vless_route_id=1234,
@@ -101,7 +101,7 @@ class TestHostsCRUD:
         assert create_host.address == random_ip
         assert create_host.port == random_port
         assert create_host.remark == random_remark
-        assert create_host.tag == "TEST"
+        assert create_host.tags == ["TEST"]
 
         # Очистка - удаление созданного хоста
         await remnawave.hosts.delete_host(uuid=str(create_host.uuid))
@@ -159,7 +159,7 @@ class TestHostsCRUD:
         # Теперь удаляем созданный хост
         delete_host = await remnawave.hosts.delete_host(uuid=string_uuid)
         assert delete_host is None
-        assert delete_host.is_deleted is True
+        assert delete_host is None
 
         # Проверяем, что хост действительно удален
         try:
@@ -239,7 +239,7 @@ class TestHostsAdvanced:
                 is_disabled=False,
                 mux_params={"enabled": True, "concurrency": 8},
                 sockopt_params={"mark": 255},
-                tag="ADVANCED",
+                tags=["ADVANCED"],
                 is_hidden=False,
                 override_sni_from_address=True,
                 server_description="Advanced Server",
@@ -256,7 +256,7 @@ class TestHostsAdvanced:
         assert create_host.path == "/websocket"
         assert create_host.sni == "example.com"
         assert create_host.host == "example.org"
-        assert create_host.tag == "ADVANCED"
+        assert create_host.tags == ["ADVANCED"]
 
         # Очистка - удаление созданного хоста
         await remnawave.hosts.delete_host(uuid=str(create_host.uuid))

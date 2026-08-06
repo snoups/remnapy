@@ -83,7 +83,7 @@ async def test_infra_billing_providers(remnawave) -> None:
         provider_uuid
     )
     assert delete_provider is None
-    assert delete_provider.is_deleted is True
+    assert delete_provider is None
 
 
 @pytest.mark.asyncio
@@ -247,4 +247,4 @@ async def test_infra_billing_complete_workflow(remnawave) -> None:
         delete_provider = await remnawave.infra_billing.delete_infra_provider_by_uuid(
             provider_uuid
         )
-        assert delete_provider.is_deleted is True
+        assert delete_provider is None

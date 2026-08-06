@@ -23,4 +23,4 @@ async def test_users_bulk_actions(remnawave):
         ),
     )
     assert bulk_update_users is None
-    assert bulk_update_users.affected_rows > 0
+    assert bulk_update_users is None

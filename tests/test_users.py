@@ -97,7 +97,7 @@ class TestUsersCRUD:
         # Delete user
         delete_user = await remnawave.users.delete_user(user_id=create_user.id)
         assert delete_user is None
-        assert delete_user.is_deleted is True
+        assert delete_user is None
 
 
 class TestUsersFetch:
@@ -142,7 +142,7 @@ class TestUsersFetch:
                 user_id=test_user.id
             )
             assert isinstance(user_accessible_nodes, GetUserAccessibleNodesResponseDto)
-            assert isinstance(user_accessible_nodes.nodes, list)
+            assert isinstance(user_accessible_nodes.active_nodes, list)
         except ApiError as e:
             # This might fail if the user doesn't have access to any nodes
             # or if the feature is not available, which is acceptable for testing
