@@ -7,18 +7,15 @@ from remnapy.models import (
     CloneNodePluginResponseDto,
     CreateNodePluginRequestDto,
     CreateNodePluginResponseDto,
-    DeleteNodePluginResponseDto,
     GetNodePluginResponseDto,
     GetNodePluginsResponseDto,
     GetTorrentBlockerReportsResponseDto,
     GetTorrentBlockerReportsStatsResponseDto,
     PluginExecutorRequestDto,
-    PluginExecutorResponseDto,
     ReorderNodePluginsRequestDto,
     ReorderNodePluginsResponseDto,
     TableFilter,
     TableSort,
-    TruncateTorrentBlockerReportsResponseDto,
     UpdateNodePluginRequestDto,
     UpdateNodePluginResponseDto,
 )
@@ -70,11 +67,11 @@ class NodePluginsController(BaseController):
 
     @delete(
         "/node-plugins/torrent-blocker/truncate",
-        response_class=TruncateTorrentBlockerReportsResponseDto,
+        response_class=None,
     )
     async def truncate_torrent_blocker_reports(
         self,
-    ) -> TruncateTorrentBlockerReportsResponseDto:
+    ) -> None:
         """Truncate Torrent Blocker Reports"""
         ...
 
@@ -107,11 +104,11 @@ class NodePluginsController(BaseController):
         """Get Node Plugin by uuid"""
         ...
 
-    @delete("/node-plugins/{uuid}", response_class=DeleteNodePluginResponseDto)
+    @delete("/node-plugins/{uuid}", response_class=None)
     async def delete_node_plugin(
         self,
         uuid: Annotated[str, Path(description="Node plugin UUID")],
-    ) -> DeleteNodePluginResponseDto:
+    ) -> None:
         """Delete Node Plugin"""
         ...
 
@@ -131,10 +128,10 @@ class NodePluginsController(BaseController):
         """Clone Node Plugin"""
         ...
 
-    @post("/node-plugins/executor", response_class=PluginExecutorResponseDto)
+    @post("/node-plugins/executor", response_class=None)
     async def plugin_executor(
         self,
         body: Annotated[PluginExecutorRequestDto, PydanticBody()],
-    ) -> PluginExecutorResponseDto:
+    ) -> None:
         """Execute command on node plugins"""
         ...

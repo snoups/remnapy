@@ -217,18 +217,6 @@ class DisableNodeResponseDto(NodeResponseDto):
     pass
 
 
-class RestartNodeResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class RestartAllNodesResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
-class ResetNodeTrafficResponseDto(BaseModel):
-    event_sent: bool = Field(alias="eventSent")
-
-
 class ReorderNodeResponseDto(RootModel[List[NodeResponseDto]]):
     root: List[NodeResponseDto]
 
@@ -247,13 +235,6 @@ class ReorderNodeResponseDto(RootModel[List[NodeResponseDto]]):
         return len(self.root)
 
 
-class DeleteNodeResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-    def __bool__(self):
-        return self.is_deleted
-
-
 class RestartNodeRequestBodyDto(BaseModel):
     force_restart: bool = Field(default=False, serialization_alias="forceRestart")
 
@@ -264,10 +245,6 @@ class RestartAllNodesRequestBodyDto(BaseModel):
 
 class ResetNodeTrafficRequestDto(BaseModel):
     uuid: Union[str, UUID] = Field(alias="uuid")
-
-
-class ResetNodeTrafficResponseDto(RestartEventResponse):
-    pass
 
 
 class ConfigProfileData(BaseModel):
@@ -290,12 +267,6 @@ class ProfileModificationResponseData(BaseModel):
     event_sent: bool = Field(alias="eventSent")
 
 
-class ProfileModificationResponseDto(ProfileModificationResponseData):
-    """Profile modification response"""
-
-    pass
-
-
 # Для обратной совместимости
 RestartAllNodesRequestDto = RestartAllNodesRequestBodyDto
 NodesResponseDto = NodeResponseDto
@@ -309,12 +280,6 @@ class NodesBulkActionsRequestDto(BaseModel):
 
     uuids: List[UUID] = Field(min_length=1)
     action: NodeBulkActionType = Field(description="Action to perform on nodes")
-
-
-class NodesBulkActionsResponseDto(BaseModel):
-    """Response after performing bulk actions on nodes"""
-
-    event_sent: bool = Field(alias="eventSent")
 
 
 class NodesUpdateFieldsDto(BaseModel):
@@ -346,7 +311,3 @@ class BulkNodesUpdateRequestDto(BaseModel):
     fields: NodesUpdateFieldsDto
 
 
-class BulkNodesUpdateResponseDto(NodesBulkActionsResponseDto):
-    """OpenAPI alias for bulk nodes update response"""
-
-    pass

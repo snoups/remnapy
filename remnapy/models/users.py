@@ -378,12 +378,6 @@ class GetUserSubscriptionRequestHistoryResponseDto(SubscriptionRequestsResponseD
     pass
 
 
-class DeleteUserResponseDto(BaseModel):
-    """Response for delete user"""
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class ExtendUserRequestDto(BaseModel):
     """Request DTO for extending user expiration date"""
 

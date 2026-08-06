@@ -7,7 +7,6 @@ from rapid_api_client.annotations import PydanticBody
 from remnapy.models import (
     CreateConfigProfileRequestDto,
     CreateConfigProfileResponseDto,
-    DeleteConfigProfileResponseDto,
     GetAllConfigProfilesResponseDto,
     GetAllInboundsResponseDto,
     GetConfigProfileByUuidResponseDto,
@@ -70,13 +69,13 @@ class ConfigProfilesController(BaseController):
         """Get config profile by uuid"""
         ...
 
-    @delete("/config-profiles/{uuid}", response_class=DeleteConfigProfileResponseDto)
+    @delete("/config-profiles/{uuid}", response_class=None)
     async def delete_config_profile_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the config profile")
         ],
-    ) -> DeleteConfigProfileResponseDto:
+    ) -> None:
         """Delete config profile"""
         ...
 

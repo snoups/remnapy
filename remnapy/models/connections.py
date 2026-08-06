@@ -198,7 +198,3 @@ class DropConnectionsRequestDto(BaseModel):
     )
 
 
-class DropConnectionsResponseDto(BaseModel):
-    """Response for POST /api/connections/drop"""
-
-    event_sent: bool = Field(alias="eventSent")

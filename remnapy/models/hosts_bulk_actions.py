@@ -66,17 +66,3 @@ class UpdateManyHostsRequestDto(BaseModel):
     )
 
 
-class BulkDeleteHostsResponseDto(List[HostResponseDto]):
-    pass
-
-
-class BulkDisableHostsResponseDto(List[HostResponseDto]):
-    pass
-
-
-class BulkEnableHostsResponseDto(List[HostResponseDto]):
-    pass
-
-
-class UpdateManyHostsResponseDto(List[HostResponseDto]):
-    pass

@@ -73,10 +73,6 @@ class GetInternalSquadByUuidResponseDto(InternalSquadDto):
     pass
 
 
-class DeleteInternalSquadResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class AddUsersToInternalSquadRequestDto(BaseModel):
     user_uuids: List[UUID] = Field(alias="userUuids")
 
@@ -85,16 +81,8 @@ class BulkActionsResponseDto(BaseModel):
     event_sent: bool = Field(alias="eventSent")
 
 
-class AddUsersToInternalSquadResponseDto(BulkActionsResponseDto):
-    pass
-
-
 class DeleteUsersFromInternalSquadRequestDto(BaseModel):
     user_uuids: List[UUID] = Field(alias="userUuids")
-
-
-class DeleteUsersFromInternalSquadResponseDto(BulkActionsResponseDto):
-    pass
 
 
 class AccessibleNodeDto(BaseModel):
@@ -148,19 +136,9 @@ class AddManyUsersToInternalSquadRequestDto(BaseModel):
     user_ids: List[int] = Field(..., serialization_alias="userIds", description="List of user IDs")
 
 
-class AddManyUsersToInternalSquadResponseDto(BulkActionsResponseDto):
-    """Response for POST /api/internal-squads/{uuid}/bulk-actions/add-many-users"""
-
-    pass
-
-
 class DeleteManyUsersFromInternalSquadRequestDto(BaseModel):
     """Request body for DELETE /api/internal-squads/{uuid}/bulk-actions/remove-many-users"""
 
     user_ids: List[int] = Field(..., serialization_alias="userIds", description="List of user IDs")
 
 
-class DeleteManyUsersFromInternalSquadResponseDto(BulkActionsResponseDto):
-    """Response for DELETE /api/internal-squads/{uuid}/bulk-actions/remove-many-users"""
-
-    pass

@@ -85,12 +85,6 @@ class DeleteSubscriptionPageConfigData(BaseModel):
     is_deleted: bool = Field(alias="isDeleted")
 
 
-class DeleteSubscriptionPageConfigResponseDto(DeleteSubscriptionPageConfigData):
-    """Response after deleting subscription page config"""
-
-    pass
-
-
 class ReorderSubscriptionPageConfigItem(BaseModel):
     """Item for reordering subscription page configs"""
 

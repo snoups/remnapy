@@ -8,7 +8,6 @@ from remnapy.enums import ErrorCode, UserStatus
 from remnapy.exceptions import ApiError
 from remnapy.models import (
     CreateUserRequestDto,
-    DeleteUserResponseDto,
     GetSubscriptionRequestsResponseDto,
     GetUserAccessibleNodesResponseDto,
     RevokeUserRequestDto,
@@ -97,7 +96,7 @@ class TestUsersCRUD:
 
         # Delete user
         delete_user = await remnawave.users.delete_user(user_id=create_user.id)
-        assert isinstance(delete_user, DeleteUserResponseDto)
+        assert delete_user is None
         assert delete_user.is_deleted is True
 
 

@@ -6,16 +6,9 @@ from rapid_api_client.annotations import PydanticBody
 
 from remnapy.models import (
     AddManyUsersToInternalSquadRequestDto,
-    AddManyUsersToInternalSquadResponseDto,
-    AddUsersToInternalSquadRequestDto,
-    AddUsersToInternalSquadResponseDto,
     CreateInternalSquadRequestDto,
     CreateInternalSquadResponseDto,
-    DeleteInternalSquadResponseDto,
     DeleteManyUsersFromInternalSquadRequestDto,
-    DeleteManyUsersFromInternalSquadResponseDto,
-    DeleteUsersFromInternalSquadRequestDto,
-    DeleteUsersFromInternalSquadResponseDto,
     GetAllInternalSquadsResponseDto,
     GetInternalSquadAccessibleNodesResponseDto,
     GetInternalSquadByUuidResponseDto,
@@ -60,39 +53,39 @@ class InternalSquadsController(BaseController):
         """Get internal squad by uuid"""
         ...
 
-    @delete("/internal-squads/{uuid}", response_class=DeleteInternalSquadResponseDto)
+    @delete("/internal-squads/{uuid}", response_class=None)
     async def delete_internal_squad(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the internal squad")
         ],
-    ) -> DeleteInternalSquadResponseDto:
+    ) -> None:
         """Delete internal squad"""
         ...
 
     @post(
         "/internal-squads/{uuid}/bulk-actions/add-users",
-        response_class=AddUsersToInternalSquadResponseDto,
+        response_class=None,
     )
     async def add_users_to_internal_squad(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the internal squad")
         ],
-    ) -> AddUsersToInternalSquadResponseDto:
+    ) -> None:
         """Add users to internal squad"""
         ...
 
     @delete(
         "/internal-squads/{uuid}/bulk-actions/remove-users",
-        response_class=DeleteUsersFromInternalSquadResponseDto,
+        response_class=None,
     )
     async def remove_users_from_internal_squad(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the internal squad")
         ],
-    ) -> DeleteUsersFromInternalSquadResponseDto:
+    ) -> None:
         """Delete users from internal squad"""
         ...
 
@@ -159,7 +152,7 @@ class InternalSquadsController(BaseController):
 
     @post(
         "/internal-squads/{uuid}/bulk-actions/add-many-users",
-        response_class=AddManyUsersToInternalSquadResponseDto,
+        response_class=None,
     )
     async def add_many_users_to_internal_squad(
         self,
@@ -167,13 +160,13 @@ class InternalSquadsController(BaseController):
             Union[str, UUID], Path(description="UUID of the internal squad")
         ],
         body: Annotated[AddManyUsersToInternalSquadRequestDto, PydanticBody()],
-    ) -> AddManyUsersToInternalSquadResponseDto:
+    ) -> None:
         """Add many users to internal squad"""
         ...
 
     @delete(
         "/internal-squads/{uuid}/bulk-actions/remove-many-users",
-        response_class=DeleteManyUsersFromInternalSquadResponseDto,
+        response_class=None,
     )
     async def remove_many_users_from_internal_squad(
         self,
@@ -181,6 +174,6 @@ class InternalSquadsController(BaseController):
             Union[str, UUID], Path(description="UUID of the internal squad")
         ],
         body: Annotated[DeleteManyUsersFromInternalSquadRequestDto, PydanticBody()],
-    ) -> DeleteManyUsersFromInternalSquadResponseDto:
+    ) -> None:
         """Remove many users from internal squad"""
         ...

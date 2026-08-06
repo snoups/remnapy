@@ -171,64 +171,6 @@ class BulkEventResponseData(BaseModel):
 
 
 # Response DTOs - наследуются от базовых
-class BulkDeleteUsersByStatusResponseDto(BulkResponseData):
-    """Response for bulk delete by status"""
-
-    pass
-
-
-class BulkDeleteUsersResponseDto(BulkResponseData):
-    """Response for bulk delete users"""
-
-    pass
-
-
-class BulkRevokeUsersSubscriptionResponseDto(BulkResponseData):
-    """Response for bulk revoke subscription"""
-
-    pass
-
-
-class BulkResetTrafficUsersResponseDto(BulkResponseData):
-    """Response for bulk reset traffic"""
-
-    pass
-
-
-class BulkUpdateUsersResponseDto(BulkResponseData):
-    """Response for bulk update users"""
-
-    pass
-
-
-class BulkUpdateUsersSquadsResponseDto(BulkResponseData):
-    """Response for bulk update squads"""
-
-    pass
-
-
-class BulkExtendExpirationDateResponseDto(BulkResponseData):
-    """Response for bulk extend expiration date"""
-
-    pass
-
-
-class BulkAllUpdateUsersResponseDto(BulkEventResponseData):
-    """Response for bulk update all users"""
-
-    pass
-
-
-class BulkAllResetTrafficUsersResponseDto(BulkEventResponseData):
-    """Response for bulk reset all users traffic"""
-
-    pass
-
-
-class BulkAllExtendExpirationDateResponseDto(BulkEventResponseData):
-    """Response for bulk extend all users expiration date"""
-
-    pass
 
 
 # Legacy compatibility

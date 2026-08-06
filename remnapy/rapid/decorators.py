@@ -12,9 +12,14 @@ from .client import BaseController, CustomRapidParameters
 def http(
     method: str,
     path: str,
-    response_class: Type[T] | TypeAdapter[T] = Response,
+    response_class: Type[T] | TypeAdapter[T] | None = Response,
     timeout: float | None = None,
 ) -> Callable[[Callable[..., T]], Callable[..., Coroutine[T, Any, T]]]:
+    """Bind a coroutine to an HTTP endpoint.
+
+    Pass ``response_class=None`` for endpoints the panel answers with 202/204
+    and no body; the wrapped coroutine then returns ``None``.
+    """
     def decorator(func: Callable[..., T]) -> Callable[..., Coroutine[T, Any, T]]:
         sig = signature(func)
         rapid_parameters = CustomRapidParameters.from_sig(sig)

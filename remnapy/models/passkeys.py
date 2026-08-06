@@ -64,12 +64,6 @@ class DeletePasskeyResponseData(BaseModel):
     passkeys: List[PasskeyDto]
 
 
-class DeletePasskeyResponseDto(BaseModel):
-    """Response with updated passkeys list after deletion"""
-
-    passkeys: List[PasskeyDto]
-
-
 class UpdatePasskeyRequestDto(BaseModel):
     """Request to update a passkey"""
 

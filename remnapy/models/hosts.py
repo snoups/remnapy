@@ -268,12 +268,6 @@ class ReorderHostResponseDto(BaseModel):
     is_updated: bool = Field(alias="isUpdated", default=True)
 
 
-class DeleteHostResponseDto(BaseModel):
-    """Delete host response"""
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class HostsResponseDto(HostResponseDto):
     """Host response data with backward compatibility properties"""
 

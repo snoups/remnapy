@@ -137,12 +137,6 @@ class UpdateExternalSquadResponseDto(ExternalSquadDto):
     pass
 
 
-class DeleteExternalSquadResponseDto(BaseModel):
-    """Response after deleting external squad"""
-
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class ReorderExternalSquadItem(BaseModel):
     view_position: int = Field(serialization_alias="viewPosition")
     uuid: UUID
@@ -159,13 +153,3 @@ class ReorderExternalSquadsResponseDto(BaseModel):
     external_squads: List[ExternalSquadDto] = Field(alias="externalSquads")
 
 
-class AddUsersToExternalSquadResponseDto(BaseModel):
-    """Response after adding users to external squad"""
-
-    event_sent: bool = Field(alias="eventSent")
-
-
-class RemoveUsersFromExternalSquadResponseDto(BaseModel):
-    """Response after removing users from external squad"""
-
-    event_sent: bool = Field(alias="eventSent")

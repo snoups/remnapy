@@ -4,14 +4,12 @@ import pytest
 
 from remnapy.models import (
     CreateNodeRequestDto,
-    DeleteNodeResponseDto,
     GetAllNodesResponseDto,
     NodeConfigProfileRequestDto,
     NodeResponseDto,
     NodesResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
-    ResetNodeTrafficResponseDto,
     UpdateNodeRequestDto,
 )
 from remnapy.models.nodes import ReorderNodeItem
@@ -69,9 +67,9 @@ async def test_nodes(remnawave):
     assert update_node.name == update_name
 
     reset_traffic = await remnawave.nodes.reset_node_traffic(uuid=string_uuid)
-    assert isinstance(reset_traffic, ResetNodeTrafficResponseDto)
+    assert reset_traffic is None
     assert reset_traffic.event_sent is True
 
     delete_node = await remnawave.nodes.delete_node(uuid=string_uuid)
-    assert isinstance(delete_node, DeleteNodeResponseDto)
+    assert delete_node is None
     assert delete_node.is_deleted is True

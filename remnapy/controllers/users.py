@@ -8,7 +8,6 @@ from remnapy.enums import TrafficLimitStrategy, UserStatus
 from remnapy.models import (
     CreateUserRequestDto,
     CreateUserResponseDto,
-    DeleteUserResponseDto,
     DisableUserResponseDto,
     EnableUserResponseDto,
     ExtendUserRequestDto,
@@ -138,11 +137,11 @@ class UsersController(BaseController):
         """Get all users using cursor-based (keyset) pagination"""
         ...
 
-    @delete("/users/{userId}", response_class=DeleteUserResponseDto)
+    @delete("/users/{userId}", response_class=None)
     async def delete_user(
         self,
         user_id: Annotated[int, Path(description="ID of the user", alias="userId")],
-    ) -> DeleteUserResponseDto:
+    ) -> None:
         """Delete user"""
         ...
 

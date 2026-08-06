@@ -3,7 +3,6 @@ import pytest
 from remnapy.models import (
     CreateConfigProfileRequestDto,
     CreateConfigProfileResponseDto,
-    DeleteConfigProfileResponseDto,
     GetAllConfigProfilesResponseDto,
     GetAllInboundsResponseDto,
     GetConfigProfileByUuidResponseDto,
@@ -119,5 +118,5 @@ async def test_config_profiles(remnawave) -> None:
     delete_profile = await remnawave.config_profiles.delete_config_profile_by_uuid(
         profile_uuid
     )
-    assert isinstance(delete_profile, DeleteConfigProfileResponseDto)
+    assert delete_profile is None
     assert delete_profile.is_deleted is True

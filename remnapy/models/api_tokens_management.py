@@ -23,10 +23,6 @@ class CreateApiTokenResponseDto(ApiTokenDto):
     token: str
 
 
-class DeleteApiTokenResponseDto(BaseModel):
-    response: bool
-
-
 class FindAllApiTokensResponseData(BaseModel):
     tokens: List[ApiTokenDto]
 

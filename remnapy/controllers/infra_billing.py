@@ -11,9 +11,6 @@ from remnapy.models import (
     CreateInfraBillingNodeResponseDto,
     CreateInfraProviderRequestDto,
     CreateInfraProviderResponseDto,
-    DeleteInfraBillingHistoryRecordByUuidResponseDto,
-    DeleteInfraBillingNodeByUuidResponseDto,
-    DeleteInfraProviderByUuidResponseDto,
     GetInfraBillingHistoryRecordsResponseDto,
     GetInfraBillingNodesResponseDto,
     GetInfraProviderByUuidResponseDto,
@@ -63,14 +60,14 @@ class InfraBillingController(BaseController):
 
     @delete(
         "/infra-billing/providers/{uuid}",
-        response_class=DeleteInfraProviderByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_provider_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the infra provider")
         ],
-    ) -> DeleteInfraProviderByUuidResponseDto:
+    ) -> None:
         """Delete infra provider by uuid"""
         ...
 
@@ -111,14 +108,14 @@ class InfraBillingController(BaseController):
 
     @delete(
         "/infra-billing/history/{uuid}",
-        response_class=DeleteInfraBillingHistoryRecordByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_billing_history_record_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the billing history record")
         ],
-    ) -> DeleteInfraBillingHistoryRecordByUuidResponseDto:
+    ) -> None:
         """Delete infra billing history"""
         ...
 
@@ -145,13 +142,13 @@ class InfraBillingController(BaseController):
 
     @delete(
         "/infra-billing/nodes/{uuid}",
-        response_class=DeleteInfraBillingNodeByUuidResponseDto,
+        response_class=None,
     )
     async def delete_infra_billing_node_by_uuid(
         self,
         uuid: Annotated[
             Union[str, UUID], Path(description="UUID of the infra billing node")
         ],
-    ) -> DeleteInfraBillingNodeByUuidResponseDto:
+    ) -> None:
         """Delete infra billing node"""
         ...

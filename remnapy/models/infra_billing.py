@@ -132,10 +132,6 @@ class GetInfraProviderByUuidResponseDto(InfraProviderDto):
     pass
 
 
-class DeleteInfraProviderByUuidResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 # Billing History models
 class CreateInfraBillingHistoryRecordRequestDto(BaseModel):
     """Модель для создания записи истории биллинга"""
@@ -155,10 +151,6 @@ class CreateInfraBillingHistoryRecordResponseDto(InfraBillingHistoryData):
 
 
 class GetInfraBillingHistoryRecordsResponseDto(InfraBillingHistoryData):
-    pass
-
-
-class DeleteInfraBillingHistoryRecordByUuidResponseDto(InfraBillingHistoryData):
     pass
 
 
@@ -212,23 +204,9 @@ class GetInfraBillingNodesResponseDto(InfraBillingNodesData):
     pass
 
 
-class DeleteInfraBillingNodeByUuidResponseDto(BaseModel):
-    """API возвращает обновленный список billing nodes после удаления"""
-
-    total_billing_nodes: float = Field(alias="totalBillingNodes")
-    billing_nodes: List[InfraBillingNodeDto] = Field(alias="billingNodes")
-    available_billing_nodes: List[AvailableBillingNodeDto] = Field(
-        alias="availableBillingNodes"
-    )
-    total_available_billing_nodes: float = Field(alias="totalAvailableBillingNodes")
-    stats: BillingStatsDto
-
-
 # Legacy aliases для обратной совместимости
 GetAllInfraProvidersResponseDto = GetInfraProvidersResponseDto
-DeleteInfraProviderResponseDto = DeleteInfraProviderByUuidResponseDto
 GetAllInfraBillingHistoryResponseDto = GetInfraBillingHistoryRecordsResponseDto
 GetInfraBillingHistoryByUuidResponseDto = InfraBillingHistoryDto
 GetAllInfraBillingNodesResponseDto = GetInfraBillingNodesResponseDto
 GetInfraBillingNodeByUuidResponseDto = InfraBillingNodeDto
-DeleteInfraBillingNodeResponseDto = DeleteInfraBillingNodeByUuidResponseDto

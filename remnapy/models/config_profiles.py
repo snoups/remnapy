@@ -75,10 +75,6 @@ class GetConfigProfileByUuidResponseDto(ConfigProfileDto):
     pass
 
 
-class DeleteConfigProfileResponseDto(BaseModel):
-    is_deleted: bool = Field(alias="isDeleted")
-
-
 class GetAllInboundsResponseDto(List[InboundDto]):
     pass
 

@@ -75,10 +75,6 @@ class DeleteTemplateData(BaseModel):
     is_deleted: bool = Field(alias="isDeleted")
 
 
-class DeleteSubscriptionTemplateResponseDto(DeleteTemplateData):
-    pass
-
-
 class ReorderTemplateItem(BaseModel):
     view_position: int = Field(serialization_alias="viewPosition")
     uuid: UUID

@@ -74,10 +74,6 @@ class GetTorrentBlockerReportsResponseDto(TorrentBlockerReportsData):
     pass
 
 
-class TruncateTorrentBlockerReportsResponseDto(TorrentBlockerReportsData):
-    pass
-
-
 class TorrentBlockerStatsDto(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
@@ -151,12 +147,6 @@ class UpdateNodePluginRequestDto(BaseModel):
 
 class UpdateNodePluginResponseDto(NodePluginDto):
     pass
-
-
-class DeleteNodePluginResponseDto(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    is_deleted: bool = Field(alias="isDeleted")
 
 
 class CreateNodePluginRequestDto(BaseModel):
@@ -240,7 +230,3 @@ class PluginExecutorRequestDto(BaseModel):
     target_nodes: PluginTargetNodesDto = Field(alias="targetNodes")
 
 
-class PluginExecutorResponseDto(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    event_sent: bool = Field(alias="eventSent")

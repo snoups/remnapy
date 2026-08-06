@@ -72,8 +72,8 @@ class BaseController(RapidApi):
     def _handle_response(
         self,
         response: Response,
-        response_class: Type[Response | str | bytes | BM] | TypeAdapter[T] = Response,
-    ) -> Response | str | bytes | BM | T:
+        response_class: Type[Response | str | bytes | BM] | TypeAdapter[T] | None = Response,
+    ) -> Response | str | bytes | BM | T | None:
         if response_class is Response:
             return response
 
@@ -93,10 +93,21 @@ class BaseController(RapidApi):
                 ),
             )
 
+        # Panel 3.2.1 answers a number of operations with 202/204 and no body at
+        # all (every delete, every bulk action). Those endpoints declare
+        # ``response_class=None``; parsing anything here would only fail.
+        if response_class is None:
+            return None
+
         if response_class is str:
             return response.text
         if response_class is bytes:
             return response.content
+
+        # Defensive: an endpoint documented as returning a body but answering
+        # empty must not blow up with a JSON decode error deep in pydantic.
+        if not response.content:
+            return None
         if isinstance(response_class, TypeAdapter):
             return response_class.validate_json(response.content)
         if pydantic_xml is not None and issubclass(

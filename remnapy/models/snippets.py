@@ -36,12 +36,6 @@ class UpdateSnippetResponseDto(SnippetsData):
     pass
 
 
-class DeleteSnippetResponseDto(SnippetsData):
-    """Delete snippet response - extends SnippetsData directly"""
-
-    pass
-
-
 class CreateSnippetRequestDto(BaseModel):
     """Create snippet request"""
 
@@ -71,5 +65,3 @@ class DeleteSnippetRequestDto(BaseModel):
     ]
 
 
-class DeleteSnippetResponseDto(SnippetsData):
-    """Delete snippet response"""

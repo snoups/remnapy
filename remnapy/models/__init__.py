@@ -1,7 +1,6 @@
 from .api_tokens_management import (
     CreateApiTokenRequestDto,
     CreateApiTokenResponseDto,
-    DeleteApiTokenResponseDto,
     FindAllApiTokensResponseDto,
     GetApiTokenScopesResponseDto,
 )
@@ -54,7 +53,6 @@ from .config_profiles import (
     ConfigProfileDto,
     CreateConfigProfileRequestDto,
     CreateConfigProfileResponseDto,
-    DeleteConfigProfileResponseDto,
     GetAllConfigProfilesResponseDto,
     GetAllConfigProfilesResponsePaginated,
     GetConfigProfileByUuidResponseDto,
@@ -71,17 +69,14 @@ from .config_profiles import (
     GetAllInboundsResponseDto as GetAllConfigProfileInboundsResponseDto,
 )
 from .external_squads import (
-    AddUsersToExternalSquadResponseDto,
     CreateExternalSquadRequestDto,
     CreateExternalSquadResponseDto,
-    DeleteExternalSquadResponseDto,
     ExternalSquadDto,
     ExternalSquadInfoDto,
     ExternalSquadSubscriptionSettingsDto,
     ExternalSquadTemplateDto,
     GetExternalSquadByUuidResponseDto,
     GetExternalSquadsResponseDto,
-    RemoveUsersFromExternalSquadResponseDto,
     ReorderExternalSquadItem,
     ReorderExternalSquadsRequestDto,
     ReorderExternalSquadsResponseDto,
@@ -93,7 +88,6 @@ from .hosts import (
     CreateHostInboundData,
     CreateHostRequestDto,
     CreateHostResponseDto,
-    DeleteHostResponseDto,
     GetAllHostsResponseDto,
     GetAllHostTagsResponseDto,
     GetOneHostResponseDto,
@@ -107,11 +101,7 @@ from .hosts import (
     UpdateHostResponseDto,
 )
 from .hosts_bulk_actions import (
-    BulkDeleteHostsResponseDto,
-    BulkDisableHostsResponseDto,
-    BulkEnableHostsResponseDto,
     UpdateManyHostsRequestDto,
-    UpdateManyHostsResponseDto,
 )
 from .hwid import (
     CreateHWIDUser,  # Legacy alias
@@ -149,11 +139,6 @@ from .infra_billing import (
     CreateInfraBillingNodeResponseDto,
     CreateInfraProviderRequestDto,
     CreateInfraProviderResponseDto,
-    DeleteInfraBillingHistoryRecordByUuidResponseDto,
-    DeleteInfraBillingNodeByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraBillingNodeResponseDto)
-    DeleteInfraBillingNodeResponseDto,  # LEGACY
-    DeleteInfraProviderByUuidResponseDto,  # ПЕРЕИМЕНОВАНА (было DeleteInfraProviderResponseDto)
-    DeleteInfraProviderResponseDto,  # LEGACY
     GetAllInfraBillingHistoryResponseDto,  # LEGACY
     GetAllInfraBillingNodesResponseDto,  # LEGACY
     GetAllInfraProvidersResponseDto,  # LEGACY
@@ -174,16 +159,11 @@ from .infra_billing import (
 )
 from .internal_squads import (
     AddManyUsersToInternalSquadRequestDto,
-    AddManyUsersToInternalSquadResponseDto,
     AddUsersToInternalSquadRequestDto,
-    AddUsersToInternalSquadResponseDto,
     CreateInternalSquadRequestDto,
     CreateInternalSquadResponseDto,
-    DeleteInternalSquadResponseDto,
     DeleteManyUsersFromInternalSquadRequestDto,
-    DeleteManyUsersFromInternalSquadResponseDto,
     DeleteUsersFromInternalSquadRequestDto,
-    DeleteUsersFromInternalSquadResponseDto,
     GetAllInternalSquadsResponseDto,
     GetInternalSquadAccessibleNodesResponseDto,
     GetInternalSquadByUuidResponseDto,
@@ -212,7 +192,6 @@ from .connections import (
     DropByUserIds,
     # Request DTOs
     DropConnectionsRequestDto,
-    DropConnectionsResponseDto,
     TargetAllNodes,
     TargetSpecificNodes,
 )
@@ -235,14 +214,12 @@ from .node_plugins import (
     CloneNodePluginResponseDto,
     CreateNodePluginRequestDto,
     CreateNodePluginResponseDto,
-    DeleteNodePluginResponseDto,
     GetNodePluginResponseDto,
     GetNodePluginsResponseDto,
     GetTorrentBlockerReportsResponseDto,
     GetTorrentBlockerReportsStatsResponseDto,
     NodePluginDto,
     PluginExecutorRequestDto,
-    PluginExecutorResponseDto,
     RecreateTablesCommandDto,
     ReorderNodePluginItem,
     ReorderNodePluginsRequestDto,
@@ -250,17 +227,14 @@ from .node_plugins import (
     TargetAllNodesDto,
     TargetSpecificNodesDto,
     TorrentBlockerReportRecordDto,
-    TruncateTorrentBlockerReportsResponseDto,
     UnblockIpsCommandDto,
     UpdateNodePluginRequestDto,
     UpdateNodePluginResponseDto,
 )
 from .nodes import (
     BulkNodesUpdateRequestDto,
-    BulkNodesUpdateResponseDto,
     CreateNodeRequestDto,
     CreateNodeResponseDto,
-    DeleteNodeResponseDto,
     DisableNodeResponseDto,
     EnableNodeResponseDto,
     ExcludedInbounds,
@@ -272,20 +246,15 @@ from .nodes import (
     NodeConfigProfileRequestDto,
     NodeResponseDto,
     NodesBulkActionsRequestDto,
-    NodesBulkActionsResponseDto,
     NodesResponseDto,  # Legacy alias
     NodesUpdateFieldsDto,
     ProfileModificationRequestDto,
-    ProfileModificationResponseDto,
     ReorderNodeRequestDto,
     ReorderNodeResponseDto,
     ResetNodeTrafficRequestDto,
-    ResetNodeTrafficResponseDto,
     RestartAllNodesRequestBodyDto,
     RestartAllNodesRequestDto,  # Legacy alias,
     RestartNodeRequestBodyDto,
-    RestartAllNodesResponseDto,
-    RestartNodeResponseDto,
     UpdateNodeRequestDto,
     UpdateNodeResponseDto,
 )
@@ -298,7 +267,6 @@ from .nodes_usage_history import (
 )
 from .passkeys import (
     DeletePasskeyRequestDto,
-    DeletePasskeyResponseDto,
     GetAllPasskeysResponseDto,
     GetPasskeyRegistrationOptionsResponseDto,
     PasskeyDto,
@@ -327,7 +295,6 @@ from .snippets import (
     CreateSnippetRequestDto,
     CreateSnippetResponseDto,
     DeleteSnippetRequestDto,
-    DeleteSnippetResponseDto,
     GetSnippetsResponseDto,
     SnippetItem,
     SnippetsData,
@@ -361,7 +328,6 @@ from .subscription_page import (
     CloneSubscriptionPageConfigResponseDto,
     CreateSubscriptionPageConfigRequestDto,
     CreateSubscriptionPageConfigResponseDto,
-    DeleteSubscriptionPageConfigResponseDto,
     GetSubpageConfigByShortUuidRequestBodyDto,
     GetSubpageConfigByShortUuidResponseDto,
     GetSubscriptionPageConfigResponseDto,
@@ -405,7 +371,6 @@ from .subscriptions_settings import (
 from .subscriptions_template import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,
-    DeleteSubscriptionTemplateResponseDto,
     GetTemplateResponseDto,
     GetTemplatesResponseDto,
     ReorderSubscriptionTemplatesRequestDto,
@@ -462,7 +427,6 @@ from .users import (
     # Response DTOs - Single User
     CreateUserResponseDto,
     # Other Response DTOs
-    DeleteUserResponseDto,
     DisableUserResponseDto,
     EnableUserResponseDto,
     ExtendUserRequestDto,
@@ -498,28 +462,18 @@ from .users import (
 )
 from .users_bulk_actions import (
     BulkAllExtendExpirationDateRequestDto,
-    BulkAllExtendExpirationDateResponseDto,
-    BulkAllResetTrafficUsersResponseDto,
     BulkAllUpdateUsersRequestDto,
-    BulkAllUpdateUsersResponseDto,
     BulkDeleteUsersByStatusRequestDto,
-    BulkDeleteUsersByStatusResponseDto,
     BulkDeleteUsersRequestDto,
-    BulkDeleteUsersResponseDto,
     BulkEventResponseData,
     BulkExtendExpirationDateRequestDto,
-    BulkExtendExpirationDateResponseDto,
     BulkResetTrafficUsersRequestDto,
-    BulkResetTrafficUsersResponseDto,
     BulkResponseData,
     BulkResponseDto,
     BulkRevokeUsersSubscriptionRequestDto,
-    BulkRevokeUsersSubscriptionResponseDto,
     BulkUpdateUsersInternalSquadsRequestDto,
     BulkUpdateUsersRequestDto,
-    BulkUpdateUsersResponseDto,
     BulkUpdateUsersSquadsRequestDto,
-    BulkUpdateUsersSquadsResponseDto,
     TagStr,
     UpdateUserFields,
 )
@@ -572,7 +526,6 @@ __all__ = [
     # Nodes models
     "CreateNodeRequestDto",
     "CreateNodeResponseDto",
-    "DeleteNodeResponseDto",
     "DisableNodeResponseDto",
     "EnableNodeResponseDto",
     "ExcludedInbounds",
@@ -583,8 +536,6 @@ __all__ = [
     "NodesResponseDto",  # Legacy alias
     "ReorderNodeRequestDto",
     "ReorderNodeResponseDto",
-    "RestartAllNodesResponseDto",
-    "RestartNodeResponseDto",
     "UpdateNodeRequestDto",
     "UpdateNodeResponseDto",
     "NodeConfigProfileDto",
@@ -593,19 +544,14 @@ __all__ = [
     "RestartAllNodesRequestBodyDto",
     "RestartNodeRequestBodyDto",
     "ResetNodeTrafficRequestDto",
-    "ResetNodeTrafficResponseDto",
     "ProfileModificationRequestDto",
-    "ProfileModificationResponseDto",
     "NodeBulkActionType",
     "NodesBulkActionsRequestDto",
-    "NodesBulkActionsResponseDto",
     "NodesUpdateFieldsDto",
     "BulkNodesUpdateRequestDto",
-    "BulkNodesUpdateResponseDto",
     # Hosts models
     "CreateHostRequestDto",
     "CreateHostResponseDto",
-    "DeleteHostResponseDto",
     "GetAllHostsResponseDto",
     "GetOneHostResponseDto",
     "HostResponseDto",
@@ -678,7 +624,6 @@ __all__ = [
     "UpdateTemplateResponseDto",
     "CreateSubscriptionTemplateRequestDto",
     "CreateSubscriptionTemplateResponseDto",
-    "DeleteSubscriptionTemplateResponseDto",
     "GetTemplatesResponseDto",
     "ReorderTemplateItem",
     "ReorderSubscriptionTemplatesRequestDto",
@@ -766,15 +711,10 @@ __all__ = [
     # API Tokens models
     "CreateApiTokenRequestDto",
     "CreateApiTokenResponseDto",
-    "DeleteApiTokenResponseDto",
     "FindAllApiTokensResponseDto",
     "GetApiTokenScopesResponseDto",
     # Host bulk actions models
-    "BulkDeleteHostsResponseDto",
-    "BulkDisableHostsResponseDto",
-    "BulkEnableHostsResponseDto",
     "UpdateManyHostsRequestDto",
-    "UpdateManyHostsResponseDto",
     # Users models
     "CreateUserRequestDto",
     "UpdateUserRequestDto",
@@ -797,7 +737,6 @@ __all__ = [
     "GetUserSubscriptionRequestHistoryResponseDto",
     "ExtendUserRequestDto",
     "ExtendUserResponseDto",
-    "DeleteUserResponseDto",
     "UserResponseDto",
     "UsersResponseDto",
     "TagsResponseDto",
@@ -811,28 +750,18 @@ __all__ = [
     "GetSubscriptionRequestsResponseDto",
     # Users bulk actions models
     "BulkAllExtendExpirationDateRequestDto",
-    "BulkAllExtendExpirationDateResponseDto",
-    "BulkAllResetTrafficUsersResponseDto",
     "BulkAllUpdateUsersRequestDto",
-    "BulkAllUpdateUsersResponseDto",
     "BulkDeleteUsersByStatusRequestDto",
-    "BulkDeleteUsersByStatusResponseDto",
     "BulkDeleteUsersRequestDto",
-    "BulkDeleteUsersResponseDto",
     "BulkEventResponseData",
     "BulkExtendExpirationDateRequestDto",
-    "BulkExtendExpirationDateResponseDto",
     "BulkResetTrafficUsersRequestDto",
-    "BulkResetTrafficUsersResponseDto",
     "BulkResponseData",
     "BulkResponseDto",
     "BulkRevokeUsersSubscriptionRequestDto",
-    "BulkRevokeUsersSubscriptionResponseDto",
     "BulkUpdateUsersInternalSquadsRequestDto",
     "BulkUpdateUsersRequestDto",
-    "BulkUpdateUsersResponseDto",
     "BulkUpdateUsersSquadsRequestDto",
-    "BulkUpdateUsersSquadsResponseDto",
     "TagStr",
     "UpdateUserFields",
     # Users stats models
@@ -842,7 +771,6 @@ __all__ = [
     "ConfigProfileDto",
     "CreateConfigProfileRequestDto",
     "CreateConfigProfileResponseDto",
-    "DeleteConfigProfileResponseDto",
     "GetAllConfigProfilesResponseDto",
     "GetAllConfigProfileInboundsResponseDto",
     "GetConfigProfileByUuidResponseDto",
@@ -862,9 +790,6 @@ __all__ = [
     "CreateInfraBillingNodeResponseDto",
     "CreateInfraProviderRequestDto",
     "CreateInfraProviderResponseDto",
-    "DeleteInfraBillingHistoryRecordByUuidResponseDto",
-    "DeleteInfraBillingNodeByUuidResponseDto",  # ПЕРЕИМЕНОВАНА (было DeleteInfraBillingNodeResponseDto)
-    "DeleteInfraProviderByUuidResponseDto",  # ПЕРЕИМЕНОВАНА (было DeleteInfraProviderResponseDto)
     "GetInfraBillingHistoryRecordsResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingHistoryResponseDto)
     "GetInfraBillingNodesResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraBillingNodesResponseDto)
     "GetInfraProvidersResponseDto",  # ПЕРЕИМЕНОВАНА (было GetAllInfraProvidersResponseDto)
@@ -879,19 +804,14 @@ __all__ = [
     "UpdateInfraBillingNodeResponseDto",
     "UpdateInfraProviderRequestDto",
     "UpdateInfraProviderResponseDto",
-    "DeleteInfraBillingNodeResponseDto",  # LEGACY
-    "DeleteInfraProviderResponseDto",  # LEGACY
     "GetAllInfraBillingHistoryResponseDto",  # LEGACY
     "GetAllInfraBillingNodesResponseDto",  # LEGACY
     "GetAllInfraProvidersResponseDto",  # LEGACY
     # Internal squads models
     "AddUsersToInternalSquadRequestDto",
-    "AddUsersToInternalSquadResponseDto",
     "CreateInternalSquadRequestDto",
     "CreateInternalSquadResponseDto",
-    "DeleteInternalSquadResponseDto",
     "DeleteUsersFromInternalSquadRequestDto",
-    "DeleteUsersFromInternalSquadResponseDto",
     "GetAllInternalSquadsResponseDto",
     "GetInternalSquadByUuidResponseDto",
     "InternalSquadDto",
@@ -904,9 +824,7 @@ __all__ = [
     "GetInternalSquadUsageResponseDto",
     "InternalSquadUsageUser",
     "AddManyUsersToInternalSquadRequestDto",
-    "AddManyUsersToInternalSquadResponseDto",
     "DeleteManyUsersFromInternalSquadRequestDto",
-    "DeleteManyUsersFromInternalSquadResponseDto",
     # Nodes usage history models
     "GetNodesUsageByRangeResponseDto",
     "GetUserAccessibleNodesResponseDto",
@@ -957,7 +875,6 @@ __all__ = [
     "WebhookPayloadDto",
     # Passkeys models
     "DeletePasskeyRequestDto",
-    "DeletePasskeyResponseDto",
     "GetAllPasskeysResponseDto",
     "GetPasskeyRegistrationOptionsResponseDto",
     "PasskeyDto",
@@ -966,17 +883,14 @@ __all__ = [
     "VerifyPasskeyRegistrationRequestDto",
     "VerifyPasskeyRegistrationResponseDto",
     # External squads models
-    "AddUsersToExternalSquadResponseDto",
     "CreateExternalSquadRequestDto",
     "CreateExternalSquadResponseDto",
-    "DeleteExternalSquadResponseDto",
     "ExternalSquadDto",
     "ExternalSquadInfoDto",
     "ExternalSquadSubscriptionSettingsDto",
     "ExternalSquadTemplateDto",
     "GetExternalSquadByUuidResponseDto",
     "GetExternalSquadsResponseDto",
-    "RemoveUsersFromExternalSquadResponseDto",
     "ReorderExternalSquadItem",
     "ReorderExternalSquadsRequestDto",
     "ReorderExternalSquadsResponseDto",
@@ -987,7 +901,6 @@ __all__ = [
     "CreateSnippetRequestDto",
     "CreateSnippetResponseDto",
     "DeleteSnippetRequestDto",
-    "DeleteSnippetResponseDto",
     "GetSnippetsResponseDto",
     "SnippetItem",
     "SnippetsData",
@@ -1013,7 +926,6 @@ __all__ = [
     "CloneSubscriptionPageConfigResponseDto",
     "CreateSubscriptionPageConfigRequestDto",
     "CreateSubscriptionPageConfigResponseDto",
-    "DeleteSubscriptionPageConfigResponseDto",
     "GetSubscriptionPageConfigResponseDto",
     "GetSubscriptionPageConfigsResponseDto",
     "GetSubpageConfigByShortUuidRequestBodyDto",
@@ -1031,7 +943,6 @@ __all__ = [
     "DropByIpAddresses",
     "TargetAllNodes",
     "TargetSpecificNodes",
-    "DropConnectionsResponseDto",
     "ConnectionsJobData",
     "ConnectionsByNodeResponseDto",
     "ConnectionsByUserResponseDto",
@@ -1054,12 +965,10 @@ __all__ = [
     # Node plugins models
     "GetTorrentBlockerReportsResponseDto",
     "GetTorrentBlockerReportsStatsResponseDto",
-    "TruncateTorrentBlockerReportsResponseDto",
     "GetNodePluginsResponseDto",
     "GetNodePluginResponseDto",
     "UpdateNodePluginRequestDto",
     "UpdateNodePluginResponseDto",
-    "DeleteNodePluginResponseDto",
     "CreateNodePluginRequestDto",
     "CreateNodePluginResponseDto",
     "ReorderNodePluginItem",
@@ -1068,7 +977,6 @@ __all__ = [
     "CloneNodePluginRequestDto",
     "CloneNodePluginResponseDto",
     "PluginExecutorRequestDto",
-    "PluginExecutorResponseDto",
     "BlockIpsCommandDto",
     "UnblockIpsCommandDto",
     "RecreateTablesCommandDto",

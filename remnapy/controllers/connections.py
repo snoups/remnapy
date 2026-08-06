@@ -10,7 +10,6 @@ from remnapy.models import (
     ConnectionsByUserResponseDto,
     ConnectionsByUserResultResponseDto,
     DropConnectionsRequestDto,
-    DropConnectionsResponseDto,
 )
 from remnapy.rapid import BaseController, get, post
 
@@ -75,11 +74,11 @@ class ConnectionsController(BaseController):
         """
         ...
 
-    @post("/connections/drop", response_class=DropConnectionsResponseDto)
+    @post("/connections/drop", response_class=None)
     async def drop_connections(
         self,
         body: Annotated[DropConnectionsRequestDto, PydanticBody()],
-    ) -> DropConnectionsResponseDto:
+    ) -> None:
         """Drop active connections.
 
         Sends a drop-connections event to the target nodes. You can specify the

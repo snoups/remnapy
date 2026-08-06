@@ -7,7 +7,6 @@ from remnapy.enums import TemplateType
 from remnapy.models import (
     CreateSubscriptionTemplateRequestDto,
     CreateSubscriptionTemplateResponseDto,
-    DeleteSubscriptionTemplateResponseDto,
     GetTemplateResponseDto,
     GetTemplatesResponseDto,
     ReorderSubscriptionTemplatesRequestDto,
@@ -52,12 +51,12 @@ class SubscriptionsTemplateController(BaseController):
 
     @delete(
         "/subscription-templates/{uuid}",
-        response_class=DeleteSubscriptionTemplateResponseDto,
+        response_class=None,
     )
     async def delete_template(
         self,
         uuid: Annotated[Union[str, UUID], Path(description="Template UUID")],
-    ) -> DeleteSubscriptionTemplateResponseDto:
+    ) -> None:
         """Delete subscription template"""
         ...
 
